@@ -1,0 +1,24 @@
+.table-container {
+    padding: 20px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+}
+
+.usertable {
+    width: 80%;
+    border-collapse: collapse;
+    margin: 25px 0;
+    font-size: 18px;
+    text-align: left;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.1);
+  
+}
+
+
+.thead{
+    padding: 12px 15px;
+    background-color: skyblue;
+}
+

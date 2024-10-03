@@ -1,0 +1,25 @@
+
+.usertable thead tr {
+    background-color: #009879;
+    color: #ffffff;
+    text-align: left;
+    font-weight: bold;
+}
+
+
+.trusers {
+    border-bottom: 1px solid #dddddd;
+}
+
+.usertable tbody tr:nth-of-type(even) {
+    background-color: #f3f3f3;
+}
+
+.usertable tbody tr:last-of-type {
+    border-bottom: 2px solid #009879;
+}
+
+.usertable tbody tr:hover {
+    background-color: #f1f1f1;
+    cursor: pointer;
+}
