@@ -3,20 +3,20 @@ import axios from "axios";
 import CryptoJs from "crypto-js";
 import { AuthContext } from "../autenticacion/AuthContext";
 
-function ErrorAutenticacion({ respuesta, mostrar }) {
+function ErrorAutenticacion({ respuesta, mostrar, onHidden }) {
   const [visible, setVisible] = useState(false);
 
-  /*este muestra un pop up de error cada vez hay un error de autenticacion */
   useEffect(() => {
     if (mostrar) {
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);
+        onHidden();  // Restablecer el estado cuando el error se oculta
       }, 3000);
 
       return () => clearTimeout(timer);
     }
-  }, [mostrar]);
+  }, [mostrar, onHidden]);
 
   if (!visible) {
     return null;
@@ -39,7 +39,6 @@ function ErrorAutenticacion({ respuesta, mostrar }) {
     </div>
   );
 }
-
 
 const LoginAutenticacion = () => {
   const [persona, setPersona] = useState({ usuario: "", password: "" });
@@ -86,6 +85,10 @@ const LoginAutenticacion = () => {
 
   const redirigir = (token, idrole) => {
     login(token, idrole);
+  };
+
+  const ocultarError = () => {
+    setMostrarError(false);
   };
 
   return (
@@ -148,7 +151,7 @@ const LoginAutenticacion = () => {
           </div>
         </div>
       </div>
-      {mostrarError && <ErrorAutenticacion respuesta={errorRespuesta} mostrar={mostrarError} />}
+      {mostrarError && <ErrorAutenticacion respuesta={errorRespuesta} mostrar={mostrarError} onHidden={ocultarError} />}
     </section>
   );
 };
