@@ -10,11 +10,14 @@ import Usuarios from './Usuarios/Usuarios';
 import Navigation from './Navigation';
 import LoginAutenticacion from './LoginAutenticacion/LoginAutenticacion';
 import ProtectedRoute from '../rutaProtegida/ProtectedRoute';
+import RestrablecerContrasenia from '../RestablecerContrasenia/RestablecerContrasenia';
 
+// <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
   return (
     <Routes>
       <Route path="/login" element={<LoginAutenticacion />} />
+      <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
       <Route path="/" element={<ProtectedRoute><Navigation /></ProtectedRoute>}>
         <Route index element={<Home />} />
         <Route path="about" element={<Blogs />} />

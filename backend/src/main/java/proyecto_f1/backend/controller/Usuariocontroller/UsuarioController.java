@@ -48,7 +48,7 @@ public class UsuarioController {
     }
 
     @PostMapping("/login")
-public ResponseEntity<validacion.AuthResponse> login(@RequestBody validacion.LoginRequest loginRequest) {
+    public ResponseEntity<validacion.AuthResponse> login(@RequestBody validacion.LoginRequest loginRequest) {
     RespuestaAutenticacion respuesta = new RespuestaAutenticacion(false, null);
      respuesta = usuarioService.validaCredenciales(loginRequest.getUsername(), loginRequest.getPassword());
 
@@ -66,7 +66,25 @@ public ResponseEntity<validacion.AuthResponse> login(@RequestBody validacion.Log
     }
 }
 
+@PostMapping("/recuperarCuenta")
+public ResponseEntity<validacion.AuthResponse> recuperarCuenta(@RequestBody validacion.recuperar recuperarCuenta) {
+RespuestaAutenticacion respuesta = new RespuestaAutenticacion(false, null);
+ respuesta = usuarioService.validaRespuesta(recuperarCuenta.getUsername(), recuperarCuenta.getcorreo(), recuperarCuenta.getrespuesta() );
 
+if (respuesta.getrespuesta()) {
+    // Genera un token JWT
+    String token = jwtValida.generateToken(recuperarCuenta.getUsername());
+
+    // Obtener el rol del usuario
+    //long role = usuarioService.obtenerRolPorUsername(recuperarCuenta.getUsername());
+
+    // Devuelve el token y el rol en la respuesta
+    return ResponseEntity.ok(new validacion.AuthResponse(token,-1, respuesta));  // Asegúrate de pasar ambos argumentos
+    // TO DO : revisar el role
+} else {
+    return ResponseEntity.ok(new validacion.AuthResponse("invalido", 0, respuesta));
+}
+}
 
 
 }

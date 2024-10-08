@@ -23,6 +23,37 @@ public class validacion {
         }
     }
 
+    public static class recuperar {
+        public static String username;
+        public static String correo;
+        public static String respuesta;
+        
+        public String getrespuesta() {
+            return respuesta;
+        }
+
+        public void setrespuesta(String respuesta) {
+            this.respuesta = respuesta;
+        }
+
+        public String getcorreo() {
+            return correo;
+        }
+
+        public void setcorreo(String correo) {
+            this.correo = correo;
+        }
+
+        public String getUsername() {
+            return username;
+        }
+
+        public void setUsername(String username) {
+            this.username = username;
+        }
+    }
+
+
     public static class AuthResponse {
         private String token;
         private long role;  // Nuevo campo para el rol del usuario

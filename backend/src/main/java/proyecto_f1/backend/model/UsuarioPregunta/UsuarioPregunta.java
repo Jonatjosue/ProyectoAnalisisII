@@ -12,7 +12,7 @@ public class UsuarioPregunta {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_Pregunta")
-    private int idPregunta;
+    private Long idPregunta;
 
     @ManyToOne
     @JoinColumn(name = "Id_Usuario", nullable = false)
@@ -41,13 +41,24 @@ public class UsuarioPregunta {
     @Column(name = "Usuario_Modificacion", length = 100)
     private String usuarioModificacion;
 
+    @Column(name = "Siguiente_Pregunta_Acceso", nullable = false  )
+    private int SiguientePreguntaAcceso;
+
     // Getters y Setters
 
-    public int getIdPregunta() {
+    public int getSiguientePreguntaAcceso() {
+        return SiguientePreguntaAcceso;
+    }
+
+    public void setSiguientePreguntaAcceso(int SiguientePreguntaAcceso) {
+        this.SiguientePreguntaAcceso = SiguientePreguntaAcceso;
+    }
+
+    public Long getIdPregunta() {
         return idPregunta;
     }
 
-    public void setIdPregunta(int idPregunta) {
+    public void setIdPregunta(Long idPregunta) {
         this.idPregunta = idPregunta;
     }
 

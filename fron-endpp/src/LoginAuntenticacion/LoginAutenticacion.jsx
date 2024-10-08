@@ -2,6 +2,8 @@ import React, { useState, useContext, useEffect } from "react";
 import axios from "axios";
 import CryptoJs from "crypto-js";
 import { AuthContext } from "../autenticacion/AuthContext";
+import { useNavigate } from 'react-router-dom';
+//import RestrablecerContrasenia from "../RestrablecerContrasenia/restrablecerContrasenia";
 
 function ErrorAutenticacion({ respuesta, mostrar, onHidden }) {
   const [visible, setVisible] = useState(false);
@@ -44,7 +46,7 @@ const LoginAutenticacion = () => {
   const [persona, setPersona] = useState({ usuario: "", password: "" });
   const [errorRespuesta, setErrorRespuesta] = useState("");
   const [mostrarError, setMostrarError] = useState(false);
-
+  const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   const iniciarSesion = async (event) => {
@@ -91,6 +93,8 @@ const LoginAutenticacion = () => {
     setMostrarError(false);
   };
 
+
+
   return (
     <section className="vh-100">
       <div className="container py-5 h-100">
@@ -135,13 +139,10 @@ const LoginAutenticacion = () => {
               </div>
 
               <div className="d-flex justify-content-around align-items-center mb-4">
-                <div className="form-check">
-                  <input className="form-check-input" type="checkbox" id="form1Example3" />
-                  <label className="form-check-label" htmlFor="form1Example3">
-                    Remember me
-                  </label>
-                </div>
-                <a href="#!">Forgot password?</a>
+                
+                <a href="/RestrablecerContrasenia" className="text-decoration-none">
+              Olvide mi contraseña
+            </a>
               </div>
 
               <button type="submit" className="btn btn-primary btn-lg btn-block">
