@@ -1,59 +1,105 @@
 import React, { useState } from "react";
+import axios from "axios";
 
 const RestablecerContrasenia = () => {
   const [email, setEmail] = useState("");
   const [username, setUsername] = useState("");
-  const [securityAnswer, setSecurityAnswer] = useState("");
-  const [message, setMessage] = useState("");
+  const [message, setMessage] = useState("Paso 1: valide su usuario o correo primero");
   const [error, setError] = useState("");
+  const [desactivar, setDesactivar] = useState(false);
+  const [verificar, setVerificar] = useState("verificar correo y usuario");
+  const [respuestas, setRespuestas] = useState([]);
+  const [preguntaActual, setPreguntaActual] = useState(0);
+  const [preguntas, setPreguntas] = useState([]); // Para almacenar preguntas e ids
 
-
-
- 
-
-  const handleSubmit = async (e) => {
+  const obtnerPreguntas = async (e) => {
     e.preventDefault();
     setMessage("");
     setError("");
     const formValido = e.target.reportValidity();
-    const objRepuesta = { username: username, email: email, respuesta: securityAnswer };
+    const objRepuesta = { username, email };
 
-  /*  if (formValido) {
-    try {
-        const response = await axios.post("http://127.0.0.1:8081/api/Usuario/recuperarCuenta", objRepuesta, {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        });
-
-        if (response.data.respuesta.respuesta === true) {
-          redirigir(response.data.token, response.data.role);
+    if (formValido) {
+      try {
+        const responses = await axios.post(
+          "http://127.0.0.1:8081/api/Usuario/obtienePreguntas",
+          objRepuesta,
+          { headers: { "Content-Type": "application/json" }, withCredentials: true }
+        );
+        if (responses.data && responses.data.length > 0) {
+          // Guardar preguntas y ids en el estado
+          setPreguntas(responses.data.map(response => ({
+            idRespuesta: response.idPregunta, // Ajusta según el nombre real del campo
+            pregunta: response.pregunta
+          })));
+          setRespuestas(Array(responses.data.length).fill({ respuesta: "" }));
+          setDesactivar(true); // Desactiva los inputs de usuario y correo
         } else {
-          setErrorRespuesta(response.data.respuesta.descripcion);
-          setMostrarError(true);
+          setError("No se encontró el usuario o correo. Pruebe de nuevo.");
         }
       } catch (error) {
-        setErrorRespuesta("Error de conexión con el servidor");
-        setMostrarError(true);
-        console.error("Error:", error);
+        setError("Error al obtener las preguntas.");
       }
-
-
-    // Validar correo electrónico y nombre de usuario
-    if (!isValidEmail || !isValidUsername) {
-      setError("El correo electrónico o nombre de usuario no coinciden.");
-      return;
     }
+  };
 
-    // Validar respuesta de la pregunta de seguridad
-    if (!isCorrectAnswer) {
-      setError("La respuesta a la pregunta de seguridad es incorrecta.");
-      return;
+  const enviarRespuestas = async (e) => {
+    e.preventDefault();
+    setMessage("");
+    setError("");
+    const formValido = e.target.reportValidity();
+    const objRepuesta = {
+      username,
+      email,
+      respuestas: respuestas.map((respuesta, index) => ({
+        idRespuesta: preguntas[index].idRespuesta,
+        respuesta: respuesta.respuesta
+      }))
+    };
+
+    if (formValido) {
+      try {
+        const response = await axios.post(
+          "http://127.0.0.1:8081/api/Usuario/recuperarCuenta",
+          objRepuesta,
+          { headers: { "Content-Type": "application/json" }, withCredentials: true }
+        );
+        if (response.data.respuesta.respuesta === true) {
+          setMessage("Respuestas correctas. Proceda con el restablecimiento de contraseña.");
+        } else {
+          setError(response.data.respuesta.descripcion);
+        }
+      } catch (error) {
+        setError("Error de conexión con el servidor.");
+      }
     }
+  };
 
-    // Si todo es correcto
-    setMessage("Acceso permitido. Puedes restablecer tu contraseña.");
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    if (!desactivar) {
+      await obtnerPreguntas(e);
+    } else {
+      await enviarRespuestas(e);
+    }
+  };
 
-    }*/
+  const handleRespuestaChange = (e) => {
+    const nuevasRespuestas = [...respuestas];
+    nuevasRespuestas[preguntaActual] = { ...nuevasRespuestas[preguntaActual], respuesta: e.target.value };
+    setRespuestas(nuevasRespuestas);
+  };
+
+  const siguientePregunta = () => {
+    if (preguntaActual < preguntas.length - 1) {
+      setPreguntaActual(preguntaActual + 1);
+    }
+  };
+
+  const preguntaAnterior = () => {
+    if (preguntaActual > 0) {
+      setPreguntaActual(preguntaActual - 1);
+    }
   };
 
   return (
@@ -69,60 +115,49 @@ const RestablecerContrasenia = () => {
               {error && <div className="alert alert-danger">{error}</div>}
               <form onSubmit={handleSubmit}>
                 <div className="mb-3">
-                  <label htmlFor="email" className="form-label">
-                    Correo electrónico
-                  </label>
-                  <input
-                    type="email"
-                    className="form-control"
-                    id="email"
-                    placeholder="Ingresa tu correo"
-                    value={email}
-                    onChange={(e) => setEmail(e.target.value)}
-                    required
-                  />
+                  <label htmlFor="email" className="form-label">Correo electrónico</label>
+                  <input type="email" className="form-control" id="email"
+                    placeholder="Ingresa tu correo" value={email} onChange={(e) => setEmail(e.target.value)}
+                    required disabled={desactivar} />
                 </div>
 
                 <div className="mb-3">
-                  <label htmlFor="username" className="form-label">
-                    Nombre de usuario
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="username"
-                    placeholder="Ingresa tu nombre de usuario"
-                    value={username}
-                    onChange={(e) => setUsername(e.target.value)}
-                    required
-                  />
+                  <label htmlFor="username" className="form-label">Nombre de usuario</label>
+                  <input type="text" className="form-control" id="username"
+                    placeholder="Ingresa tu nombre de usuario" value={username} onChange={(e) => setUsername(e.target.value)}
+                    required disabled={desactivar} />
                 </div>
 
-                <div className="mb-3">
-                  <label htmlFor="securityQuestion" className="form-label">
-                    Pregunta de seguridad: ¿Cuál es el nombre de tu primera mascota?
-                  </label>
-                  <input
-                    type="text"
-                    className="form-control"
-                    id="securityQuestion"
-                    placeholder="Ingresa la respuesta"
-                    value={securityAnswer}
-                    onChange={(e) => setSecurityAnswer(e.target.value)}
-                    required
-                  />
+                {preguntas.length > 0 && (
+                  <div className="mb-3">
+                    <label htmlFor="securityQuestion" className="form-label">
+                      Pregunta de seguridad: {preguntas[preguntaActual].pregunta}
+                    </label>
+                    <input type="text" className="form-control" id="securityQuestion"
+                      placeholder="Ingresa la respuesta" value={respuestas[preguntaActual].respuesta || ""}
+                      onChange={handleRespuestaChange} required disabled={!desactivar} />
+                  </div>
+                )}
+
+                <div className="col-12 mt-3">
+                  <button className="btn btn-secondary me-2" onClick={preguntaAnterior}
+                    disabled={preguntaActual === 0 || preguntas.length === 0}>
+                    Anterior
+                  </button>
+                  <button className="btn btn-secondary" onClick={siguientePregunta}
+                    disabled={preguntaActual === preguntas.length - 1 || preguntas.length === 0}>
+                    Siguiente
+                  </button>
                 </div>
 
-                <button type="submit" className="btn btn-primary w-100">
-                  Verificar y Restablecer Contraseña
+                <button type="submit" className="btn btn-primary w-100 mt-3">
+                  {verificar}
                 </button>
               </form>
             </div>
           </div>
           <div className="text-center mt-3">
-            <a href="/login" className="text-decoration-none">
-              Volver al inicio de sesión
-            </a>
+            <a href="/login" className="text-decoration-none">Volver al inicio de sesión</a>
           </div>
         </div>
       </div>
