@@ -11,6 +11,7 @@ import Navigation from './Navigation';
 import LoginAutenticacion from './LoginAutenticacion/LoginAutenticacion';
 import ProtectedRoute from '../rutaProtegida/ProtectedRoute';
 import RestrablecerContrasenia from '../RestablecerContrasenia/RestablecerContrasenia';
+import CambiarContrasenia from '../CambiarContrasenia/CambiarContrasenia';
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -25,6 +26,7 @@ function App() {
         <Route path="FormularioEmpresa" element={<FormularioEmpresa />} />
         <Route path="ListaEmpresas" element={<ListaEmpresas />} />
         <Route path="Usuarios" element={<Usuarios />} />
+        <Route path='/CambiarContrasenia' element={<CambiarContrasenia/>}/>
       </Route>
     </Routes>
   );
