@@ -12,6 +12,7 @@ import LoginAutenticacion from './LoginAutenticacion/LoginAutenticacion';
 import ProtectedRoute from '../rutaProtegida/ProtectedRoute';
 import RestrablecerContrasenia from '../RestablecerContrasenia/RestablecerContrasenia';
 import MiPerfil from '../MiPerfil';
+import CambiarContrasenia from '../CambiarContrasenia/CambiarContrasenia';
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -27,6 +28,7 @@ function App() {
         <Route path="ListaEmpresas" element={<ListaEmpresas />} />
         <Route path="Usuarios" element={<Usuarios />} />
         <Route path="Persona" element={< Persona/>} />
+        <Route path='/CambiarContrasenia' element={<CambiarContrasenia/>}/>
       </Route>
     </Routes>
   );

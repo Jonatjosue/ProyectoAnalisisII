@@ -19,7 +19,15 @@ export const AuthProvider = ({ children }) => {
   }, []);
 
 
+  const cambiarContrasenia = (token, role) => {
 
+    setAuthToken(token);
+    setUserRole(role);
+    localStorage.setItem('token', token);
+    localStorage.setItem('userRole', role);
+    navigate('/CambiarContrasenia');
+    
+  };
  
 
   const login = (token, role) => {
@@ -41,7 +49,7 @@ export const AuthProvider = ({ children }) => {
   };
 
   return (
-    <AuthContext.Provider value={{ authToken, userRole, login, logout }}>
+    <AuthContext.Provider value={{ authToken, userRole, login, logout ,cambiarContrasenia }}>
       {children}
     </AuthContext.Provider>
   );

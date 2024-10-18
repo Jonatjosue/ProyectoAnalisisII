@@ -15,12 +15,17 @@ public interface EmpresaRepository extends JpaRepository<Empresa, Long> {
             "WHERE us.Id_Usuario = :idUsuario", nativeQuery = true)
     Long findPasswordIntentosByIdUsuario(@Param("idUsuario") Long idUsuario);
 
-    @Query(value = "SELECT  em.PasswordCantidadPreguntasValidar  FROM USUARIO us"+
-                    "inner join SUCURSAL SUCU"+
-                    "on sucu.Id_Sucursal = us.Id_Sucursal"+
-                    "inner join EMPRESA em"+
-                    "on em.id_empresa = sucu.id_empresa" +
-                    "where us.Id_Usuario = :idUsuario", nativeQuery = true)
-    Long findCantidadPreguntasValidar(@Param("idUsuario") Long idUsuario);
+    @Query(value = "SELECT em.PasswordCantidadPreguntasValidar "+
+    "FROM USUARIO us "+
+    "INNER JOIN SUCURSAL sucu ON sucu.Id_Sucursal = us.Id_Sucursal "+
+    "INNER JOIN EMPRESA em ON em.id_empresa = sucu.id_empresa "+
+    "WHERE us.Id_Usuario = :idUsuario", nativeQuery = true)
+    int findCantidadPreguntasValidarByIdUsuario(@Param("idUsuario") Long idUsuario);
+
+    /*"SELECT em.PasswordCantidadPreguntasValidar"+
+    "FROM USUARIO us"+
+    "INNER JOIN SUCURSAL sucu ON sucu.Id_Sucursal = us.Id_Sucursal"+
+    "INNER JOIN EMPRESA em ON em.id_empresa = sucu.id_empresa"+
+    "WHERE us.Id_Usuario = :idUsuario"*/
 
 }

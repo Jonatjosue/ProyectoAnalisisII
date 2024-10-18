@@ -6,7 +6,9 @@ import org.springframework.web.bind.annotation.*;
 import proyecto_f1.backend.service.Usuario.*;
 import proyecto_f1.backend.model.Usuario.*;
 import proyecto_f1.backend.ClasesValidacion.validacion;
+import proyecto_f1.backend.ClasesValidacion.validacion.PreguntasUsuarioRecuperacion;
 import proyecto_f1.backend.ClasesValidacion.validacion.RespuestaAutenticacion;
+import proyecto_f1.backend.ClasesValidacion.validacion.RespuestaAutenticacionPregunta;
 import proyecto_f1.backend.ClasesValidacion.jwtValida;
 import java.util.List;
 
@@ -67,10 +69,10 @@ public class UsuarioController {
 }
 
 @PostMapping("/recuperarCuenta")
-public ResponseEntity<validacion.AuthResponse> recuperarCuenta(@RequestBody validacion.recuperar recuperarCuenta) {
-RespuestaAutenticacion respuesta = new RespuestaAutenticacion(false, null);
- respuesta = usuarioService.validaRespuesta(recuperarCuenta.getUsername(), recuperarCuenta.getcorreo(), recuperarCuenta.getrespuesta() );
-
+public ResponseEntity<validacion.PreguntaResponse> recuperarCuenta(@RequestBody validacion.recuperar recuperarCuenta) {
+RespuestaAutenticacionPregunta respuesta = new RespuestaAutenticacionPregunta(false, null,null);
+respuesta = usuarioService.validaRespuesta(recuperarCuenta.getUsername(), recuperarCuenta.getcorreo(), recuperarCuenta.getrespuestas() );
+//System.out.println(respuesta.getClass().);
 if (respuesta.getrespuesta()) {
     // Genera un token JWT
     String token = jwtValida.generateToken(recuperarCuenta.getUsername());
@@ -79,12 +81,15 @@ if (respuesta.getrespuesta()) {
     //long role = usuarioService.obtenerRolPorUsername(recuperarCuenta.getUsername());
 
     // Devuelve el token y el rol en la respuesta
-    return ResponseEntity.ok(new validacion.AuthResponse(token,-1, respuesta));  // Asegúrate de pasar ambos argumentos
+    return ResponseEntity.ok(new validacion.PreguntaResponse(token,-1,  respuesta));  // Asegúrate de pasar ambos argumentos
     // TO DO : revisar el role
 } else {
-    return ResponseEntity.ok(new validacion.AuthResponse("invalido", 0, respuesta));
+    return ResponseEntity.ok(new validacion.PreguntaResponse("invalido", 0, respuesta ));
 }
 }
-
+@PostMapping("/obtienePreguntas")
+public ResponseEntity<List<PreguntasUsuarioRecuperacion>> obtienePreguntas(@RequestBody validacion.recuperar  id) {
+    return ResponseEntity.ok(usuarioService.metodoPreguntas(id));
+}
 
 }

@@ -41,18 +41,7 @@ public class UsuarioPregunta {
     @Column(name = "Usuario_Modificacion", length = 100)
     private String usuarioModificacion;
 
-    @Column(name = "Siguiente_Pregunta_Acceso", nullable = false  )
-    private int SiguientePreguntaAcceso;
-
     // Getters y Setters
-
-    public int getSiguientePreguntaAcceso() {
-        return SiguientePreguntaAcceso;
-    }
-
-    public void setSiguientePreguntaAcceso(int SiguientePreguntaAcceso) {
-        this.SiguientePreguntaAcceso = SiguientePreguntaAcceso;
-    }
 
     public Long getIdPregunta() {
         return idPregunta;

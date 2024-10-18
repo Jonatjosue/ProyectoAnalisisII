@@ -13,6 +13,7 @@ import ProtectedRoute from './rutaProtegida/ProtectedRoute';
 import { LoginAutenticacion } from './LoginAuntenticacion/LoginAutenticacion';
 import RestrablecerContrasenia from "./RestablecerContrasenia/RestablecerContrasenia";
 import Persona from './Persona/Persona';
+import CambiarContrasenia from "./CambiarContrasenia/CambiarContrasenia";
 
 
 
@@ -48,6 +49,7 @@ function NavBar() {
                <li className="nav-link active" aria-current="page" ><Link to="/ListaEmpresas" onClick={handleClick}>ListaEmpresas</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/Usuarios" onClick={handleClick}>Usuarios</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/Persona" onClick={handleClick}>Persona</Link></li>
+               <li class="nav-link active" aria-current="page" ><Link to="/CambiarContrasenia">Cambiar Contraseña</Link></li>
              </>
            ) : (
              <li className="nav-link active" aria-current="page" ><Link to="/" onClick={() => setShowLinks(true)}>Home</Link></li>
@@ -78,6 +80,7 @@ function App() {
           <Route path="/Usuarios" element={<ProtectedRoute><Usuarios /></ProtectedRoute>} />
           <Route path="/Persona" element={<ProtectedRoute><Persona /></ProtectedRoute>} />
 
+          <Route path="/CambiarContrasenia" element={<ProtectedRoute><CambiarContrasenia /></ProtectedRoute>} />
         </Routes>
       </div>
     </AuthProvider>
