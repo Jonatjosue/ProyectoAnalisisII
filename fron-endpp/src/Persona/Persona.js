@@ -90,11 +90,11 @@ const Clientes = () => {
                             <td style={thTdStyle}>{persona.nombre}</td>
                             <td style={thTdStyle}>{persona.apellido}</td>
                             <td style={thTdStyle}>{new Date(persona.fechaNacimiento).toLocaleDateString()}</td>
-                            <td style={thTdStyle}>{persona.genero?.descripcion || 'N/A'}</td> {/* Manejo de posibles datos nulos */}
+                            <td style={thTdStyle}>{persona.genero || 'N/A'}</td> {/* Manejo de posibles datos nulos */}
                             <td style={thTdStyle}>{persona.direccion || 'N/A'}</td>
                             <td style={thTdStyle}>{persona.telefono || 'N/A'}</td>
                             <td style={thTdStyle}>{persona.correoElectronico || 'N/A'}</td>
-                            <td style={thTdStyle}>{persona.estadoCivil?.descripcion || 'N/A'}</td>
+                            <td style={thTdStyle}>{persona.estado_civil || 'N/A'}</td>
                         </tr>
                     ))}
                 </tbody>
