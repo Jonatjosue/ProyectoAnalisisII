@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import proyecto_f1.backend.model.Persona.Persona;
+import proyecto_f1.backend.model.PersonaView.PersonaView;
 import proyecto_f1.backend.repository.PersonaRepository.PersonaRepository;
 
 import java.util.List;
@@ -16,11 +17,11 @@ public class PersonaService {
     @Autowired
     private PersonaRepository personaRepository;
 
-    public List<Persona> obtenerPersonas() {
+    public List<PersonaView> obtenerPersonas() {
         return personaRepository.findAll();
     }
 
-    public Persona obtenerPersonaPorId(Long id) {
+    public PersonaView obtenerPersonaPorId(Long id) {
         return personaRepository.findById(id).orElse(null);
     }
 }

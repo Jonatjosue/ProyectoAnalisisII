@@ -1,6 +1,6 @@
 package proyecto_f1.backend.controller.Persona;
 
-import proyecto_f1.backend.model.Persona.Persona;
+import proyecto_f1.backend.model.PersonaView.PersonaView;
 import proyecto_f1.backend.service.PersonaService.PersonaService;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,12 +17,12 @@ public class PersonaController {
     private PersonaService personaService;
 
     @GetMapping
-    public List<Persona> obtenerPersonas() {
+    public List<PersonaView> obtenerPersonas() {
         return personaService.obtenerPersonas();
     }
 
     @GetMapping("/{id}")
-    public Persona obtenerPersonaPorId(@PathVariable Long id) {
+    public PersonaView obtenerPersonaPorId(@PathVariable Long id) {
         return personaService.obtenerPersonaPorId(id);
     }
 }
