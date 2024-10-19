@@ -13,6 +13,8 @@ import ProtectedRoute from './rutaProtegida/ProtectedRoute';
 import { LoginAutenticacion } from './LoginAuntenticacion/LoginAutenticacion';
 import RestrablecerContrasenia from "./RestablecerContrasenia/RestablecerContrasenia";
 import CuentaCorriente from './Cuentacorriente/Cuentacorriente'
+import CambiarContrasenia from "./CambiarContrasenia/CambiarContrasenia";
+
 
 
 
