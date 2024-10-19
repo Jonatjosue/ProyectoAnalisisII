@@ -12,7 +12,7 @@ import { AuthProvider , AuthContext } from './autenticacion/AuthContext';
 import ProtectedRoute from './rutaProtegida/ProtectedRoute';
 import { LoginAutenticacion } from './LoginAuntenticacion/LoginAutenticacion';
 import RestrablecerContrasenia from "./RestablecerContrasenia/RestablecerContrasenia";
-
+import CuentaCorriente from './Cuentacorriente/Cuentacorriente'
 
 
 
@@ -46,11 +46,13 @@ function NavBar() {
                <li class="nav-link active" aria-current="page" ><Link to="/FormularioEmpresa" onClick={handleClick}>FormularioEmpresa</Link></li>
                <li class="nav-link active" aria-current="page" ><Link to="/ListaEmpresas" onClick={handleClick}>ListaEmpresas</Link></li>
                <li class="nav-link active" aria-current="page" ><Link to="/Usuarios" onClick={handleClick}>Usuarios</Link></li>
+               
              </>
            ) : (
              <li class="nav-link active" aria-current="page" ><Link to="/" onClick={() => setShowLinks(true)}>Home</Link></li>
            )}
            <li class="nav-link active" aria-current="page" ><Link to="/login" onClick={logoutClick}>Logout</Link></li>
+           <li class="nav-link active" aria-current="page" ><Link to="/CuentaCorriente" onClick={handleClick}>Cuenta corriente</Link></li>
          </ul>
       )}
     </div>
@@ -74,6 +76,8 @@ function App() {
           <Route path="/FormularioEmpresa" element={<ProtectedRoute><FormularioEmpresa /></ProtectedRoute>} />
           <Route path="/ListaEmpresas" element={<ProtectedRoute><ListaEmpresas /></ProtectedRoute>} />
           <Route path="/Usuarios" element={<ProtectedRoute><Usuarios /></ProtectedRoute>} />
+          <Route path="/CuentaCorriente" element={<CuentaCorriente />} />
+          
         </Routes>
       </div>
     </AuthProvider>
