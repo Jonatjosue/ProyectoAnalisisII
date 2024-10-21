@@ -6,11 +6,13 @@ import org.springframework.web.bind.annotation.*;
 import proyecto_f1.backend.service.Usuario.*;
 import proyecto_f1.backend.model.Usuario.*;
 import proyecto_f1.backend.ClasesValidacion.validacion;
+import proyecto_f1.backend.ClasesValidacion.validacion.OpcionesMenuUsuario;
 import proyecto_f1.backend.ClasesValidacion.validacion.PreguntasUsuarioRecuperacion;
 import proyecto_f1.backend.ClasesValidacion.validacion.RespuestaAutenticacion;
 import proyecto_f1.backend.ClasesValidacion.validacion.RespuestaAutenticacionPregunta;
 import proyecto_f1.backend.ClasesValidacion.jwtValida;
 import java.util.List;
+
 
 @RestController
 @RequestMapping("/api/Usuario")
@@ -91,5 +93,35 @@ if (respuesta.getrespuesta()) {
 public ResponseEntity<List<PreguntasUsuarioRecuperacion>> obtienePreguntas(@RequestBody validacion.recuperar  id) {
     return ResponseEntity.ok(usuarioService.metodoPreguntas(id));
 }
+
+@PostMapping("/setNewPassword")
+public ResponseEntity<String> postMethodName(@RequestBody PasswordRequest nesPassword) throws Exception {
+    
+    usuarioService.setNewPassword(nesPassword.getNesPassword());
+
+    return ResponseEntity.ok( "nueva contraseña establecida");
+}
+
+
+    @GetMapping("/opcionesUsuario")
+    public ResponseEntity<List<OpcionesMenuUsuario>>obtenerOpciones(@RequestParam Long idUsuario) {
+        List<OpcionesMenuUsuario> permisos =  usuarioService.obtenerPermisosOpciones(idUsuario);
+        return ResponseEntity.ok(permisos);
+    }
+
+    public static class PasswordRequest {
+        private String nesPassword;
+    
+        // Getter y setter
+        public String getNesPassword() {
+            return nesPassword;
+        }
+    
+        public void setNesPassword(String nesPassword) {
+            this.nesPassword = nesPassword;
+        }
+    }
+    
+    
 
 }

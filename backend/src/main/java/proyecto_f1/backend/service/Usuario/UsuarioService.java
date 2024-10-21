@@ -2,9 +2,13 @@ package proyecto_f1.backend.service.Usuario;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.actuate.autoconfigure.metrics.MetricsProperties.System;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import proyecto_f1.backend.ClasesValidacion.validacion;
+import proyecto_f1.backend.ClasesValidacion.validacion.OpcionesMenuUsuario;
 import proyecto_f1.backend.ClasesValidacion.validacion.PreguntasUsuarioRecuperacion;
 import proyecto_f1.backend.ClasesValidacion.validacion.RespuestaAutenticacion;
 import proyecto_f1.backend.ClasesValidacion.validacion.RespuestaAutenticacionPregunta;
@@ -17,6 +21,7 @@ import proyecto_f1.backend.repository.EmpresaRepository.EmpresaRepository;
 import proyecto_f1.backend.repository.RespuestaRepository.RespuestaRepository;
 import proyecto_f1.backend.repository.Usuario.*;
 import proyecto_f1.backend.repository.UsuarioRoleRepository.UsuarioRoleRepository;
+import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.ArrayList;
@@ -248,6 +253,42 @@ public class UsuarioService {
         Usuario usuarioPresent = usuario != null ? usuario : usuarioCorreo;
 
         return usuarioRepository.findPreguntasRecuperacion(usuarioPresent.getIdUsuario());
+    }
+
+    public List<OpcionesMenuUsuario> obtenerPermisosOpciones(Long idUsuario) {
+        return usuarioRepository.obtenerPermisosOpciones(idUsuario);
+    }
+
+
+   
+    public void setNewPassword(String newPassword) throws Exception {
+        // Obtener el contexto de seguridad
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        
+        if (authentication != null ) {
+            Usuario userDetails = (Usuario)authentication.getPrincipal();
+            String nombreUsuario = userDetails.getNombre(); // Obtener el nombre del usuario
+            
+            // Busca al usuario por nombre
+            Optional<Usuario> usuarioOptional = usuarioRepository.findByNombre(nombreUsuario);
+            
+            // Verifica si el usuario existe
+            if (usuarioOptional.isPresent()) {
+                Usuario usuario = usuarioOptional.get();
+
+                // Aquí puedes establecer la nueva contraseña
+                usuario.setPassword(newPassword);
+                
+                // Guarda los cambios en el repositorio
+                usuarioRepository.save(usuario);
+            } else {
+                // Manejo del caso en que el usuario no se encuentra
+                throw new UsernameNotFoundException("Usuario no encontrado");
+            }
+        } else {
+            // Manejo de caso en que no hay autenticación
+            throw new Exception("No autenticado");
+        }
     }
 
 }

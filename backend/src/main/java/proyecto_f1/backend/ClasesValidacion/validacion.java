@@ -261,7 +261,10 @@ public static class respuesta {
         String getPregunta();
     }
 
-    
+    public interface OpcionesMenuUsuario {
+        String getNombre();
+        int getTienePermiso();  
+    }
 
     public static class preguntasUsuarioRecuperaciones{
         @JsonProperty("Id_Pregunta")

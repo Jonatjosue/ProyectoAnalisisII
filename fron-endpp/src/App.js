@@ -13,10 +13,19 @@ import ProtectedRoute from './rutaProtegida/ProtectedRoute';
 import { LoginAutenticacion } from './LoginAuntenticacion/LoginAutenticacion';
 import RestrablecerContrasenia from "./RestablecerContrasenia/RestablecerContrasenia";
 import CuentaCorriente from './Cuentacorriente/Cuentacorriente'
+import Persona from './Persona/Persona';
 import CambiarContrasenia from "./CambiarContrasenia/CambiarContrasenia";
 
-
-
+// Simulando los permisos para cada ruta
+const permisos = {
+  FormularioUsuario: 1, 
+  FormularioEmpresa: 0,
+  ListaEmpresas: 0,
+  Usuarios: 0,
+  Persona: 0,
+  CuentaCorriente: 0,
+  CambiarContrasenia: 1
+};
 
 function NavBar() {
   const {  authToken , logout } = useContext(AuthContext);
@@ -30,39 +39,52 @@ function NavBar() {
     logout();
   };
 
-
   return (
-    <nav class="navbar navbar-expand-lg bg-body-tertiary">
-  <div class="container-fluid">
-    <a class="navbar-brand">Cuenta corriente</a>
-    <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-    { authToken && (
-            <ul class="navbar-nav">
-            {showLinks ? (
-             <>
-               <li class="nav-link active" aria-current="page" ><Link to="/" onClick={handleClick}>Home</Link></li>
-               <li class="nav-link active" aria-current="page" ><Link to="/about" onClick={handleClick}>About</Link></li>
-               <li class="nav-link active" aria-current="page" ><Link to="/FormularioEmpresa" onClick={handleClick}>FormularioEmpresa</Link></li>
-               <li class="nav-link active" aria-current="page" ><Link to="/ListaEmpresas" onClick={handleClick}>ListaEmpresas</Link></li>
-               <li class="nav-link active" aria-current="page" ><Link to="/Usuarios" onClick={handleClick}>Usuarios</Link></li>
-               
-             </>
-           ) : (
-             <li class="nav-link active" aria-current="page" ><Link to="/" onClick={() => setShowLinks(true)}>Home</Link></li>
-           )}
-           <li class="nav-link active" aria-current="page" ><Link to="/login" onClick={logoutClick}>Logout</Link></li>
-           <li class="nav-link active" aria-current="page" ><Link to="/CuentaCorriente" onClick={handleClick}>Cuenta corriente</Link></li>
-         </ul>
-      )}
-    </div>
-  </div>
-</nav>
+    <nav className="navbar navbar-expand-lg bg-body-tertiary">
+      <div className="container-fluid">
+        <a className="navbar-brand">Cuenta corriente</a>
+        <button className="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
+          <span className="navbar-toggler-icon"></span>
+        </button>
+        <div className="collapse navbar-collapse" id="navbarNav">
+          {authToken && (
+            <ul className="navbar-nav">
+              {showLinks ? (
+                <>
+                  <li className="nav-link active" aria-current="page"><Link to="/" onClick={handleClick}>Home</Link></li>
+                  <li className="nav-link active" aria-current="page"><Link to="/about" onClick={handleClick}>About</Link></li>
+                  
+                  {/* Condicionales para mostrar/enlazar las rutas según permisos */}
+                  {permisos.FormularioEmpresa === 1 && (
+                    <li className="nav-link active" aria-current="page"><Link to="/FormularioEmpresa" onClick={handleClick}>FormularioEmpresa</Link></li>
+                  )}
+                  {permisos.ListaEmpresas === 1 && (
+                    <li className="nav-link active" aria-current="page"><Link to="/ListaEmpresas" onClick={handleClick}>ListaEmpresas</Link></li>
+                  )}
+                  {permisos.Usuarios === 1 && (
+                    <li className="nav-link active" aria-current="page"><Link to="/Usuarios" onClick={handleClick}>Usuarios</Link></li>
+                  )}
+                  {permisos.Persona === 1 && (
+                    <li className="nav-link active" aria-current="page"><Link to="/Persona" onClick={handleClick}>Persona</Link></li>
+                  )}
+                  {permisos.CambiarContrasenia === 1 && (
+                    <li className="nav-link active" aria-current="page"><Link to="/CambiarContrasenia">Cambiar Contraseña</Link></li>
+                  )}
+                  {permisos.CuentaCorriente === 1 && (
+                    <li className="nav-link active" aria-current="page"><Link to="/CuentaCorriente" onClick={handleClick}>Cuenta corriente</Link></li>
+                  )}
+                </>
+              ) : (
+                <li className="nav-link active" aria-current="page"><Link to="/" onClick={() => setShowLinks(true)}>Home</Link></li>
+              )}
+              <li className="nav-link active" aria-current="page"><Link to="/login" onClick={logoutClick}>Logout</Link></li>
+            </ul>
+          )}
+        </div>
+      </div>
+    </nav>
   );
 }
-
 
 function App() {
   return (
@@ -74,12 +96,29 @@ function App() {
           <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/about" element={<ProtectedRoute><About /></ProtectedRoute>} />
-          <Route path="/FormularioUsuario" element={<ProtectedRoute><FormularioUsuario /></ProtectedRoute>} />
-          <Route path="/FormularioEmpresa" element={<ProtectedRoute><FormularioEmpresa /></ProtectedRoute>} />
-          <Route path="/ListaEmpresas" element={<ProtectedRoute><ListaEmpresas /></ProtectedRoute>} />
-          <Route path="/Usuarios" element={<ProtectedRoute><Usuarios /></ProtectedRoute>} />
-          <Route path="/CuentaCorriente" element={<CuentaCorriente />} />
           
+          {/* Condicionales para las rutas basadas en permisos */}
+          {permisos.FormularioUsuario === 1 && (
+            <Route path="/FormularioUsuario" element={<ProtectedRoute><FormularioUsuario /></ProtectedRoute>} />
+          )}
+          {permisos.FormularioEmpresa === 1 && (
+            <Route path="/FormularioEmpresa" element={<ProtectedRoute><FormularioEmpresa /></ProtectedRoute>} />
+          )}
+          {permisos.ListaEmpresas === 1 && (
+            <Route path="/ListaEmpresas" element={<ProtectedRoute><ListaEmpresas /></ProtectedRoute>} />
+          )}
+          {permisos.Usuarios === 1 && (
+            <Route path="/Usuarios" element={<ProtectedRoute><Usuarios /></ProtectedRoute>} />
+          )}
+          {permisos.Persona === 1 && (
+            <Route path="/Persona" element={<ProtectedRoute><Persona /></ProtectedRoute>} />
+          )}
+          {permisos.CambiarContrasenia === 1 && (
+            <Route path="/CambiarContrasenia" element={<ProtectedRoute><CambiarContrasenia /></ProtectedRoute>} />
+          )}
+          {permisos.CuentaCorriente === 1 && (
+            <Route path="/CuentaCorriente" element={<ProtectedRoute><CuentaCorriente /> </ProtectedRoute>} />
+          )}
         </Routes>
       </div>
     </AuthProvider>

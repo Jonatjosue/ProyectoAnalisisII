@@ -1,11 +1,16 @@
 import React, { useState } from "react";
-import axios from "axios";
-
+import axiosInstance from "../axiosConfig";// Importa la instancia configurada
+import CryptoJs from "crypto-js";
 const CambiarContrasenia = () => {
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [message, setMessage] = useState("");
   const [error, setError] = useState("");
+
+
+  const generateMD5Hash = (str) => {
+    return CryptoJs.MD5(str).toString();
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -20,17 +25,14 @@ const CambiarContrasenia = () => {
 
     // Realizar la solicitud para cambiar la contraseña
     try {
-      const response = await axios.post(
-        "http://127.0.0.1:8081/api/Usuario/cambiarContrasenia",
-        { password }, // Ajusta los datos que envías según el backend
-        {
-          headers: { "Content-Type": "application/json" },
-          withCredentials: true,
-        }
+      var passwordHash = generateMD5Hash(password)
+      const response = await axiosInstance.post(
+        "/Usuario/setNewPassword",
+        { nesPassword: passwordHash } // Ajusta los datos que envías según el backend
       );
 
       // Aquí manejas la respuesta del servidor
-      if (response.data.success) {
+      if (response) {
         setMessage("La contraseña ha sido cambiada exitosamente.");
       } else {
         setError("Hubo un error al cambiar la contraseña.");
