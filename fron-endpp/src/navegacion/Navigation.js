@@ -11,7 +11,11 @@ import Navigation from './Navigation';
 import LoginAutenticacion from './LoginAutenticacion/LoginAutenticacion';
 import ProtectedRoute from '../rutaProtegida/ProtectedRoute';
 import RestrablecerContrasenia from '../RestablecerContrasenia/RestablecerContrasenia';
+import MiPerfil from '../MiPerfil';
 import CuentasCorrientes from '../Cuentacorriente/Cuentacorriente';
+import CambiarContrasenia from '../CambiarContrasenia/CambiarContrasenia';
+import Persona from '../Persona/Persona'
+
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
   return (
@@ -25,8 +29,10 @@ function App() {
         <Route path="FormularioEmpresa" element={<FormularioEmpresa />} />
         <Route path="ListaEmpresas" element={<ListaEmpresas />} />
         <Route path="Usuarios" element={<Usuarios />} />
+        <Route path="Persona" element={< Persona/>} />
         <Route path="CuentasCorrientes" element={<CuentasCorrientes />} />
-       
+        <Route path='/CambiarContrasenia' element={<CambiarContrasenia/>}/>
+
       </Route>
     </Routes>
   );
