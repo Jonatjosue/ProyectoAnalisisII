@@ -20,7 +20,7 @@ public class RoleService {
         return roleRepository.save(role);
     }
 
-    public List<Role> obtenerRoles(){
+    public List<Role> obtenerRoles() {
         return roleRepository.findAll();
     }
 
@@ -31,9 +31,14 @@ public class RoleService {
         return roleRepository.save(role);
     }
 
-    public Date obtenerFecha(){
+    public Date obtenerFecha() {
         LocalDate dateObj = LocalDate.now();
         Date date = Date.from(dateObj.atStartOfDay(ZoneId.systemDefault()).toInstant());
         return date;
+    }
+
+    public Role obtenerRolePorId(Long idRole) {
+        return roleRepository.findById(idRole)
+                .orElseThrow(() -> new RuntimeException("Role no encontrado con id: " + idRole));
     }
 }
