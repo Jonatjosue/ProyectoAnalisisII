@@ -16,6 +16,7 @@ import CuentasCorrientes from '../Cuentacorriente/Cuentacorriente';
 import CambiarContrasenia from '../CambiarContrasenia/CambiarContrasenia';
 import Persona from '../Persona/Persona'
 import ModuloList from '../Navbar/ModuloList';
+import MenuList from '../Navbar/ModuloList';
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -34,6 +35,7 @@ function App() {
         <Route path="CuentasCorrientes" element={<CuentasCorrientes />} />
         <Route path='/CambiarContrasenia' element={<CambiarContrasenia/>}/>
         <Route path="/modulos" element={<ModuloList />} />
+        <Route path="/menu" element={<MenuList />} />
       </Route>
     </Routes>
   );

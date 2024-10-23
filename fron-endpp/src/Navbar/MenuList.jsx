@@ -3,13 +3,15 @@ import { Table, Container, Row, Col, Button, Spinner, Modal, Form } from 'react-
 import axios from 'axios';
 
 const ModuloList = () => {
+  const [menus, setMenus] = useState([]);
   const [modulos, setModulos] = useState([]);
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [newModulo, setNewModulo] = useState({
+  const [newModulo, setNewMenu] = useState({
     nombre: '',
-    ordenMenu: '',
+    idModulo: '', // Added idModulo to newModulo state
+    ordenMenu: '', // Allow user input for ordenMenu
     usuarioCreacion: localStorage.getItem('username'),
     fechaCreacion: '',
   });
@@ -17,19 +19,37 @@ const ModuloList = () => {
   const [editModulo, setEditModulo] = useState(null);
 
   useEffect(() => {
-    fetchModulos();
+    fetchMenus();
+    fetchModulos(); // Fetch modulos here
   }, []);
+
+  const fetchMenus = async () => {
+    try {
+      const response = await axios.get('http://localhost:8081/api/menu');
+      setMenus(response.data);
+      setLoading(false);
+      setNewMenu((prev) => ({ ...prev, ordenMenu: response.data.length + 1 }));
+    } catch (error) {
+      console.error('Error fetching Menus:', error);
+      setLoading(false);
+    }
+  };
 
   const fetchModulos = async () => {
     try {
       const response = await axios.get('http://localhost:8081/api/modulos');
-      setModulos(response.data);
+      setModulos(response.data); // Store the fetched modulos
       setLoading(false);
-      setNewModulo((prev) => ({ ...prev, ordenMenu: response.data.length + 1 }));
     } catch (error) {
       console.error('Error fetching Modulos:', error);
       setLoading(false);
     }
+  };
+
+  // Function to get the name of the module by ID
+  const getModuloNameById = (id) => {
+    const modulo = modulos.find(m => m.idModulo === id);
+    return modulo ? modulo.nombre : 'Unknown'; // Return 'Unknown' if not found
   };
 
   const handleShowAdd = () => setShowAddModal(true);
@@ -47,7 +67,7 @@ const ModuloList = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setNewModulo({ ...newModulo, [name]: value });
+    setNewMenu({ ...newModulo, [name]: value });
   };
 
   const handleEditInputChange = (e) => {
@@ -63,9 +83,9 @@ const ModuloList = () => {
         ...newModulo,
         fechaCreacion: currentDateTime,
       };
-      await axios.post('http://localhost:8081/api/modulos', moduloToSubmit);
+      await axios.post('http://localhost:8081/api/menu', moduloToSubmit);
       setShowAddModal(false);
-      fetchModulos();
+      fetchMenus();
     } catch (error) {
       console.error('Error adding new Modulo:', error);
     }
@@ -83,7 +103,7 @@ const ModuloList = () => {
       const newOrdenMenu = parseInt(updatedModulo.ordenMenu);
 
       if (originalOrdenMenu !== newOrdenMenu) {
-        const updatedModulos = modulos.map((modulo) => {
+        const updatedModulos = menus.map((modulo) => {
           if (modulo.idModulo !== updatedModulo.idModulo) {
             if (modulo.ordenMenu >= newOrdenMenu && modulo.ordenMenu < originalOrdenMenu) {
               return { ...modulo, ordenMenu: modulo.ordenMenu + 1 };
@@ -96,13 +116,13 @@ const ModuloList = () => {
         });
 
         await Promise.all(updatedModulos.map(modulo => 
-          axios.put(`http://localhost:8081/api/modulos/${modulo.idModulo}`, modulo)
+          axios.put(`http://localhost:8081/api/menu/${modulo.idMenu}`, modulo)
         ));
       }
 
-      await axios.put(`http://localhost:8081/api/modulos/${updatedModulo.idModulo}`, updatedModulo);
+      await axios.put(`http://localhost:8081/api/menu/${updatedModulo.idMenu}`, updatedModulo);
       handleCloseEdit();
-      fetchModulos();
+      fetchMenus();
     } catch (error) {
       console.error('Error updating Modulo:', error);
     }
@@ -112,10 +132,10 @@ const ModuloList = () => {
     <Container className="mt-5">
       <Row className="justify-content-between align-items-center">
         <Col>
-          <h1 className="text-center">Gestión de Módulos</h1>
+          <h1 className="text-center">Gestión de Menú</h1>
         </Col>
         <Col className="text-right">
-          <Button variant="primary" onClick={handleShowAdd}>Nuevo Modulo</Button>
+          <Button variant="primary" onClick={handleShowAdd}>Nuevo Menú</Button>
         </Col>
       </Row>
       {loading ? (
@@ -130,6 +150,7 @@ const ModuloList = () => {
             <tr>
               <th className="text-center">Id</th>
               <th className="text-center">Nombre</th>
+              <th className="text-center">Módulo</th>
               <th className="text-center">Orden Menú</th>
               <th className="text-center">Fecha Creación</th>
               <th className="text-center">Usuario Creación</th>
@@ -139,22 +160,23 @@ const ModuloList = () => {
             </tr>
           </thead>
           <tbody>
-            {modulos.length === 0 ? (
+            {menus.length === 0 ? (
               <tr>
                 <td colSpan="8" className="text-center">No Modulos found</td>
               </tr>
             ) : (
-              modulos.map((modulo) => (
-                <tr key={modulo.idModulo}>
-                  <td className="text-center">{modulo.idModulo}</td>
-                  <td >{modulo.nombre}</td>
-                  <td className="text-center">{modulo.ordenMenu}</td>
-                  <td className="text-center">{new Date(modulo.fechaCreacion).toLocaleDateString()}</td>
-                  <td className="text-center">{modulo.usuarioCreacion}</td>
-                  <td className="text-center">{new Date(modulo.fechaModificacion).toLocaleDateString()}</td>
-                  <td className="text-center">{modulo.usuarioModificacion}</td>
+              menus.map((item) => (
+                <tr key={item.idModulo}>
+                  <td className="text-center">{item.idMenu}</td>
+                  <td>{item.nombre}</td>
+                  <td className="text-center">{getModuloNameById(item.idModulo)}</td> {/* Display module name */}
+                  <td className="text-center">{item.ordenMenu}</td>
+                  <td className="text-center">{new Date(item.fechaCreacion).toLocaleDateString()}</td>
+                  <td className="text-center">{item.usuarioCreacion}</td>
+                  <td className="text-center">{new Date(item.fechaModificacion).toLocaleDateString()}</td>
+                  <td className="text-center">{item.usuarioModificacion}</td>
                   <td className="text-center">
-                    <Button variant="warning" size="sm" className="mr-2" onClick={() => handleShowEdit(modulo)}>Editar</Button>
+                    <Button variant="warning" size="sm" className="mr-2" onClick={() => handleShowEdit(item)}>Editar</Button>
                   </td>
                 </tr>
               ))
@@ -180,13 +202,31 @@ const ModuloList = () => {
                 required
               />
             </Form.Group>
+            <Form.Group controlId="idModulo" className="mt-3">
+              <Form.Label>Seleccionar Módulo</Form.Label>
+              <Form.Control
+                as="select"
+                name="idModulo"
+                value={newModulo.idModulo}
+                onChange={handleInputChange}
+                required
+              >
+                <option value="">Seleccione un Módulo</option>
+                {modulos.map(modulo => (
+                  <option key={modulo.idModulo} value={modulo.idModulo}>
+                    {modulo.nombre}
+                  </option>
+                ))}
+              </Form.Control>
+            </Form.Group>
             <Form.Group controlId="ordenMenu" className="mt-3">
               <Form.Label>Orden Menu</Form.Label>
               <Form.Control
                 type="number"
                 name="ordenMenu"
                 value={newModulo.ordenMenu}
-                readOnly
+                onChange={handleInputChange} // Allow user input
+                required
               />
             </Form.Group>
             <Button variant="primary" type="submit" className="mt-3">Crear Modulo</Button>
@@ -212,20 +252,31 @@ const ModuloList = () => {
                   required
                 />
               </Form.Group>
-              <Form.Group controlId="ordenMenu" className="mt-3">
-                <Form.Label>Orden Menu</Form.Label>
+              <Form.Group controlId="idModulo" className="mt-3">
+                <Form.Label>Seleccionar Módulo</Form.Label>
                 <Form.Control
                   as="select"
-                  name="ordenMenu"
-                  value={editModulo.ordenMenu}
+                  name="idModulo"
+                  value={editModulo.idModulo}
                   onChange={handleEditInputChange}
+                  required
                 >
-                  {[...Array(modulos.length)].map((_, index) => (
-                    <option key={index + 1} value={index + 1}>
-                      {index + 1}
+                  {modulos.map(modulo => (
+                    <option key={modulo.idModulo} value={modulo.idModulo}>
+                      {modulo.nombre}
                     </option>
                   ))}
                 </Form.Control>
+              </Form.Group>
+              <Form.Group controlId="ordenMenu" className="mt-3">
+                <Form.Label>Orden Menu</Form.Label>
+                <Form.Control
+                  type="number"
+                  name="ordenMenu"
+                  value={editModulo.ordenMenu}
+                  onChange={handleEditInputChange}
+                  required
+                />
               </Form.Group>
               <Button variant="primary" type="submit" className="mt-3">Actualizar Módulo</Button>
             </Form>
