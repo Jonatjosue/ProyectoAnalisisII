@@ -38,6 +38,9 @@ public class OpcionEntity {
     @Column(name = "Usuario_Modificacion")
     private String usuarioModificacion;
 
+    @Column(name = "Pagina")
+    private String pagina;
+
     // Getters and Setters
 
     public Long getIdMenu() {
@@ -102,5 +105,13 @@ public class OpcionEntity {
 
     public void setUsuarioModificacion(String usuarioModificacion) {
         this.usuarioModificacion = usuarioModificacion;
+    }
+
+    public String getPagina() {
+        return pagina;
+    }
+
+    public void setPagina(String pagina) {
+        this.pagina = pagina;
     }
 }
