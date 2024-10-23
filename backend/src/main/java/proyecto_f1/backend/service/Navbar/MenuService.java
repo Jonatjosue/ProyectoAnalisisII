@@ -22,7 +22,7 @@ public class MenuService {
         return menuRepository.findById(id);
     }
 
-    public MenuEntity save(MenuEntity modulo) {
-        return menuRepository.save(modulo);
+    public MenuEntity save(MenuEntity menu) {
+        return menuRepository.save(menu);
     }
 }
