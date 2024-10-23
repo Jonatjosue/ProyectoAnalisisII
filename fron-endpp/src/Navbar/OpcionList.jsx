@@ -94,9 +94,11 @@ const ModuloList = () => {
   const handleEditFormSubmit = async (e) => {
     e.preventDefault();
     try {
+      const currentDateTime = new Date().toISOString(); // Capture the current date/time
       const updatedOpcion = {
         ...editOpcion,
         usuarioModificacion: localStorage.getItem('username'),
+        fechaModificacion: currentDateTime, // Set the modification date
       };
 
       const originalOrdenMenu = editOpcion.ordenMenu;
@@ -134,7 +136,7 @@ const ModuloList = () => {
   const currentOpciones = opciones.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
-
+  
   return (
     <Container className="mt-5">
       <Row className="justify-content-between align-items-center">
