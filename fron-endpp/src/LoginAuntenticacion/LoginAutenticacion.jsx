@@ -87,6 +87,9 @@ const LoginAutenticacion = () => {
   const redirigir = (token, idrole, username) => {
     login(token, idrole);
     localStorage.setItem('username', username); // Store username in localStorage
+    const startSession = new Date().toISOString(); // Capture current date/time
+    localStorage.setItem('startSession', startSession); // Store session start time in localStorage
+    alert(startSession);
   };
 
   const ocultarError = () => {
