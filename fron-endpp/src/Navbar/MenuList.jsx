@@ -229,7 +229,7 @@ const ModuloList = () => {
                 required
               />
             </Form.Group>
-            <Button variant="primary" type="submit" className="mt-3">Crear Modulo</Button>
+            <Button variant="primary" type="submit" className="mt-3">Crear Menú</Button>
           </Form>
         </Modal.Body>
       </Modal>
