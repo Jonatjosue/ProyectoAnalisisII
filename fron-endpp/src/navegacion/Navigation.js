@@ -15,6 +15,7 @@ import MiPerfil from '../MiPerfil';
 import CuentasCorrientes from '../Cuentacorriente/Cuentacorriente';
 import CambiarContrasenia from '../CambiarContrasenia/CambiarContrasenia';
 import Persona from '../Persona/Persona'
+import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -32,6 +33,7 @@ function App() {
         <Route path="Persona" element={< Persona/>} />
         <Route path="CuentasCorrientes" element={<CuentasCorrientes />} />
         <Route path='/CambiarContrasenia' element={<CambiarContrasenia/>}/>
+        <Route path='/TipoDocumentoPage' element={<TipoDocumentoPage/>}/>
 
       </Route>
     </Routes>

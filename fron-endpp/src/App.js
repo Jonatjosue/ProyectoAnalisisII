@@ -15,6 +15,7 @@ import RestrablecerContrasenia from "./RestablecerContrasenia/RestablecerContras
 import CuentaCorriente from './Cuentacorriente/Cuentacorriente'
 import Persona from './Persona/Persona';
 import CambiarContrasenia from "./CambiarContrasenia/CambiarContrasenia";
+import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
 
 
 
@@ -51,6 +52,7 @@ function NavBar() {
                <li className="nav-link active" aria-current="page" ><Link to="/Usuarios" onClick={handleClick}>Usuarios</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/Persona" onClick={handleClick}>Persona</Link></li>
                <li class="nav-link active" aria-current="page" ><Link to="/CambiarContrasenia">Cambiar Contraseña</Link></li>
+               <li class="nav-link active" aria-current="page" ><Link to="/TipoDocumentoPage">TipoDocumentoPage</Link></li>
              </>
            ) : (
              <li className="nav-link active" aria-current="page" ><Link to="/" onClick={() => setShowLinks(true)}>Home</Link></li>
@@ -83,6 +85,7 @@ function App() {
           <Route path="/Persona" element={<ProtectedRoute><Persona /></ProtectedRoute>} />
           <Route path="/CambiarContrasenia" element={<ProtectedRoute><CambiarContrasenia /></ProtectedRoute>} />
           <Route path="/CuentaCorriente" element={<ProtectedRoute> <CuentaCorriente /> </ProtectedRoute> } />
+          <Route path="/TipoDocumentoPage" element={<ProtectedRoute> <TipoDocumentoPage /> </ProtectedRoute> } />
           
         </Routes>
       </div>
