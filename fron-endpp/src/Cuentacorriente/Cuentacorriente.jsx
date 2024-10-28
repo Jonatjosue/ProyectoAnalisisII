@@ -3,6 +3,11 @@ import 'bootstrap/dist/css/bootstrap.min.css';
 
 function CuentasCorrientes() {
   const [cuentasCorrientes, setCuentasCorrientes] = useState([]);
+
+
+  const [roleOpcion, setRoleOpcion] = useState(null); //agregar pagina
+  
+  
   const [formData, setFormData] = useState({
     idTipoDocumento: '',
     idPersona: '',
@@ -28,6 +33,16 @@ function CuentasCorrientes() {
   const [isEditing, setIsEditing] = useState(false);
   const dialogRef = useRef(null);
 
+  
+  
+  
+  useEffect(() => {
+   
+    fetchRoleOpcion(localStorage.getItem("userRole"), 'Empresas');
+  }, []); // agregar pagina
+
+  
+  
   const fetchCuentaCorrienteByIds = async () => {
     try {
       const response = await fetch(`http://localhost:8081/api/cuentasCorrientes/${formData.idTipoDocumento}/${formData.idPersona}`);
@@ -38,6 +53,7 @@ function CuentasCorrientes() {
     }
   };
 
+  
   const openDialog = (cuentaCorriente = null) => {
     if (cuentaCorriente) {
       setFormData(cuentaCorriente);
@@ -70,6 +86,7 @@ function CuentasCorrientes() {
     dialogRef.current.showModal();
   };
 
+
   const closeDialog = () => {
     dialogRef.current.close();
     setFormData({
@@ -97,6 +114,7 @@ function CuentasCorrientes() {
     setIsEditing(false);
   };
 
+ 
   const handleChange = (e) => {
     const { name, value, type, checked } = e.target;
     setFormData({
@@ -105,6 +123,19 @@ function CuentasCorrientes() {
     });
   };
 
+  
+  const fetchRoleOpcion = async (idRole, nombreOpcion) => {
+    try {
+        const response = await fetch(`http://localhost:8081/api/role-opcion-por-nombre/`+idRole+`/`+nombreOpcion);
+        const data = await response.json();
+        setRoleOpcion(data);  // Actualizamos el estado con los datos recibidos
+
+    } catch (error) {
+        console.error("Error al obtener los datos:", error);
+    }
+  };
+
+  
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
@@ -131,7 +162,12 @@ function CuentasCorrientes() {
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4">Crear Cuenta Corriente</h1>
-
+      {
+        (roleOpcion.Alta===true)?<form></form>:<p>No puede escribir</p>
+        
+      }
+    
+      
       <div className="form-inline mb-3">
         <input
           type="number"
@@ -311,8 +347,9 @@ function CuentasCorrientes() {
           </div>
         </form>
       </dialog>
+  
     </div>
-  );
+  );//agregar tambien
 }
 
 export default CuentasCorrientes;

@@ -43,6 +43,9 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 
         String username = null;
         String jwt = null;
+        String testUser = "testuser";
+
+
 
             // Permitir que la ruta de inicio de sesión pase sin filtro
     if (request.getRequestURI().equals("/api/Usuario/login")) {
@@ -54,6 +57,25 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         chain.doFilter(request, response); // Permitir acceso
         return; // Salir del método
     }
+//============================================================== para poder hacer pruebas sin token
+    if (testUser.equals("testuser")) {
+
+        Usuario userDetails = this.userrepo.findUsuario("Elgin");
+        Collection<? extends GrantedAuthority> roles = roleUsuario.findRolesUsuario(username)
+        .stream()
+        .map(role -> new SimpleGrantedAuthority(role)) // Asume que role es un String
+        .collect(Collectors.toList());
+
+UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
+        new UsernamePasswordAuthenticationToken(userDetails, null, roles);
+
+usernamePasswordAuthenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+SecurityContextHolder.getContext().setAuthentication(usernamePasswordAuthenticationToken);
+        chain.doFilter(request, response); // Permitir acceso sin autenticación
+        return;
+    }
+//========================================================================
+
 
     if (request.getRequestURI().equals("/api/Usuario/recuperarCuenta")) {
         chain.doFilter(request, response); // Permitir acceso

@@ -15,16 +15,18 @@ import RestrablecerContrasenia from "./RestablecerContrasenia/RestablecerContras
 import CuentaCorriente from './Cuentacorriente/Cuentacorriente'
 import Persona from './Persona/Persona';
 import CambiarContrasenia from "./CambiarContrasenia/CambiarContrasenia";
+import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
 
 // Simulando los permisos para cada ruta
 const permisos = {
   FormularioUsuario: 1, 
-  FormularioEmpresa: 0,
-  ListaEmpresas: 0,
-  Usuarios: 0,
-  Persona: 0,
-  CuentaCorriente: 0,
-  CambiarContrasenia: 1
+  FormularioEmpresa: 1,
+  ListaEmpresas: 1,
+  Usuarios: 1,
+  Persona: 1,
+  CuentaCorriente: 1,
+  CambiarContrasenia: 1,
+  TipoDocumentoPage: 1
 };
 
 function NavBar() {
@@ -73,6 +75,9 @@ function NavBar() {
                   {permisos.CuentaCorriente === 1 && (
                     <li className="nav-link active" aria-current="page"><Link to="/CuentaCorriente" onClick={handleClick}>Cuenta corriente</Link></li>
                   )}
+                  {permisos.TipoDocumentoPage &&(
+                    <li class="nav-link active" aria-current="page" ><Link to="/TipoDocumentoPage">TipoDocumentoPage</Link></li>
+                  )}
                 </>
               ) : (
                 <li className="nav-link active" aria-current="page"><Link to="/" onClick={() => setShowLinks(true)}>Home</Link></li>
@@ -83,6 +88,7 @@ function NavBar() {
         </div>
       </div>
     </nav>
+
   );
 }
 
@@ -119,6 +125,15 @@ function App() {
           {permisos.CuentaCorriente === 1 && (
             <Route path="/CuentaCorriente" element={<ProtectedRoute><CuentaCorriente /> </ProtectedRoute>} />
           )}
+          <Route path="/FormularioUsuario" element={<ProtectedRoute><FormularioUsuario /></ProtectedRoute>} />
+          <Route path="/FormularioEmpresa" element={<ProtectedRoute><FormularioEmpresa /></ProtectedRoute>} />
+          <Route path="/ListaEmpresas" element={<ProtectedRoute><ListaEmpresas /></ProtectedRoute>} />
+          <Route path="/Usuarios" element={<ProtectedRoute><Usuarios /></ProtectedRoute>} />
+          <Route path="/Persona" element={<ProtectedRoute><Persona /></ProtectedRoute>} />
+          <Route path="/CambiarContrasenia" element={<ProtectedRoute><CambiarContrasenia /></ProtectedRoute>} />
+          <Route path="/CuentaCorriente" element={<ProtectedRoute> <CuentaCorriente /> </ProtectedRoute> } />
+          <Route path="/TipoDocumentoPage" element={<ProtectedRoute> <TipoDocumentoPage /> </ProtectedRoute> } />
+          
         </Routes>
       </div>
     </AuthProvider>
