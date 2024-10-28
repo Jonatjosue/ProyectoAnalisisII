@@ -25,16 +25,14 @@ public class Usuario {
     @Temporal(TemporalType.DATE)
     private Date fechaNacimiento;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Status_Usuario", nullable = false)
-    private StatusUsuario statusUsuario;
+    @Column(name = "Id_Status_Usuario", nullable = false)
+    private String statusUsuario;
 
     @Column(name = "Password", length = 255)
     private String password;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Genero", nullable = false)
-    private Genero genero;
+    @Column(name = "Id_Genero", nullable = false)
+    private String idGenero;
 
     @Column(name = "Ultima_Fecha_Ingreso")
     @Temporal(TemporalType.TIMESTAMP)
@@ -62,9 +60,8 @@ public class Usuario {
     @Column(name = "Telefono_Movil", length = 30)
     private String telefonoMovil;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Sucursal", nullable = false)
-    private Sucursal sucursal;
+    @Column(name = "Id_Sucursal", nullable = false)
+    private String sucursal;
 
     @Column(name = "Fecha_Creacion", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -125,11 +122,11 @@ public class Usuario {
         this.fechaNacimiento = fechaNacimiento;
     }
 
-    public StatusUsuario getStatusUsuario() {
+    public String getStatusUsuario() {
         return statusUsuario;
     }
 
-    public void setStatusUsuario(StatusUsuario statusUsuario) {
+    public void setStatusUsuario(String statusUsuario) {
         this.statusUsuario = statusUsuario;
     }
 
@@ -141,12 +138,12 @@ public class Usuario {
         this.password = password;
     }
 
-    public Genero getGenero() {
-        return genero;
+    public String getIdGenero() {
+        return idGenero;
     }
 
-    public void setGenero(Genero genero) {
-        this.genero = genero;
+    public void setIdGenero(String idGenero) {
+        this.idGenero = idGenero;
     }
 
     public Date getUltimaFechaIngreso() {
@@ -213,11 +210,11 @@ public class Usuario {
         this.telefonoMovil = telefonoMovil;
     }
 
-    public Sucursal getSucursal() {
+    public String getSucursal() {
         return sucursal;
     }
 
-    public void setSucursal(Sucursal sucursal) {
+    public void setSucursal(String sucursal) {
         this.sucursal = sucursal;
     }
 

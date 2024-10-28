@@ -60,7 +60,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
 //============================================================== para poder hacer pruebas sin token
     if (testUser.equals("testuser")) {
 
-        Usuario userDetails = this.userrepo.findUsuario("Elgin");
+        Usuario userDetails = this.userrepo.findUsuario("Nologin");  /*  ###### CAMBIAR AQUI EL USUARIO A TESTEAR ####### */
         Collection<? extends GrantedAuthority> roles = roleUsuario.findRolesUsuario(username)
         .stream()
         .map(role -> new SimpleGrantedAuthority(role)) // Asume que role es un String

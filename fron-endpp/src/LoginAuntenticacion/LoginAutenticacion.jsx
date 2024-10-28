@@ -3,7 +3,6 @@ import axios from "axios";
 import CryptoJs from "crypto-js";
 import { AuthContext } from "../autenticacion/AuthContext";
 import { useNavigate } from 'react-router-dom';
-//import RestrablecerContrasenia from "../RestrablecerContrasenia/restrablecerContrasenia";
 
 function ErrorAutenticacion({ respuesta, mostrar, onHidden }) {
   const [visible, setVisible] = useState(false);
@@ -64,7 +63,7 @@ const LoginAutenticacion = () => {
         });
 
         if (response.data.respuesta.respuesta === true) {
-          redirigir(response.data.token, response.data.role);
+          redirigir(response.data.token, response.data.role, persona.usuario); // Pass the username here
         } else {
           setErrorRespuesta(response.data.respuesta.descripcion);
           setMostrarError(true);
@@ -85,15 +84,16 @@ const LoginAutenticacion = () => {
     return CryptoJs.MD5(str).toString();
   };
 
-  const redirigir = (token, idrole) => {
+  const redirigir = (token, idrole, username) => {
     login(token, idrole);
+    localStorage.setItem('username', username); // Store username in localStorage
+    const startSession = new Date().toISOString(); // Capture current date/time
+    localStorage.setItem('startSession', startSession); // Store session start time in localStorage
   };
 
   const ocultarError = () => {
     setMostrarError(false);
   };
-
-
 
   return (
     <section className="vh-100">
@@ -139,10 +139,9 @@ const LoginAutenticacion = () => {
               </div>
 
               <div className="d-flex justify-content-around align-items-center mb-4">
-                
                 <a href="/RestrablecerContrasenia" className="text-decoration-none">
-              Olvide mi contraseña
-            </a>
+                  Olvide mi contraseña
+                </a>
               </div>
 
               <button type="submit" className="btn btn-primary btn-lg btn-block">
