@@ -129,7 +129,7 @@ function CuentasCorrientes() {
         const response = await fetch(`http://localhost:8081/api/role-opcion-por-nombre/`+idRole+`/`+nombreOpcion);
         const data = await response.json();
         setRoleOpcion(data);  // Actualizamos el estado con los datos recibidos
-
+        console.log(data)
     } catch (error) {
         console.error("Error al obtener los datos:", error);
     }
@@ -139,6 +139,7 @@ function CuentasCorrientes() {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
+      console.log('llegosi')
       const requestOptions = {
         method: isEditing ? 'PUT' : 'POST',
         headers: {
@@ -162,10 +163,7 @@ function CuentasCorrientes() {
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4">Crear Cuenta Corriente</h1>
-      {
-        (roleOpcion.Alta===true)?<form></form>:<p>No puede escribir</p>
-        
-      }
+  
     
       
       <div className="form-inline mb-3">
@@ -188,9 +186,10 @@ function CuentasCorrientes() {
         <button className="btn btn-primary" onClick={fetchCuentaCorrienteByIds}>Buscar</button>
       </div>
 
-      <button className="btn btn-success mb-3" onClick={() => openDialog()}>
+     { roleOpcion?.Alta===true&& (<button className="btn btn-success mb-3" onClick={() => openDialog()}>
         <i className="fas fa-plus"></i> Crear Nueva Cuenta
-      </button>
+      </button>)}
+      { roleOpcion?.Alta===false&& (<div><p>No tiene permisos de crear nuevas cuentas</p></div>)}
 
       <div className="table-responsive">
         <table className="table table-bordered">
