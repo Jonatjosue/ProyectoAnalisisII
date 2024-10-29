@@ -45,7 +45,7 @@ public class RoleController {
                 .map(role -> {
                     role.setIdRole(roleDetails.getIdRole());
                     role.setNombre(roleDetails.getNombre());
-                    role.setFechaModificacion(roleDetails.getUsuarioModificacion());
+                    role.setFechaModificacion(roleDetails.getFechaModificacion());
                     role.setUsuarioModificacion(roleDetails.getUsuarioModificacion());
                     return ResponseEntity.ok(roleService.save(role));
                 })

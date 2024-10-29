@@ -22,7 +22,7 @@ public class Role {
     private String usuarioCreacion;
 
     @Column(name = "Fecha_Modificacion")
-    private String fechaModificacion;
+    private Date fechaModificacion;
 
     @Column(name = "Usuario_Modificacion")
     private String usuarioModificacion;
@@ -62,11 +62,11 @@ public class Role {
         this.usuarioCreacion = usuarioCreacion;
     }
 
-    public String getFechaModificacion() {
+    public Date getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(String fechaModificacion) {
+    public void setFechaModificacion(Date fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 

@@ -2,9 +2,6 @@ package proyecto_f1.backend.model.Usuario;
 
 import jakarta.persistence.*;
 import java.util.Date;
-import proyecto_f1.backend.model.StatusUsuario.StatusUsuario;
-import proyecto_f1.backend.model.Genero.Genero;
-import proyecto_f1.backend.model.Sucursal.Sucursal;
 
 @Entity
 @Table(name = "USUARIO")

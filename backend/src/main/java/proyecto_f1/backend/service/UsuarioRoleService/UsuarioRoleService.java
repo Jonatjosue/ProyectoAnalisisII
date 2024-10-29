@@ -15,11 +15,6 @@ public class UsuarioRoleService {
     @Autowired
     private UsuarioRoleRepository usuarioRoleRepository;
 
-    // Método para obtener todas las relaciones Usuario-Rol
-    public List<UsuarioRole> getAllUsuarioRoles() {
-        return usuarioRoleRepository.findAll();
-    }
-
     // Método para obtener todas las relaciones Usuario-Rol por idUsuario
     public List<UsuarioRole> getUsuarioRolesByUsuarioId(Long idUsuario) {
         return usuarioRoleRepository.findByIdUsuario(idUsuario);
