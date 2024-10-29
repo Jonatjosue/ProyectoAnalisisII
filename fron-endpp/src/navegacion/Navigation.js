@@ -17,6 +17,7 @@ import CambiarContrasenia from '../CambiarContrasenia/CambiarContrasenia';
 import Persona from '../Persona/Persona'
 import ModuloList from '../Navbar/ModuloList';
 import MenuList from '../Navbar/ModuloList';
+import RoleList from '../gestionRoles/RoleList';
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -36,6 +37,7 @@ function App() {
         <Route path='/CambiarContrasenia' element={<CambiarContrasenia/>}/>
         <Route path="/modulos" element={<ModuloList />} />
         <Route path="/menu" element={<MenuList />} />
+        <Route path="/role" element={<RoleList />} />
       </Route>
     </Routes>
   );
