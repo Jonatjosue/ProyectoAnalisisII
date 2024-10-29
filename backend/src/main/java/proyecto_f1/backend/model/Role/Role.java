@@ -1,11 +1,8 @@
 package proyecto_f1.backend.model.Role;
 
 import java.util.Date;
-import java.util.Set;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
-import proyecto_f1.backend.model.Usuario.UsuarioRole;
 
 @Entity
 @Table(name = "ROLE")  // Especificar el nombre exacto de la tabla existente
@@ -25,16 +22,10 @@ public class Role {
     private String usuarioCreacion;
 
     @Column(name = "Fecha_Modificacion")
-    private Date fechaModificacion;
+    private String fechaModificacion;
 
     @Column(name = "Usuario_Modificacion")
     private String usuarioModificacion;
-
-
-
-    @OneToMany(mappedBy = "role")
-    @JsonIgnore
-    private Set<UsuarioRole> usuarioRoles;
 
 
     // Getters y Setters
@@ -71,11 +62,11 @@ public class Role {
         this.usuarioCreacion = usuarioCreacion;
     }
 
-    public Date getFechaModificacion() {
+    public String getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(Date fechaModificacion) {
+    public void setFechaModificacion(String fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 
@@ -87,11 +78,4 @@ public class Role {
         this.usuarioModificacion = usuarioModificacion;
     }
 
-    public Set<UsuarioRole> getUsuarioRoles() {
-        return usuarioRoles;
-    }
-
-    public void setUsuarioRoles(Set<UsuarioRole> usuarioRoles) {
-        this.usuarioRoles = usuarioRoles;
-    }
 }

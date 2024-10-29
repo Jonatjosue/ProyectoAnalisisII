@@ -4,6 +4,7 @@ import java.time.LocalDate;
 import java.time.ZoneId;
 import java.util.Date;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -20,20 +21,15 @@ public class RoleService {
         return roleRepository.save(role);
     }
 
-    public List<Role> obtenerRoles(){
+    public List<Role> findAll(){
         return roleRepository.findAll();
     }
 
-    public Role actualizarRole(Long idRole, Role roleDetalles) {
-        Role role = roleRepository.findById(idRole).orElseThrow();
-        role.setNombre(roleDetalles.getNombre());
-        role.setFechaModificacion(obtenerFecha());
-        return roleRepository.save(role);
+    public Optional<Role> findById(Long id) {
+        return roleRepository.findById(id);
     }
 
-    public Date obtenerFecha(){
-        LocalDate dateObj = LocalDate.now();
-        Date date = Date.from(dateObj.atStartOfDay(ZoneId.systemDefault()).toInstant());
-        return date;
+    public Role save(Role role) {
+        return roleRepository.save(role);
     }
 }
