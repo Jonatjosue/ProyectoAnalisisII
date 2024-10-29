@@ -32,4 +32,9 @@ public class RoleService {
     public Role save(Role role) {
         return roleRepository.save(role);
     }
+
+    public Role obtenerRolePorId(Long idRole) {
+        return roleRepository.findById(idRole)
+                .orElseThrow(() -> new RuntimeException("Role no encontrado con id: " + idRole));
+    }
 }

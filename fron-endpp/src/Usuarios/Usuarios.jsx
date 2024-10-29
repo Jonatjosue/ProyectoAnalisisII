@@ -486,6 +486,9 @@ import { AuthContext } from '../autenticacion/AuthContext';
 function Usuarios() {
   const { userRole } = useContext(AuthContext);
   const [usuarios, setUsuarios] = useState([]);
+  const [roles, setRoles] = useState({});
+
+ 
   const [formData, setFormData] = useState({
     idUsuario: null,
     nombre: '',
@@ -511,12 +514,32 @@ function Usuarios() {
   const dialogRef = useRef(null);
 
   useEffect(() => {
-    fetch('http://localhost:8081/api/Usuario/All')
+    /*fetch('http://localhost:8081/api/Usuario/All')
       .then(response => response.json())
-      .then(data => setUsuarios(data))
-      .catch(error => console.error('Error fetching data:', error));
-  }, []);
+      .then(data => setUsuarios(data),)
+      .catch(error => console.error('Error fetching data:', error));*/
+      
+      
+      fetch('http://localhost:8081/api/Usuario/All', {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          setUsuarios(data); 
+          perfiles(data);
+          
+        })
+        .catch((error) => {
+          console.error("Error al obtener los usuarios: ", error);
+        });
 
+  perfiles(usuarios);
+  }, []);
+ 
   const openDialog = (usuario = null) => {
     if (usuario) {
       setFormData(usuario);
@@ -606,7 +629,30 @@ function Usuarios() {
       alert('Error al guardar el usuario');
     }
   };
-  console.log(userRole == 1)
+
+  const perfiles = (usuarios) => {
+    let rolesTemp = {};
+    usuarios.forEach((element) => {
+      let IDUsuario = element.idUsuario;
+      fetch('http://localhost:8081/api/usuario-role/usuario/' + IDUsuario, {
+        credentials: 'include',
+        method: 'GET',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+      })
+        .then((response) => response.json())
+        .then((data) => {
+          rolesTemp[IDUsuario] = data[0]?.role?.nombre || 'Sin Rol';
+          // Actualizamos los roles en el estado
+          setRoles((prevRoles) => ({ ...prevRoles, [IDUsuario]: rolesTemp[IDUsuario] }));
+        })
+        .catch((error) => {
+          console.error('Error al obtener los roles: ', error);
+        });
+    });
+  };
+  
   return (
     
     <div className="container mt-5">
@@ -624,12 +670,15 @@ function Usuarios() {
             <th>Última Fecha de Ingreso</th>
             <th>Última Fecha de Cambio de Password</th>
             <th>Intentos de Acceso</th>
+            <th>Roles asignados</th>
             <th>Acciones</th>
           </tr>
         </thead>
         <tbody>
           {usuarios.map(usuario => (
+            
             <tr key={usuario.idUsuario}>
+              
               <td>{usuario.idUsuario}</td>
               <td>{usuario.nombre}</td>
               <td>{usuario.apellido}</td>
@@ -639,6 +688,7 @@ function Usuarios() {
               <td>{new Date(usuario.ultimaFechaIngreso).toLocaleDateString()}</td>
               <td>{new Date(usuario.ultimaFechaCambioPassword).toLocaleDateString()}</td>
               <td>{usuario.intentosDeAcceso}</td>
+              <td>{roles[usuario.idUsuario] || 'Sin Rol'}</td>
               <td>
                 {userRole ==1 && (
                   <button className="btn btn-warning" onClick={() => openDialog(usuario)}>Editar</button>

@@ -18,7 +18,7 @@ import proyecto_f1.backend.service.Role.RoleService;
 @RestController
 @RequestMapping("/api/Role")
 public class RoleController {
-    
+
     @Autowired
     private RoleService roleService;
 
@@ -51,4 +51,10 @@ public class RoleController {
                 })
                 .orElse(ResponseEntity.notFound().build());
     }
+
+    @GetMapping("/{idRole}")
+    public Role obtenerRolePorId(@PathVariable Long idRole) {
+        return roleService.obtenerRolePorId(idRole);
+    }
+
 }
