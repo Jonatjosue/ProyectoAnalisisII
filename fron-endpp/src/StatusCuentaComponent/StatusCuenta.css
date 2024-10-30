@@ -1,7 +1,7 @@
-/* StatusUsuario.css */
+/* StatusCuenta.css */
 
 /* Contenedor principal */
-.status-usuario-container {
+.status-cuenta-container {
     width: 80%;
     max-width: 600px;
     margin: 20px auto;
@@ -11,23 +11,23 @@
     background-color: #f9f9f9;
 }
 
-/* Encabezado */
-.status-usuario-container h2,
-.status-usuario-container h3 {
+/* Encabezados */
+.status-cuenta-container h2,
+.status-cuenta-container h3 {
     text-align: center;
     color: #333;
 }
 
 /* Lista de items */
-.status-usuario-list {
+.status-cuenta-list {
     list-style-type: none;
     padding: 0;
 }
 
-.status-usuario-item {
+.status-cuenta-item {
     display: flex;
     justify-content: space-between;
-    align-items: center;
+    align-items: center; /* Alineación vertical de los elementos */
     padding: 10px;
     margin: 5px 0;
     background-color: #fff;
@@ -36,6 +36,7 @@
 }
 
 /* Botones */
+.details-button,
 .edit-button,
 .submit-button,
 .cancel-button,
@@ -46,6 +47,13 @@
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    min-width: 100px; /* Ancho mínimo para evitar cambios de tamaño */
+    text-align: center; /* Centra el texto en el botón */
+}
+
+.details-button {
+    background-color: #6c757d;
+    margin-right: 10px; /* Espacio adicional entre botones */
 }
 
 .edit-button {
@@ -64,10 +72,17 @@
     margin-top: 10px;
 }
 
-.submit-button:hover,
+.delete-button {
+    background-color: #dc3545;
+    margin-top: 10px;
+}
+
+.details-button:hover,
 .edit-button:hover,
-.cancel-button:hover {
-    background-color: #0056b3;
+.submit-button:hover,
+.cancel-button:hover,
+.delete-button:hover {
+    opacity: 0.9; /* Cambia la opacidad al pasar el mouse */
 }
 
 /* Campo de entrada */
@@ -87,24 +102,15 @@
     margin-top: 10px;
 }
 
-/* Botón de eliminar */
-.delete-button {
-    background-color: #dc3545;
-    margin-top: 10px;
-    display: inline-block;
-}
-
-.delete-button:hover {
-    background-color: #c82333;
-}
-
 /* Espaciado para la lista */
-.status-usuario-list {
+.status-cuenta-list {
     margin-bottom: 20px;
 }
-.status-usuario-details {
+
+.status-cuenta-details {
     margin-top: 10px;
     padding: 10px;
     border-top: 1px solid #ddd;
     background-color: #f9f9f9;
+    margin-bottom: 10px; /* Espacio adicional debajo del contenedor de detalles */
 }

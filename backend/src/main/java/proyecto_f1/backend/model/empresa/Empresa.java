@@ -20,28 +20,28 @@ public class Empresa {
     @Column(name = "Nit", length = 20, nullable = false)
     private String nit;
 
-    @Column(name = "PasswordCantidadMayusculas")
+    @Column(name = "passwordcantidadmayusculas")
     private Integer passwordCantidadMayusculas;
 
-    @Column(name = "PasswordCantidadMinusculas")
+    @Column(name = "passwordcantidadminusculas")
     private Integer passwordCantidadMinusculas;
 
-    @Column(name = "PasswordCantidadCaracteresEspeciales")
+    @Column(name = "passwordcantidadcaracteresespeciales")
     private Integer passwordCantidadCaracteresEspeciales;
 
-    @Column(name = "PasswordCantidadCaducidadDias")
+    @Column(name = "passwordcantidadcaducidaddias")
     private Integer passwordCantidadCaducidadDias;
 
-    @Column(name = "PasswordLargo")
+    @Column(name = "passwordlargo")
     private Integer passwordLargo;
 
-    @Column(name = "PasswordIntentosAntesDeBloquear")
+    @Column(name = "passwordintentosantesdebloquear")
     private Integer passwordIntentosAntesDeBloquear;
 
-    @Column(name = "PasswordCantidadNumeros")
+    @Column(name = "passwordcantidadnumeros")
     private Integer passwordCantidadNumeros;
 
-    @Column(name = "PasswordCantidadPreguntasValidar")
+    @Column(name = "passwordcantidadpreguntasvalidar")
     private Integer passwordCantidadPreguntasValidar;
 
     @Column(name = "Fecha_Creacion", nullable = false)

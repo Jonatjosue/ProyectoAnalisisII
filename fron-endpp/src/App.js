@@ -18,13 +18,12 @@ import CambiarContrasenia from "./CambiarContrasenia/CambiarContrasenia";
 import ModuloList from "./Navbar/ModuloList";
 import MenuList from "./Navbar/MenuList";
 import OpcionList from "./Navbar/OpcionList";
-<<<<<<< HEAD
 import Genero from "./Genero/Genero";
 import StatusUsuario from "./StatusUsuario/StatusUsuario";
+import StatusCuentaComponent from "./StatusCuentaComponent/StatusCuentaComponent";
+import EstadoCivil from "./EstadoCivil/EstadoCivil";
 
-=======
 import RoleList from "./gestionRoles/RoleList";
->>>>>>> 56e667e12605d02ee384b171a8f447c5fc0b12e9
 
 
 
@@ -66,6 +65,8 @@ function NavBar() {
                <li className="nav-link active" aria-current="page" ><Link to="/Persona" onClick={handleClick}>Persona</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/Genero" onClick={handleClick}>Genero</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/StatusUsuario" onClick={handleClick}>StatusUsuario</Link></li>
+               <li className="nav-link active" aria-current="page" ><Link to="/StatusCuentaComponent" onClick={handleClick}>StatusCuentaComponent</Link></li>
+               <li className="nav-link active" aria-current="page" ><Link to="/EstadoCivil" onClick={handleClick}>EstadoCivil</Link></li>
                <li class="nav-link active" aria-current="page" ><Link to="/CambiarContrasenia">Cambiar Contraseña</Link></li>
              </>
            ) : (
@@ -102,12 +103,11 @@ function App() {
           <Route path="/modulos" element={<ProtectedRoute><ModuloList /></ProtectedRoute>} />
           <Route path="/menu" element={<ProtectedRoute><MenuList /></ProtectedRoute>} />
           <Route path="/opcion" element={<ProtectedRoute><OpcionList /></ProtectedRoute>} />
-<<<<<<< HEAD
           <Route path="/Genero" element={<ProtectedRoute><Genero /></ProtectedRoute>} />
           <Route path="/StatusUsuario" element={<ProtectedRoute><StatusUsuario /></ProtectedRoute>} />
-=======
+          <Route path="/StatusCuentaComponent" element={<ProtectedRoute><StatusCuentaComponent /></ProtectedRoute>} />
+          <Route path="/EstadoCivil" element={<ProtectedRoute><EstadoCivil /></ProtectedRoute>} />
           <Route path="/role" element={<ProtectedRoute><RoleList /></ProtectedRoute>} />
->>>>>>> 56e667e12605d02ee384b171a8f447c5fc0b12e9
         </Routes>
       </div>
     </AuthProvider>

@@ -33,6 +33,7 @@ const GeneroComponent = () => {
     const [nuevoGenero, setNuevoGenero] = useState({ nombre: '' });
     const [modoEdicion, setModoEdicion] = useState(false);
     const [generoEditando, setGeneroEditando] = useState(null);
+    const [detallesVisibles, setDetallesVisibles] = useState({});
 
     // Obtener todos los géneros al montar el componente
     useEffect(() => {
@@ -96,6 +97,11 @@ const GeneroComponent = () => {
         setNuevoGenero({ nombre: genero.nombre });
     };
 
+    // Manejar la visualización de detalles de un género
+    const toggleDetalles = (id) => {
+        setDetallesVisibles(prev => ({ ...prev, [id]: !prev[id] }));
+    };
+
     return (
         <div className="genero-container">
             <h2>Lista de Géneros</h2>
@@ -103,7 +109,21 @@ const GeneroComponent = () => {
             <ul className="genero-list">
                 {generos.map(genero => (
                     <li key={genero.idGenero} className="genero-item">
-                        {genero.nombre}
+                        <div>
+                            <strong>{genero.nombre}</strong>
+                            <button onClick={() => toggleDetalles(genero.idGenero)} className="details-button">
+                                {detallesVisibles[genero.idGenero] ? '  Ocultar Detalles' : '   Mostrar Detalles'}
+                            </button>
+                            {detallesVisibles[genero.idGenero] && (
+                                <div className="genero-details">
+                                    <p>Fecha de Creación: {genero.fechaCreacion}</p>
+                                    <p>Usuario de Creación: {genero.usuarioCreacion}</p>
+                                    <p>Fecha de Modificación: {genero.fechaModificacion ? new Date(genero.fechaModificacion).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }) : '' }</p>
+                                    <p>Usuario de Modificación: {genero.usuarioModificacion || ''}</p>
+
+                                </div>
+                            )}
+                        </div>
                         <button onClick={() => handleEditarGenero(genero)} className="edit-button">Editar</button>
                     </li>
                 ))}

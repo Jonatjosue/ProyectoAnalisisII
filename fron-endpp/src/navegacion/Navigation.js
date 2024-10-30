@@ -17,11 +17,7 @@ import CambiarContrasenia from '../CambiarContrasenia/CambiarContrasenia';
 import Persona from '../Persona/Persona'
 import ModuloList from '../Navbar/ModuloList';
 import MenuList from '../Navbar/ModuloList';
-<<<<<<< HEAD
 import Genero from '../Genero/Genero';
-=======
-import RoleList from '../gestionRoles/RoleList';
->>>>>>> 56e667e12605d02ee384b171a8f447c5fc0b12e9
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -41,11 +37,8 @@ function App() {
         <Route path='/CambiarContrasenia' element={<CambiarContrasenia/>}/>
         <Route path="/modulos" element={<ModuloList />} />
         <Route path="/menu" element={<MenuList />} />
-<<<<<<< HEAD
         <Route path="/Genero" element={<Genero />} />
-=======
         <Route path="/role" element={<RoleList />} />
->>>>>>> 56e667e12605d02ee384b171a8f447c5fc0b12e9
       </Route>
     </Routes>
   );
