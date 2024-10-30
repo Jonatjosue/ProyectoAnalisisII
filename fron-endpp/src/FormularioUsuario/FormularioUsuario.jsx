@@ -22,6 +22,7 @@ const FormularioUsuario = () => {
     fechaModificacion: '',
     usuarioCreacion: '',
     usuarioModificacion: '',
+    
   });
 
   const handleChange = (e) => {
