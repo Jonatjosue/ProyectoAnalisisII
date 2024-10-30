@@ -18,6 +18,7 @@ import Persona from '../Persona/Persona'
 import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
 import ModuloList from '../Navbar/ModuloList';
 import MenuList from '../Navbar/ModuloList';
+import RoleList from '../gestionRoles/RoleList';
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -38,6 +39,7 @@ function App() {
         <Route path='/TipoDocumentoPage' element={<TipoDocumentoPage/>}/>
         <Route path="/modulos" element={<ModuloList />} />
         <Route path="/menu" element={<MenuList />} />
+        <Route path="/role" element={<RoleList />} />
       </Route>
     </Routes>
   );

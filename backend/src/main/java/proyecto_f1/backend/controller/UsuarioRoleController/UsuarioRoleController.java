@@ -17,11 +17,11 @@ public class UsuarioRoleController {
     @Autowired
     private UsuarioRoleService usuarioRoleService;
 
-    // Obtener todas las relaciones Usuario-Rol
+    /*/ Obtener todas las relaciones Usuario-Rol
     @GetMapping
     public List<UsuarioRole> getAllUsuarioRoles() {
         return usuarioRoleService.getAllUsuarioRoles();
-    }
+    }*/
 
     // Obtener todas las relaciones Usuario-Rol para un usuario específico por
     // idUsuario

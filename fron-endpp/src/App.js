@@ -18,6 +18,7 @@ import CambiarContrasenia from "./CambiarContrasenia/CambiarContrasenia";
 import ModuloList from "./Navbar/ModuloList";
 import MenuList from "./Navbar/MenuList";
 import OpcionList from "./Navbar/OpcionList";
+import RoleList from "./gestionRoles/RoleList";
 import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
 
 // Simulando los permisos para cada ruta
@@ -69,8 +70,11 @@ function NavBar() {
                  <li className="nav-link active" aria-current="page" ><Link to="/opcion" onClick={handleClick}>Gestión de Opciones</Link></li>
                )}
                {permisos.FormularioEmpresa === 1 &&(
-               <li className="nav-link active" aria-current="page"><Link to="/about" onClick={handleClick}>About</Link></li>
-               )}
+               <li className="nav-link active" aria-current="page" ><Link to="/role" onClick={handleClick}>Gestión de Role</Link></li>
+                )}
+               {( permisos.FormularioEmpresa === 1 && 
+                   <li className="nav-link active" aria-current="page"><Link to="/about" onClick={handleClick}>About</Link></li>
+                )}
                   {/* Condicionales para mostrar/enlazar las rutas según permisos */}
                   {permisos.FormularioEmpresa === 1 && (
                     <li className="nav-link active" aria-current="page"><Link to="/FormularioEmpresa" onClick={handleClick}>FormularioEmpresa</Link></li>
@@ -140,17 +144,24 @@ function App() {
           {permisos.CuentaCorriente === 1 && (
             <Route path="/CuentaCorriente" element={<ProtectedRoute><CuentaCorriente /> </ProtectedRoute>} />
           )}
-          <Route path="/FormularioUsuario" element={<ProtectedRoute><FormularioUsuario /></ProtectedRoute>} />
-          <Route path="/FormularioEmpresa" element={<ProtectedRoute><FormularioEmpresa /></ProtectedRoute>} />
-          <Route path="/ListaEmpresas" element={<ProtectedRoute><ListaEmpresas /></ProtectedRoute>} />
-          <Route path="/Usuarios" element={<ProtectedRoute><Usuarios /></ProtectedRoute>} />
-          <Route path="/Persona" element={<ProtectedRoute><Persona /></ProtectedRoute>} />
-          <Route path="/CambiarContrasenia" element={<ProtectedRoute><CambiarContrasenia /></ProtectedRoute>} />
-          <Route path="/CuentaCorriente" element={<ProtectedRoute> <CuentaCorriente /> </ProtectedRoute> } />
-          <Route path="/TipoDocumentoPage" element={<ProtectedRoute> <TipoDocumentoPage /> </ProtectedRoute> } />
-          <Route path="/modulos" element={<ProtectedRoute><ModuloList /></ProtectedRoute>} />
-          <Route path="/menu" element={<ProtectedRoute><MenuList /></ProtectedRoute>} />
-          <Route path="/opcion" element={<ProtectedRoute><OpcionList /></ProtectedRoute>} />
+
+          {permisos.CuentaCorriente === 1 && (
+            <Route path="/TipoDocumentoPage" element={<ProtectedRoute> <TipoDocumentoPage /> </ProtectedRoute> } />
+          )}
+          {permisos.CuentaCorriente === 1 && (
+            <Route path="/modulos" element={<ProtectedRoute><ModuloList /></ProtectedRoute>} />
+          )}
+           {permisos.CuentaCorriente === 1 && (
+             <Route path="/menu" element={<ProtectedRoute><MenuList /></ProtectedRoute>} />
+          )}
+           {permisos.CuentaCorriente === 1 && (
+              <Route path="/opcion" element={<ProtectedRoute><OpcionList /></ProtectedRoute>} />
+          )}
+         
+         {permisos.CuentaCorriente === 1 && (
+              <Route path="/role" element={<ProtectedRoute><RoleList /></ProtectedRoute>} />
+          )}
+          
         </Routes>
       </div>
     </AuthProvider>
