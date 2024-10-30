@@ -18,9 +18,13 @@ import CambiarContrasenia from "./CambiarContrasenia/CambiarContrasenia";
 import ModuloList from "./Navbar/ModuloList";
 import MenuList from "./Navbar/MenuList";
 import OpcionList from "./Navbar/OpcionList";
+<<<<<<< HEAD
 import Genero from "./Genero/Genero";
 import StatusUsuario from "./StatusUsuario/StatusUsuario";
 
+=======
+import RoleList from "./gestionRoles/RoleList";
+>>>>>>> 56e667e12605d02ee384b171a8f447c5fc0b12e9
 
 
 
@@ -54,6 +58,7 @@ function NavBar() {
                <li className="nav-link active" aria-current="page" ><Link to="/modulos" onClick={handleClick}>Gestión de Modulos</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/menu" onClick={handleClick}>Gestión de Menus</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/opcion" onClick={handleClick}>Gestión de Opciones</Link></li>
+               <li className="nav-link active" aria-current="page" ><Link to="/role" onClick={handleClick}>Gestión de Role</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/about" onClick={handleClick}>About</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/FormularioEmpresa" onClick={handleClick}>FormularioEmpresa</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/ListaEmpresas" onClick={handleClick}>ListaEmpresas</Link></li>
@@ -97,8 +102,12 @@ function App() {
           <Route path="/modulos" element={<ProtectedRoute><ModuloList /></ProtectedRoute>} />
           <Route path="/menu" element={<ProtectedRoute><MenuList /></ProtectedRoute>} />
           <Route path="/opcion" element={<ProtectedRoute><OpcionList /></ProtectedRoute>} />
+<<<<<<< HEAD
           <Route path="/Genero" element={<ProtectedRoute><Genero /></ProtectedRoute>} />
           <Route path="/StatusUsuario" element={<ProtectedRoute><StatusUsuario /></ProtectedRoute>} />
+=======
+          <Route path="/role" element={<ProtectedRoute><RoleList /></ProtectedRoute>} />
+>>>>>>> 56e667e12605d02ee384b171a8f447c5fc0b12e9
         </Routes>
       </div>
     </AuthProvider>
