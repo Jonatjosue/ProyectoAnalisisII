@@ -12,6 +12,7 @@ import proyecto_f1.backend.ClasesValidacion.validacion.RespuestaAutenticacionPre
 import proyecto_f1.backend.ClasesValidacion.jwtValida;
 import java.util.List;
 
+
 @RestController
 @RequestMapping("/api/Usuario")
 public class UsuarioController {
@@ -37,6 +38,11 @@ public class UsuarioController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
+    @GetMapping("/getRole/{username}")
+    public List<UsuarioRole> getRole(@PathVariable String username) {
+        return usuarioService.obtenerRolPorUsername(username);
+    }
+
     @PutMapping("/{id}")
     public ResponseEntity<Usuario> actualizarUsuario(@PathVariable Long id, @RequestBody Usuario usuarioDetalles) {
         return ResponseEntity.ok(usuarioService.actualizarUsuario(id, usuarioDetalles));
@@ -47,6 +53,7 @@ public class UsuarioController {
         usuarioService.eliminarUsuario(id);
         return ResponseEntity.noContent().build();
     }
+    
 
     @PostMapping("/login")
     public ResponseEntity<validacion.AuthResponse> login(@RequestBody validacion.LoginRequest loginRequest) {
@@ -58,13 +65,12 @@ public class UsuarioController {
             String token = jwtValida.generateToken(loginRequest.getUsername());
 
             // Obtener el rol del usuario
-            long role = usuarioService.obtenerRolPorUsername(loginRequest.getUsername());
+            List <UsuarioRole> roles = usuarioService.obtenerRolPorUsername(loginRequest.getUsername());
 
             // Devuelve el token y el rol en la respuesta
-            return ResponseEntity.ok(new validacion.AuthResponse(token, role, respuesta)); // Asegúrate de pasar ambos
-                                                                                           // argumentos
+            return ResponseEntity.ok(new validacion.AuthResponse(token, roles, respuesta));
         } else {
-            return ResponseEntity.ok(new validacion.AuthResponse("invalido", 0, respuesta));
+            return ResponseEntity.ok(new validacion.AuthResponse("invalido", null, respuesta));
         }
     }
 

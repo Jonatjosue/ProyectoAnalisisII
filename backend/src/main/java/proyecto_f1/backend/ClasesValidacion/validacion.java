@@ -6,6 +6,8 @@ import java.util.List;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import proyecto_f1.backend.model.Usuario.UsuarioRole;
+
 
 public class validacion {
 
@@ -122,12 +124,12 @@ public static class respuesta {
 
     public static class AuthResponse {
         private String token;
-        private long role;  // Nuevo campo para el rol del usuario
+        private List<UsuarioRole> roles;  // Nuevo campo para el rol del usuario
         private RespuestaAutenticacion respuesta;
 
-        public AuthResponse(String token, long role,RespuestaAutenticacion respuesta) {  // Constructor actualizado
+        public AuthResponse(String token, List<UsuarioRole> roles,RespuestaAutenticacion respuesta) {  // Constructor actualizado
             this.token = token;
-            this.role = role;
+            this.roles = roles;
             this.respuesta = respuesta;
         }
 
@@ -139,12 +141,12 @@ public static class respuesta {
             this.token = token;
         }
 
-        public long getRole() {  // Getter para el rol
-            return role;
+        public List<UsuarioRole> getRoles() {  // Getter para el rol
+            return roles;
         }
 
         public void setRole(long role) {  // Setter para el rol
-            this.role = role;
+            this.roles = null;
         }
 
         public RespuestaAutenticacion getrespuesta() {  // Getter para el rol

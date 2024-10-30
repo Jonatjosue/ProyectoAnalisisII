@@ -105,6 +105,7 @@ public class UsuarioService {
     }
 
     // Corrección del método para obtener el rol por username
+    /*
     public long obtenerRolPorUsername(String username) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByNombre(username);
 
@@ -122,6 +123,24 @@ public class UsuarioService {
         }
 
         return 0; // Devuelve 0 si no hay roles
+    }
+        */
+
+    public List<UsuarioRole> obtenerRolPorUsername(String username) {
+        Optional<Usuario> usuarioOpt = usuarioRepository.findByNombre(username);
+
+        if (usuarioOpt.isPresent()) {
+            Usuario usuario = usuarioOpt.get();
+            List<UsuarioRole> usuarioRoles = usuarioRoleRepository.findByIdUsuario(usuario.getIdUsuario());
+
+            if (!usuarioRoles.isEmpty()) {
+                return usuarioRoles;
+            }
+            System.out.println("El usuario con id "+usuario.getIdUsuario()+" no cuenta con ningún role asignado.");
+
+        }
+
+        return null;
     }
 
     public RespuestaAutenticacionPregunta validaRespuesta(String username, String correo,

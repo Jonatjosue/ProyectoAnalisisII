@@ -5,11 +5,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import proyecto_f1.backend.model.Usuario.UsuarioRole;
-import proyecto_f1.backend.model.Usuario.UsuarioRoleId;
 import proyecto_f1.backend.service.UsuarioRoleService.UsuarioRoleService;
 
-import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/usuario-role")
