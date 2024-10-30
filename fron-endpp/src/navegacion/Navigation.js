@@ -11,13 +11,13 @@ import Navigation from './Navigation';
 import LoginAutenticacion from './LoginAutenticacion/LoginAutenticacion';
 import ProtectedRoute from '../rutaProtegida/ProtectedRoute';
 import RestrablecerContrasenia from '../RestablecerContrasenia/RestablecerContrasenia';
-import MiPerfil from '../MiPerfil';
 import CuentasCorrientes from '../Cuentacorriente/Cuentacorriente';
 import CambiarContrasenia from '../CambiarContrasenia/CambiarContrasenia';
 import Persona from '../Persona/Persona'
 import ModuloList from '../Navbar/ModuloList';
 import MenuList from '../Navbar/ModuloList';
 import RoleList from '../gestionRoles/RoleList';
+import UserRoleSelect from '../UsuarioRole/UserRoleSelect';
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -38,6 +38,7 @@ function App() {
         <Route path="/modulos" element={<ModuloList />} />
         <Route path="/menu" element={<MenuList />} />
         <Route path="/role" element={<RoleList />} />
+        <Route path="/asignar-role" element={<UserRoleSelect />} />
       </Route>
     </Routes>
   );

@@ -166,7 +166,7 @@ const ModuloList = () => {
               </tr>
             ) : (
               menus.map((item) => (
-                <tr key={item.idModulo}>
+                <tr key={item.idMenu}>
                   <td className="text-center">{item.idMenu}</td>
                   <td>{item.nombre}</td>
                   <td className="text-center">{getModuloNameById(item.idModulo)}</td> {/* Display module name */}

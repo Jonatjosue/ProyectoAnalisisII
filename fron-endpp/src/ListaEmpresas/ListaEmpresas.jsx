@@ -165,7 +165,7 @@ const ListaEmpresas = () => {
                 // Only show fields that are not excluded
                 !['idEmpresa', 'fechaCreacion', 'usuarioCreacion', 'fechaModificacion', 'usuarioModificacion'].includes(key) && (
                   <Form.Group controlId={key} className="mb-3" key={index}>
-                    <Form.Label>{key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}</Form.Label> {/* Humanize label */}
+                    <Form.Label>{key.replace(/([A-Z])/g, ' $1').replace(/^./, (str) => str.toUpperCase())}</Form.Label>
                     <Form.Control
                       type="text"
                       name={key}

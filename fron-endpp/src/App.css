@@ -36,3 +36,49 @@
     transform: rotate(360deg);
   }
 }
+
+.navbar-nav .dropdown:hover > .dropdown-menu {
+  display: block;
+}
+.dropdown-menu .dropdown:hover > .dropdown-menu {
+  display: block;
+}
+
+.mega-menu {
+  width: 400px;
+}
+
+.accordion-style .dropdown-item {
+  width: 200px;
+}
+
+.flyout-menu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: 5px;
+  display: none;
+}
+
+.nav-item.dropdown:hover .flyout-menu {
+  display: block;
+}
+
+.dropdown-grid {
+  display: flex;
+  flex-direction: row;
+  gap: 10px;
+}
+
+.dropdown-grid .dropdown-menu {
+  position: absolute;
+  top: 0;
+  left: 100%;
+  margin-left: 5px;
+  display: none;
+}
+
+.dropdown-item:hover .dropdown-menu {
+  display: block;
+}
