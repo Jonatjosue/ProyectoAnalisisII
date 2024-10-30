@@ -22,6 +22,7 @@ import Genero from "./Genero/Genero";
 import StatusUsuario from "./StatusUsuario/StatusUsuario";
 import StatusCuentaComponent from "./StatusCuentaComponent/StatusCuentaComponent";
 import EstadoCivil from "./EstadoCivil/EstadoCivil";
+import TipoDocumento from "./TipoDocumento/TipoDocumento";
 
 import RoleList from "./gestionRoles/RoleList";
 
@@ -67,6 +68,7 @@ function NavBar() {
                <li className="nav-link active" aria-current="page" ><Link to="/StatusUsuario" onClick={handleClick}>StatusUsuario</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/StatusCuentaComponent" onClick={handleClick}>StatusCuentaComponent</Link></li>
                <li className="nav-link active" aria-current="page" ><Link to="/EstadoCivil" onClick={handleClick}>EstadoCivil</Link></li>
+               <li className="nav-link active" aria-current="page" ><Link to="/TipoDocumento" onClick={handleClick}>TipoDocumento</Link></li>
                <li class="nav-link active" aria-current="page" ><Link to="/CambiarContrasenia">Cambiar Contraseña</Link></li>
              </>
            ) : (
@@ -107,6 +109,7 @@ function App() {
           <Route path="/StatusUsuario" element={<ProtectedRoute><StatusUsuario /></ProtectedRoute>} />
           <Route path="/StatusCuentaComponent" element={<ProtectedRoute><StatusCuentaComponent /></ProtectedRoute>} />
           <Route path="/EstadoCivil" element={<ProtectedRoute><EstadoCivil /></ProtectedRoute>} />
+          <Route path="/TipoDocumento" element={<ProtectedRoute><TipoDocumento /></ProtectedRoute>} />
           <Route path="/role" element={<ProtectedRoute><RoleList /></ProtectedRoute>} />
         </Routes>
       </div>
