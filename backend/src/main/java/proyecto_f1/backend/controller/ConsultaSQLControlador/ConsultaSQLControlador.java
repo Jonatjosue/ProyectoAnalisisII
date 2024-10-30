@@ -3,6 +3,8 @@ package proyecto_f1.backend.controller.ConsultaSQLControlador;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -240,4 +242,23 @@ public class ConsultaSQLControlador {
         return consultaDirecta.ejecutarConsultaPorId(sql, idRole, nombreOpcion);
     }
 
+    // Método GET ajustado con PathVariable
+    @GetMapping("api/saldo-cuenta-usuario/{idPersona}")
+    public List<Map<String, Object>> obtenerSaldoCuentaConUsuario(@PathVariable int idPersona) {
+        return consultaDirecta.obtenerSaldoCuentaConUsuario(idPersona);
+    }
+
+    // Método POST para actualizar el saldo
+    @PostMapping("/api/actualizar-saldo-cuenta/{idSaldoCuenta}/{idPersona}")
+    public ResponseEntity<String> actualizarSaldoCuenta(
+            @PathVariable int idSaldoCuenta,
+            @PathVariable int idPersona) {
+        try {
+            consultaDirecta.ejecutarProcedimientoActualizarSaldoCuenta(idSaldoCuenta, idPersona);
+            return ResponseEntity.ok("Saldo actualizado exitosamente");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el saldo");
+        }
+    }
 }
