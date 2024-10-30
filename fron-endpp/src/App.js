@@ -18,6 +18,8 @@ import CambiarContrasenia from "./CambiarContrasenia/CambiarContrasenia";
 import ModuloList from "./Navbar/ModuloList";
 import MenuList from "./Navbar/MenuList";
 import OpcionList from "./Navbar/OpcionList";
+import Genero from "./Genero/Genero";
+import StatusUsuario from "./StatusUsuario/StatusUsuario";
 import RoleList from "./gestionRoles/RoleList";
 import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
 
@@ -89,8 +91,14 @@ function NavBar() {
                     <li className="nav-link active" aria-current="page"><Link to="/Persona" onClick={handleClick}>Persona</Link></li>
                   )}
                   {permisos.CambiarContrasenia === 1 && (
-                    <li className="nav-link active" aria-current="page"><Link to="/CambiarContrasenia">Cambiar Contraseña</Link></li>
-                  )}
+                    <li className="nav-link active" aria-current="page" ><Link to="/Genero" onClick={handleClick}>Genero</Link></li>
+                 )}
+                  {permisos.CuentaCorriente === 1 && (
+                     <li className="nav-link active" aria-current="page" ><Link to="/StatusUsuario" onClick={handleClick}>StatusUsuario</Link></li>
+                    )}
+                  {permisos.CuentaCorriente === 1 && (
+                     <li className="nav-link active" aria-current="page"><Link to="/CambiarContrasenia">Cambiar Contraseña</Link></li>
+                    )}
                   {permisos.CuentaCorriente === 1 && (
                     <li className="nav-link active" aria-current="page"><Link to="/CuentaCorriente" onClick={handleClick}>Cuenta corriente</Link></li>
                   )}
@@ -160,6 +168,15 @@ function App() {
          
          {permisos.CuentaCorriente === 1 && (
               <Route path="/role" element={<ProtectedRoute><RoleList /></ProtectedRoute>} />
+          )}
+           {permisos.CuentaCorriente === 1 && (
+              <Route path="/Genero" element={<ProtectedRoute><Genero /></ProtectedRoute>} />
+          )}
+            {permisos.CuentaCorriente === 1 && (
+              <Route path="/StatusUsuario" element={<ProtectedRoute><StatusUsuario /></ProtectedRoute>} />
+          )}
+            {permisos.CuentaCorriente === 1 && (
+             <Route path="/role" element={<ProtectedRoute><RoleList /></ProtectedRoute>} />
           )}
           
         </Routes>

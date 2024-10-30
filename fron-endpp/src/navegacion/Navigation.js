@@ -19,6 +19,9 @@ import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
 import ModuloList from '../Navbar/ModuloList';
 import MenuList from '../Navbar/ModuloList';
 import RoleList from '../gestionRoles/RoleList';
+import Genero from '../Genero/Genero';
+import StatusUsuario from "./StatusUsuario/StatusUsuario";
+
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -40,6 +43,8 @@ function App() {
         <Route path="/modulos" element={<ModuloList />} />
         <Route path="/menu" element={<MenuList />} />
         <Route path="/role" element={<RoleList />} />
+        <Route path="/Genero" element={<Genero />} />
+        <Route path="/StatusUsuario" element={<StatusUsuario/>} />
       </Route>
     </Routes>
   );
