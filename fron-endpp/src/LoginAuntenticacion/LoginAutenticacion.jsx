@@ -12,7 +12,7 @@ function ErrorAutenticacion({ respuesta, mostrar, onHidden }) {
       setVisible(true);
       const timer = setTimeout(() => {
         setVisible(false);
-        onHidden();  // Restablecer el estado cuando el error se oculta
+        onHidden();  // Reset state when the error is hidden
       }, 3000);
 
       return () => clearTimeout(timer);
@@ -45,25 +45,41 @@ const LoginAutenticacion = () => {
   const [persona, setPersona] = useState({ usuario: "", password: "" });
   const [errorRespuesta, setErrorRespuesta] = useState("");
   const [mostrarError, setMostrarError] = useState(false);
+  const [selectedRole, setSelectedRole] = useState(""); // State for the selected role
+  const [roleNames, setRoleNames] = useState([]); // State for role names
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
   const iniciarSesion = async (event) => {
     event.preventDefault();
     const formValido = event.target.reportValidity();
-
+    
     if (formValido) {
       const hashedPassword = generateMD5Hash(persona.password);
       const credenciales = { username: persona.usuario, password: hashedPassword };
-
+    
       try {
         const response = await axios.post("http://127.0.0.1:8081/api/Usuario/login", credenciales, {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         });
-
+    
         if (response.data.respuesta.respuesta === true) {
-          redirigir(response.data.token, response.data.role, persona.usuario); // Pass the username here
+          const idRoles = response.data.roles.map(role => role.idRole); // Extract idRole
+          redirigir(response.data.token, idRoles, persona.usuario);
+  
+          // Fetch role names from api/user-roles
+          const rolesResponse = await axios.get("http://127.0.0.1:8081/api/user-roles", {
+            headers: { "Content-Type": "application/json" }
+          });
+          
+          // Map role names to idRoles
+          const names = idRoles.map(idRole => {
+            const role = rolesResponse.data.find(role => role.roleId === idRole);
+            return role ? role.roleName : "Unknown Role";
+          });
+
+          setRoleNames(names); // Store the role names in the state
         } else {
           setErrorRespuesta(response.data.respuesta.descripcion);
           setMostrarError(true);
@@ -80,6 +96,42 @@ const LoginAutenticacion = () => {
     setPersona({ ...persona, [e.target.name]: e.target.value });
   };
 
+  const handleRoleChange = (e) => {
+    setSelectedRole(e.target.value); // Update the selected role
+  };
+
+  const handleBuscarRoles = async () => {
+    try {
+      const username = persona.usuario;
+
+      // Fetch the roles associated with the user
+      const rolesResponse = await axios.get(`http://127.0.0.1:8081/api/Usuario/getRole/${username}`, {
+        headers: { "Content-Type": "application/json" }
+      });
+
+      // Extract idRole values
+      const idRoles = rolesResponse.data.map(role => role.idRole);
+
+      // Fetch role names from api/user-roles
+      const rolesDataResponse = await axios.get("http://127.0.0.1:8081/api/user-roles", {
+        headers: { "Content-Type": "application/json" }
+      });
+
+      // Map role names to idRoles
+      const names = idRoles.map(idRole => {
+        const role = rolesDataResponse.data.find(role => role.roleId === idRole);
+        return role ? role.roleName : "Unknown Role";
+      });
+
+      setRoleNames(names); // Store role names in state
+
+    } catch (error) {
+      setErrorRespuesta("Error al obtener roles");
+      setMostrarError(true);
+      console.error("Error:", error);
+    }
+  };
+
   const generateMD5Hash = (str) => {
     return CryptoJs.MD5(str).toString();
   };
@@ -87,8 +139,10 @@ const LoginAutenticacion = () => {
   const redirigir = (token, idrole, username) => {
     login(token, idrole);
     localStorage.setItem('username', username); // Store username in localStorage
+    localStorage.setItem('role', 'Administrador');
     const startSession = new Date().toISOString(); // Capture current date/time
     localStorage.setItem('startSession', startSession); // Store session start time in localStorage
+    navigate('/');
   };
 
   const ocultarError = () => {
@@ -96,7 +150,7 @@ const LoginAutenticacion = () => {
   };
 
   return (
-    <section className="vh-100">
+    <section className="vh-100" style={{ backgroundColor: '#f8f9fa' }}>
       <div className="container py-5 h-100">
         <div className="row d-flex align-items-center justify-content-center h-100">
           <div className="col-md-8 col-lg-7 col-xl-6">
@@ -107,47 +161,81 @@ const LoginAutenticacion = () => {
             />
           </div>
           <div className="col-md-7 col-lg-5 col-xl-5 offset-xl-1">
-            <form onSubmit={iniciarSesion} id="formUsuario">
-              <div className="form-outline mb-4">
-                <input
-                  id="campoUsuario"
-                  className="form-control form-control-lg"
-                  type="text"
-                  name="usuario"
-                  value={persona.usuario}
-                  onChange={handleChange}
-                  required
-                />
-                <label className="form-label" htmlFor="campoUsuario">
-                  Usuario
-                </label>
-              </div>
+            <div className="card shadow-sm" style={{ borderRadius: '1rem', backgroundColor: '#ffffff' }}>
+              <div className="card-body p-4">
+                <h2 className="text-center">Iniciar Sesión</h2>
+                <form onSubmit={iniciarSesion} id="formUsuario">
+                  <br />
+                  <div className="form-outline mb-4">
+                    <input
+                      id="campoUsuario"
+                      className="form-control form-control-lg"
+                      type="text"
+                      name="usuario"
+                      value={persona.usuario}
+                      onChange={handleChange}
+                      required
+                    />
+                    <label 
+                      className="form-label" 
+                      htmlFor="campoUsuario"
+                      style={{ marginLeft: '16px' }} // Add left margin
+                    >
+                      Usuario
+                    </label>
+                  </div>
 
-              <div className="form-outline mb-4">
-                <input
-                  id="password"
-                  className="form-control form-control-lg"
-                  type="password"
-                  name="password"
-                  value={persona.password}
-                  onChange={handleChange}
-                  required
-                />
-                <label className="form-label" htmlFor="password">
-                  Password
-                </label>
-              </div>
+                  <div className="form-outline mb-4">
+                    <input
+                      id="password"
+                      className="form-control form-control-lg"
+                      type="password"
+                      name="password"
+                      value={persona.password}
+                      onChange={handleChange}
+                      required
+                    />
+                    <label className="form-label" htmlFor="password" style={{ marginLeft: '16px'}}>
+                      Password
+                    </label>
+                  </div>
 
-              <div className="d-flex justify-content-around align-items-center mb-4">
-                <a href="/RestrablecerContrasenia" className="text-decoration-none">
-                  Olvide mi contraseña
-                </a>
+                  {/* New Button and Select Dropdown */}
+                  <div className="d-flex mb-4 align-items-center">
+                    <button 
+                      type="button" 
+                      className="btn btn-secondary me-2" 
+                      style={{ width: '200px' }} // Set to your desired width
+                      onClick={handleBuscarRoles} // Capture username on click
+                    >
+                      Buscar Roles
+                    </button>
+                    <select 
+                      className="form-select" 
+                      value={selectedRole} 
+                      onChange={handleRoleChange}
+                    >
+                      <option value="">Selecciona un Role</option>
+                      {roleNames.map((roleName, index) => (
+                        <option key={index} value={roleName}>{roleName}</option> // Display role names
+                      ))}
+                    </select>
+                  </div>
+                  <button 
+                    type="submit" 
+                    className="btn btn-primary btn-lg btn-block" 
+                    disabled={selectedRole === ""} // Disable the button if no role is selected
+                  >
+                    Sign in
+                  </button>
+                  <div className="d-flex justify-content-around align-items-center mb-4">
+                    <a href="/RestrablecerContrasenia" className="text-decoration-none">
+                      Olvide mi contraseña
+                    </a>
+                  </div>
+                </form>
               </div>
-
-              <button type="submit" className="btn btn-primary btn-lg btn-block">
-                Sign in
-              </button>
-            </form>
+            </div>
           </div>
         </div>
       </div>
