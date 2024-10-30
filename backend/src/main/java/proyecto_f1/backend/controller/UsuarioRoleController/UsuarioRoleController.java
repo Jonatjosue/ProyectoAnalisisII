@@ -1,6 +1,7 @@
 package proyecto_f1.backend.controller.UsuarioRoleController;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import proyecto_f1.backend.model.Usuario.UsuarioRole;
@@ -14,14 +15,37 @@ import java.util.Optional;
 @RequestMapping("/api/usuario-role")
 public class UsuarioRoleController {
 
+    private final UsuarioRoleService usuarioRoleService;
+
     @Autowired
+    public UsuarioRoleController(UsuarioRoleService usuarioRoleService) {
+        this.usuarioRoleService = usuarioRoleService;
+    }
+
+    @PostMapping
+    public ResponseEntity<UsuarioRole> createUsuarioRole(@RequestBody UsuarioRole usuarioRole) {
+        UsuarioRole createdUsuarioRole = usuarioRoleService.createUsuarioRole(usuarioRole);
+        return new ResponseEntity<>(createdUsuarioRole, HttpStatus.CREATED);
+    }
+
+    @PutMapping("/{idUsuario}/{idRole}")
+    public ResponseEntity<UsuarioRole> updateUsuarioRole(
+            @PathVariable Long idUsuario,
+            @PathVariable Long idRole,
+            @RequestBody UsuarioRole usuarioRole) {
+        UsuarioRole updatedUsuarioRole = usuarioRoleService.updateUsuarioRole(idUsuario, idRole, usuarioRole);
+        return new ResponseEntity<>(updatedUsuarioRole, HttpStatus.OK);
+    }
+
+
+    /*@Autowired
     private UsuarioRoleService usuarioRoleService;
 
-    /*/ Obtener todas las relaciones Usuario-Rol
+    //Obtener todas las relaciones Usuario-Rol
     @GetMapping
     public List<UsuarioRole> getAllUsuarioRoles() {
         return usuarioRoleService.getAllUsuarioRoles();
-    }*/
+    }
 
     // Obtener todas las relaciones Usuario-Rol para un usuario específico por
     // idUsuario
@@ -79,4 +103,5 @@ public class UsuarioRoleController {
         usuarioRoleService.deleteUsuarioRole(id);
         return ResponseEntity.noContent().build();
     }
+        */
 }
