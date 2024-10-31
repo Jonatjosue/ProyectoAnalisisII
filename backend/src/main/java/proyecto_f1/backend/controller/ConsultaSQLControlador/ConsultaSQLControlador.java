@@ -124,32 +124,34 @@ public class ConsultaSQLControlador {
 
     // INSERT MOVIMIENTO_CUENTA (con conversión de fechas)
     @PostMapping("/api/movimiento-cuenta")
-    public String insertarMovimientoCuenta(@RequestBody Map<String, Object> nuevoRegistro) {
-        String sql = "INSERT INTO ProyectoAnalisis.dbo.MOVIMIENTO_CUENTA " +
-                "(Id_Saldo_Cuenta, Id_Tipo_Movimiento_CXC, Fecha_Movimiento, Valor_Movimiento, " +
-                "Valor_Movimiento_Pagado, Generado_Automaticamente, Descripcion, Fecha_Creacion, " +
-                "Usuario_Creacion, Fecha_Modificacion, Usuario_Modificacion) " +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
+    public ResponseEntity<String> insertarMovimientoCuenta(@RequestBody Map<String, Object> nuevoRegistro) {
+        try {
+            String sql = "INSERT INTO ProyectoAnalisis.dbo.MOVIMIENTO_CUENTA " +
+                    "(Id_Saldo_Cuenta, Id_Tipo_Movimiento_CXC, Fecha_Movimiento, Valor_Movimiento, " +
+                    "Valor_Movimiento_Pagado, Generado_Automaticamente, Descripcion, Fecha_Creacion, " +
+                    "Usuario_Creacion, Fecha_Modificacion, Usuario_Modificacion) " +
+                    "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?, ?, ?)";
 
-        // Convertir fechas a Timestamp
-        Timestamp fechaMovimiento = convertirFecha(nuevoRegistro.get("Fecha_Movimiento"));
-        Timestamp fechaCreacion = convertirFecha(nuevoRegistro.get("Fecha_Creacion"));
-        Timestamp fechaModificacion = convertirFecha(nuevoRegistro.get("Fecha_Modificacion"));
+            consultaDirecta.ejecutarInsert(sql,
+                    nuevoRegistro.get("Id_Saldo_Cuenta"),
+                    nuevoRegistro.get("Id_Tipo_Movimiento_CXC"),
+                    convertirFecha(nuevoRegistro.get("Fecha_Movimiento")),
+                    nuevoRegistro.get("Valor_Movimiento"),
+                    nuevoRegistro.get("Valor_Movimiento_Pagado"),
+                    nuevoRegistro.get("Generado_Automaticamente"),
+                    nuevoRegistro.get("Descripcion"),
+                    convertirFecha(nuevoRegistro.get("Fecha_Creacion")),
+                    nuevoRegistro.get("Usuario_Creacion"),
+                    convertirFecha(nuevoRegistro.get("Fecha_Modificacion")),
+                    nuevoRegistro.get("Usuario_Modificacion"));
 
-        consultaDirecta.ejecutarInsert(sql,
-                nuevoRegistro.get("Id_Saldo_Cuenta"),
-                nuevoRegistro.get("Id_Tipo_Movimiento_CXC"),
-                fechaMovimiento,
-                nuevoRegistro.get("Valor_Movimiento"),
-                nuevoRegistro.get("Valor_Movimiento_Pagado"),
-                nuevoRegistro.get("Generado_Automaticamente"),
-                nuevoRegistro.get("Descripcion"),
-                fechaCreacion,
-                nuevoRegistro.get("Usuario_Creacion"),
-                fechaModificacion,
-                nuevoRegistro.get("Usuario_Modificacion"));
+            return ResponseEntity.ok("Movimiento cuenta insertado con éxito.");
+        } catch (Exception e) {
+            e.printStackTrace();
 
-        return "Registro insertado con éxito en MOVIMIENTO_CUENTA";
+            System.err.println(consultaDirecta);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al insertar movimiento cuenta.");
+        }
     }
 
     // SELECT ROLE_OPCION

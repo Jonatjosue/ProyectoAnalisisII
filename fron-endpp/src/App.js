@@ -16,6 +16,8 @@ import CuentaCorriente from './Cuentacorriente/Cuentacorriente'
 import Persona from './Persona/Persona';
 import CambiarContrasenia from "./CambiarContrasenia/CambiarContrasenia";
 import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
+import SaldoCuentaPage from "./SaldoCuentaPage/SaldoCuentaPage";
+import MovimientoCuentaPage from "./MovimientoCuentaPage/MovimientoCuentaPage";
 
 
 
@@ -53,6 +55,8 @@ function NavBar() {
                <li className="nav-link active" aria-current="page" ><Link to="/Persona" onClick={handleClick}>Persona</Link></li>
                <li class="nav-link active" aria-current="page" ><Link to="/CambiarContrasenia">Cambiar Contraseña</Link></li>
                <li class="nav-link active" aria-current="page" ><Link to="/TipoDocumentoPage">TipoDocumentoPage</Link></li>
+               <li class="nav-link active" aria-current="page" ><Link to="/SaldoCuentaPage">SaldoCuentaPage</Link></li>
+               <li class="nav-link active" aria-current="page" ><Link to="/MovimientoCuentaPage">MovimientoCuentaPage</Link></li>
              </>
            ) : (
              <li className="nav-link active" aria-current="page" ><Link to="/" onClick={() => setShowLinks(true)}>Home</Link></li>
@@ -86,6 +90,8 @@ function App() {
           <Route path="/CambiarContrasenia" element={<ProtectedRoute><CambiarContrasenia /></ProtectedRoute>} />
           <Route path="/CuentaCorriente" element={<ProtectedRoute> <CuentaCorriente /> </ProtectedRoute> } />
           <Route path="/TipoDocumentoPage" element={<ProtectedRoute> <TipoDocumentoPage /> </ProtectedRoute> } />
+          <Route path="/SaldoCuentaPage" element={<ProtectedRoute> <SaldoCuentaPage /> </ProtectedRoute> } />
+          <Route path="/MovimientoCuentaPage" element={<ProtectedRoute> <MovimientoCuentaPage /> </ProtectedRoute> } />
           
         </Routes>
       </div>
