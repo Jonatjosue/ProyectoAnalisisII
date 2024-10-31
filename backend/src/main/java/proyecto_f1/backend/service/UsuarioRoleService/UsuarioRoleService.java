@@ -2,6 +2,8 @@ package proyecto_f1.backend.service.UsuarioRoleService;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
+
 import proyecto_f1.backend.model.Usuario.UsuarioRole;
 import proyecto_f1.backend.model.Usuario.UsuarioRoleId;
 import proyecto_f1.backend.repository.UsuarioRoleRepository.UsuarioRoleRepository;
@@ -12,10 +14,31 @@ import java.util.Optional;
 @Service
 public class UsuarioRoleService {
 
+    private final UsuarioRoleRepository usuarioRoleRepository;
+    
     @Autowired
-    private UsuarioRoleRepository usuarioRoleRepository;
+    public UsuarioRoleService(UsuarioRoleRepository usuarioRoleRepository) {
+        this.usuarioRoleRepository = usuarioRoleRepository;
+    }
 
-    // Método para obtener todas las relaciones Usuario-Rol por idUsuario
+    @Transactional
+    public UsuarioRole createUsuarioRole(UsuarioRole usuarioRole) {
+        return usuarioRoleRepository.save(usuarioRole);
+    }
+
+    @Transactional
+    public UsuarioRole updateUsuarioRole(Long idUsuario, Long idRole, UsuarioRole updatedUsuarioRole) {
+        UsuarioRoleId usuarioRoleId = new UsuarioRoleId(idUsuario, idRole);
+        if (usuarioRoleRepository.existsById(usuarioRoleId)) {
+            updatedUsuarioRole.setIdUsuario(idUsuario);
+            updatedUsuarioRole.setIdRole(idRole);
+            return usuarioRoleRepository.save(updatedUsuarioRole);
+        } else {
+            throw new RuntimeException("UsuarioRole with provided ID does not exist.");
+        }
+    }
+
+    /*/ Método para obtener todas las relaciones Usuario-Rol por idUsuario
     public List<UsuarioRole> getUsuarioRolesByUsuarioId(Long idUsuario) {
         return usuarioRoleRepository.findByIdUsuario(idUsuario);
     }
@@ -58,4 +81,5 @@ public class UsuarioRoleService {
             throw new RuntimeException("La relación Usuario-Rol no existe y no puede ser eliminada");
         }
     }
+        */
 }

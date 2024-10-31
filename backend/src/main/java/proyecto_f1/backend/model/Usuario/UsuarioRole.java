@@ -3,7 +3,6 @@ package proyecto_f1.backend.model.Usuario;
 
 import java.util.Date;
 import jakarta.persistence.*;
-import proyecto_f1.backend.model.Role.Role;
 
 @Entity
 @Table(name = "USUARIO_ROLE")
@@ -17,16 +16,6 @@ public class UsuarioRole {
     @Id
     @Column(name = "Id_Role", nullable = false)
     private Long idRole;
-
-    // Relación con la entidad Usuario
-    @ManyToOne
-    @JoinColumn(name = "Id_Usuario", insertable = false, updatable = false)
-    private Usuario usuario;
-
-    // Relación con la entidad Role
-    @ManyToOne
-    @JoinColumn(name = "Id_Role", insertable = false, updatable = false)
-    private Role role;
 
     @Column(name = "Fecha_Creacion", nullable = false)
     @Temporal(TemporalType.TIMESTAMP)
@@ -58,22 +47,6 @@ public class UsuarioRole {
 
     public void setIdRole(Long idRole) {
         this.idRole = idRole;
-    }
-
-    public Usuario getUsuario() {
-        return usuario;
-    }
-
-    public void setUsuario(Usuario usuario) {
-        this.usuario = usuario;
-    }
-
-    public Role getRole() {
-        return role;
-    }
-
-    public void setRole(Role role) {
-        this.role = role;
     }
 
     public Date getFechaCreacion() {
