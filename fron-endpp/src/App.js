@@ -9,7 +9,7 @@ import ListaEmpresas from "./ListaEmpresas/ListaEmpresas";
 import Usuarios from "./Usuarios/Usuarios";
 import { AuthProvider, AuthContext } from "./autenticacion/AuthContext";
 import ProtectedRoute from "./rutaProtegida/ProtectedRoute";
-import { LoginAutenticacion } from "./LoginAuntenticacion/LoginAutenticacion";
+import LoginAutenticacion from './LoginAuntenticacion/LoginAutenticacion';
 import RestrablecerContrasenia from "./RestablecerContrasenia/RestablecerContrasenia";
 import CuentaCorriente from "./Cuentacorriente/Cuentacorriente";
 import Persona from "./Persona/Persona";
