@@ -2,8 +2,11 @@ package proyecto_f1.backend.model.SQLServerConsultaDirecta;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.dao.EmptyResultDataAccessException;
+import org.springframework.jdbc.core.ConnectionCallback;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.stereotype.Component;
+
+import java.sql.PreparedStatement;
 import java.util.List;
 import java.util.Map;
 
