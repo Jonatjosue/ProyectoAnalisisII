@@ -1,4 +1,5 @@
 package proyecto_f1.backend.model.empresa;
+
 import jakarta.persistence.*;
 import java.util.Date;
 

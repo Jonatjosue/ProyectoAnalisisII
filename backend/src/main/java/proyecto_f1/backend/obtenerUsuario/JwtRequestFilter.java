@@ -63,7 +63,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         Usuario userDetails = this.userrepo.findUsuario("Nologin");  /*  ###### CAMBIAR AQUI EL USUARIO A TESTEAR ####### */
         Collection<? extends GrantedAuthority> roles = roleUsuario.findRolesUsuario(username)
         .stream()
-        .map(role -> new SimpleGrantedAuthority(role)) // Asume que role es un String
+        .map(role -> new SimpleGrantedAuthority(role)) 
         .collect(Collectors.toList());
 
 UsernamePasswordAuthenticationToken usernamePasswordAuthenticationToken =
