@@ -104,7 +104,7 @@ const LoginAutenticacion = () => {
 
           // Log the ID of the selected role
           const selectedRoleId = roleIds.find(role => role.name === selectedRole)?.id;
-          console.log("Selected Role ID:", selectedRoleId);
+          localStorage.setItem('roleId', selectedRoleId);
         } else {
           setErrorRespuesta(response.data.respuesta.descripcion);
           setMostrarError(true);
@@ -146,7 +146,7 @@ const LoginAutenticacion = () => {
       });
 
       setRoleIds(roles);
-      setConfirmationMessage(`Se recuperaron ${roles.length} roles.`);
+      setConfirmationMessage(`El usuario cuenta con ${roles.length} role(s).`);
     } catch (error) {
       setErrorRespuesta("Error al obtener roles");
       setMostrarError(true);
@@ -161,7 +161,6 @@ const LoginAutenticacion = () => {
   const redirigir = (token, idrole, username) => {
     login(token, idrole);
     localStorage.setItem('username', username);
-    localStorage.setItem('role', 'Administrador');
     const startSession = new Date().toISOString();
     localStorage.setItem('startSession', startSession);
     navigate('/');
