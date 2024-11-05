@@ -39,6 +39,9 @@ public class OpcionService {
     
         return opcionFiltrada;
     }
+    public List<OpcionEntity> buscaOpcion() {
+        return opcionRepository.findAll(Sort.by(Sort.Direction.ASC, "ordenMenu"));
+    }
     
     
 

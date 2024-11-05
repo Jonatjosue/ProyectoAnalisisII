@@ -19,6 +19,11 @@ import ModuloList from '../Navbar/ModuloList';
 import MenuList from '../Navbar/ModuloList';
 import RoleList from '../gestionRoles/RoleList';
 import UserRoleSelect from '../UsuarioRole/UserRoleSelect';
+import Genero from '../Genero/Genero';
+import StatusCuentaComponent from '../StatusCuentaComponent/StatusCuentaComponent';
+import EstadoCivilList from '../EstadoCivil/EstadoCivil';
+import TipoDocumentoList from '../TipoDocumento/TipoDocumento';
+import SucursalList from '../SucursalList/SucursalList';
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -39,8 +44,13 @@ function App() {
         <Route path='/TipoDocumentoPage' element={<TipoDocumentoPage/>}/>
         <Route path="/modulos" element={<ModuloList />} />
         <Route path="/menu" element={<MenuList />} />
+        <Route path="/Genero" element={<Genero />} />
         <Route path="/role" element={<RoleList />} />
         <Route path="/asignar-role" element={<UserRoleSelect />} />
+        <Route path="/StatusCuentaComponent" element={<StatusCuentaComponent />} />
+        <Route path="/EstadoCivil" element={<EstadoCivilList />} />
+        <Route path="/TipoDocumento" element={<TipoDocumentoList />} />
+        <Route path="/SucursalList" element={<SucursalList />} />
       </Route>
     </Routes>
   );

@@ -2,10 +2,8 @@ import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import './StatusUsuario.css'; // Importa el archivo CSS
 
-// URL base de la API
 const BASE_URL = 'http://localhost:8081/api/statusUsuarios';
 
-// Servicio para manejar las operaciones CRUD
 class StatusUsuarioService {
     obtenerTodos() {
         return axios.get(BASE_URL);
@@ -26,9 +24,7 @@ class StatusUsuarioService {
     eliminarStatusUsuario(id) {
         return axios.delete(`${BASE_URL}/${id}`);
     }
-    
 }
-
 
 const statusUsuarioService = new StatusUsuarioService();
 
@@ -38,6 +34,7 @@ const StatusUsuarioComponent = () => {
     const [nuevoStatusUsuario, setNuevoStatusUsuario] = useState({ nombre: '', usuarioCreacion: '' });
     const [modoEdicion, setModoEdicion] = useState(false);
     const [statusUsuarioEditando, setStatusUsuarioEditando] = useState(null);
+    const [detallesVisibles, setDetallesVisibles] = useState({});
 
     useEffect(() => {
         statusUsuarioService.obtenerTodos()
@@ -122,6 +119,13 @@ const StatusUsuarioComponent = () => {
         setNuevoStatusUsuario({ nombre: '', usuarioCreacion: nuevoStatusUsuario.usuarioCreacion });
     };
 
+    const toggleDetalles = (id) => {
+        setDetallesVisibles(prevDetalles => ({
+            ...prevDetalles,
+            [id]: !prevDetalles[id]
+        }));
+    };
+
     return (
         <div className="status-usuario-container">
             <h2>Lista de Status de Usuario</h2>
@@ -129,8 +133,21 @@ const StatusUsuarioComponent = () => {
             <ul className="status-usuario-list">
                 {statusUsuarios.map(statusUsuario => (
                     <li key={statusUsuario.idStatusUsuario} className="status-usuario-item">
-                        {statusUsuario.nombre}
-                        <button onClick={() => handleEditarStatusUsuario(statusUsuario)} className="edit-button">Editar</button>
+                        <span>{statusUsuario.nombre}</span>
+                        <div className="button-group-inline">
+                            <button onClick={() => toggleDetalles(statusUsuario.idStatusUsuario)} className="details-button">
+                                {detallesVisibles[statusUsuario.idStatusUsuario] ? 'Ocultar Detalles' : 'Mostrar Detalles'}
+                            </button>
+                            <button onClick={() => handleEditarStatusUsuario(statusUsuario)} className="edit-button">Editar</button>
+                        </div>
+                        {detallesVisibles[statusUsuario.idStatusUsuario] && (
+                            <div className="status-usuario-details">
+                                <p>Fecha de Creación: {new Date(statusUsuario.fechaCreacion).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' })}</p>
+                                <p>Usuario de Creación: {statusUsuario.usuarioCreacion}</p>
+                                <p>Fecha de Modificación: {statusUsuario.fechaModificacion ? new Date(statusUsuario.fechaModificacion).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }) : ''}</p>
+                                <p>Usuario de Modificación: {statusUsuario.usuarioModificacion || ''}</p>
+                            </div>
+                        )}
                     </li>
                 ))}
             </ul>

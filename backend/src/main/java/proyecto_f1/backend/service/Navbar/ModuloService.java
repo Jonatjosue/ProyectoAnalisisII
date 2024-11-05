@@ -35,7 +35,11 @@ public class ModuloService {
         .collect(Collectors.toList());
 
     return opcionFiltrada;
-    }    
+    }   
+    
+    public List<ModuloEntity> buscaModulo() {
+    return moduloRepository.findAll(Sort.by(Sort.Direction.ASC, "ordenMenu"));
+    }  
 
     public Optional<ModuloEntity> findById(Long id) {
         return moduloRepository.findById(id);

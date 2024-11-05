@@ -35,7 +35,9 @@ public class MenuService {
 
     return opcionFiltrada;
     }
-
+    public List<MenuEntity> buscaMenu() {
+    return menuRepository.findAll(Sort.by(Sort.Direction.ASC, "ordenMenu"));
+    }
   
     
     public Optional<MenuEntity> findById(Long id) {

@@ -24,8 +24,12 @@ public class OpcionController {
 
     @GetMapping
     public List<OpcionEntity> getAllOpciiones(String usuario, Long role) {
-
         return opcionService.findAll(usuario, role);
+    }
+
+    @GetMapping
+    public List<OpcionEntity> getAllOpciiones() {
+        return opcionService.buscaOpcion();
     }
 
     @GetMapping("/{id}")

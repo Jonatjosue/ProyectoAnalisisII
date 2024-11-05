@@ -29,7 +29,7 @@ const usuario = localStorage.getItem('username');
 
   const fetchMenus = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/api/menu?usuario=${usuario}&role=${role}`);
+      const response = await axios.get(`http://localhost:8081/api/menu`);
       setMenus(response.data);
       setLoading(false);
       setNewMenu((prev) => ({ ...prev, ordenMenu: response.data.length + 1 }));
@@ -41,7 +41,7 @@ const usuario = localStorage.getItem('username');
 
   const fetchModulos = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/api/modulos?usuario=${usuario}&role=${role}`);
+      const response = await axios.get(`http://localhost:8081/api/modulos`);
       setModulos(response.data); // Store the fetched modulos
       setLoading(false);
     } catch (error) {

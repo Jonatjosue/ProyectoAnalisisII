@@ -29,6 +29,11 @@ public class ModuloController {
         return moduloService.findAll(usuario, role);
     }
 
+    @GetMapping
+    public List<ModuloEntity> getAllModulos() {
+        return moduloService.buscaModulo();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<ModuloEntity> getModuloById(@PathVariable Long id) {
         return moduloService.findById(id)

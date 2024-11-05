@@ -27,6 +27,11 @@ public class MenuController {
         return menuService.findAll(usuario,role);
     }
 
+    @GetMapping
+    public List<MenuEntity> getAllMenus() {
+        return menuService.buscaMenu();
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity<MenuEntity> getMenuById(@PathVariable Long id) {
         return menuService.findById(id)

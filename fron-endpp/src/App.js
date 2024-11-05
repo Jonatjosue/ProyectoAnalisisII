@@ -23,6 +23,12 @@ import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
 import Genero from "./Genero/Genero";
 import StatusUsuario from "./StatusUsuario/StatusUsuario"
 import axiosInstance from "./axiosConfig";
+import StatusCuentaComponent from "./StatusCuentaComponent/StatusCuentaComponent";
+import EstadoCivil from "./EstadoCivil/EstadoCivil";
+import TipoDocumento from "./TipoDocumento/TipoDocumento";
+import SucursalList from "./SucursalList/SucursalList";
+
+
 
 
 function NavBar() {
@@ -195,6 +201,17 @@ function App() {
           <Route path="/FormularioEmpresa" element={<ProtectedRoute><FormularioEmpresa /></ProtectedRoute>} />
           <Route path="/Persona" element={<ProtectedRoute><Persona /></ProtectedRoute>} />
           <Route path="/CambiarContrasenia" element={<ProtectedRoute><CambiarContrasenia /></ProtectedRoute>} />
+          <Route path="/CuentaCorriente" element={<ProtectedRoute> <CuentaCorriente /> </ProtectedRoute> } />
+          <Route path="/modulos" element={<ProtectedRoute><ModuloList /></ProtectedRoute>} />
+          <Route path="/menu" element={<ProtectedRoute><MenuList /></ProtectedRoute>} />
+          <Route path="/opcion" element={<ProtectedRoute><OpcionList /></ProtectedRoute>} />
+          <Route path="/Genero" element={<ProtectedRoute><Genero /></ProtectedRoute>} />
+          <Route path="/StatusUsuario" element={<ProtectedRoute><StatusUsuario /></ProtectedRoute>} />
+          <Route path="/StatusCuentaComponent" element={<ProtectedRoute><StatusCuentaComponent /></ProtectedRoute>} />
+          <Route path="/EstadoCivil" element={<ProtectedRoute><EstadoCivil /></ProtectedRoute>} />
+          <Route path="/TipoDocumento" element={<ProtectedRoute><TipoDocumento /></ProtectedRoute>} />
+          <Route path="/SucursalList" element={<ProtectedRoute><SucursalList /></ProtectedRoute>} />
+          <Route path="/role" element={<ProtectedRoute><RoleList /></ProtectedRoute>} />
           <Route path="/CuentaCorriente" element={<ProtectedRoute><CuentaCorriente /></ProtectedRoute>} />
           <Route path="/gestion-documentos" element={<ProtectedRoute><TipoDocumentoPage /></ProtectedRoute>} />
         </Routes>
