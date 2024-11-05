@@ -82,6 +82,7 @@ const LoginAutenticacion = () => {
   const navigate = useNavigate();
   const { login } = useContext(AuthContext);
 
+
   const [confirmationMessage, setConfirmationMessage] = useState("");
 
   const iniciarSesion = async (event) => {
@@ -99,11 +100,11 @@ const LoginAutenticacion = () => {
         });
         
         if (response.data.respuesta.respuesta === true) {
-          const idRoles = response.data.roles.map(role => role.idRole);
-          redirigir(response.data.token, idRoles, persona.usuario);
+         // const idRoles = response.data.roles.map(role => role.idRole);
+         const selectedRoleId = roleIds.find(role => role.name === selectedRole)?.id;
+          redirigir(response.data.token, selectedRoleId, persona.usuario);
 
           // Log the ID of the selected role
-          const selectedRoleId = roleIds.find(role => role.name === selectedRole)?.id;
           console.log("Selected Role ID:", selectedRoleId);
         } else {
           setErrorRespuesta(response.data.respuesta.descripcion);
@@ -160,8 +161,10 @@ const LoginAutenticacion = () => {
 
   const redirigir = (token, idrole, username) => {
     login(token, idrole);
+    console.log(idrole)
     localStorage.setItem('username', username);
     localStorage.setItem('role', 'Administrador');
+  // localStorage.setItem('userRole', this.selectedRoleId);
     const startSession = new Date().toISOString();
     localStorage.setItem('startSession', startSession);
     navigate('/');
@@ -253,7 +256,7 @@ const LoginAutenticacion = () => {
                   </div>
 
                   <div className="d-flex justify-content-around align-items-center mb-4">
-                    <a href="#!">Olvidé mi contraseña</a>
+                    <a href="/RestrablecerContrasenia">Olvidé mi contraseña</a>
                   </div>
                 </form>
                 <ErrorAutenticacion 

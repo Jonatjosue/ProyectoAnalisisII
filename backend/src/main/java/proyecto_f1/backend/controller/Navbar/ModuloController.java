@@ -25,8 +25,8 @@ public class ModuloController {
     private ModuloService moduloService;
 
     @GetMapping
-    public List<ModuloEntity> getAllModulos() {
-        return moduloService.findAll();
+    public List<ModuloEntity> getAllModulos(String usuario, Long role) {
+        return moduloService.findAll(usuario, role);
     }
 
     @GetMapping("/{id}")

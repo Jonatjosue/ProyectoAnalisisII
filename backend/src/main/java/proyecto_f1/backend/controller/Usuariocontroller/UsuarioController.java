@@ -92,7 +92,7 @@ public class UsuarioController {
 
             // Devuelve el token y el rol en la respuesta
             return ResponseEntity.ok(new validacion.PreguntaResponse(token, -1, respuesta)); // Asegúrate de pasar ambos
-                                                                                             // argumentos
+            // argumentos
             // TO DO : revisar el role
         } else {
             return ResponseEntity.ok(new validacion.PreguntaResponse("invalido", 0, respuesta));
@@ -114,8 +114,8 @@ public ResponseEntity<String> postMethodName(@RequestBody PasswordRequest nesPas
 
 
     @GetMapping("/opcionesUsuario")
-    public ResponseEntity<List<OpcionesMenuUsuario>>obtenerOpciones(@RequestParam Long idUsuario) {
-        List<OpcionesMenuUsuario> permisos =  usuarioService.obtenerPermisosOpciones(idUsuario);
+    public ResponseEntity<List<OpcionesMenuUsuario>>obtenerOpciones(@RequestParam Long idUsuario, Long idRole) {
+        List<OpcionesMenuUsuario> permisos =  usuarioService.obtenerPermisosOpciones(idUsuario, idRole);
         return ResponseEntity.ok(permisos);
     }
 

@@ -23,8 +23,8 @@ public class MenuController {
     private MenuService menuService;
 
     @GetMapping
-    public List<MenuEntity> getAllMenus() {
-        return menuService.findAll();
+    public List<MenuEntity> getAllMenus(String usuario, Long role) {
+        return menuService.findAll(usuario,role);
     }
 
     @GetMapping("/{id}")

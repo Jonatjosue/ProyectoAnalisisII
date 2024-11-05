@@ -19,13 +19,17 @@ const ModuloList = () => {
   const [editModulo, setEditModulo] = useState(null);
 
   useEffect(() => {
+    
     fetchMenus();
     fetchModulos(); // Fetch modulos here
   }, []);
+  
+  const role = localStorage.getItem('userRole');
+const usuario = localStorage.getItem('username');
 
   const fetchMenus = async () => {
     try {
-      const response = await axios.get('http://localhost:8081/api/menu');
+      const response = await axios.get(`http://localhost:8081/api/menu?usuario=${usuario}&role=${role}`);
       setMenus(response.data);
       setLoading(false);
       setNewMenu((prev) => ({ ...prev, ordenMenu: response.data.length + 1 }));
@@ -37,7 +41,7 @@ const ModuloList = () => {
 
   const fetchModulos = async () => {
     try {
-      const response = await axios.get('http://localhost:8081/api/modulos');
+      const response = await axios.get(`http://localhost:8081/api/modulos?usuario=${usuario}&role=${role}`);
       setModulos(response.data); // Store the fetched modulos
       setLoading(false);
     } catch (error) {

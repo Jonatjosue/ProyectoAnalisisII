@@ -29,7 +29,14 @@ public interface UsuarioRepository extends JpaRepository<Usuario, Long>{
 
 
 
-    @Query(value = "EXEC sp_ObtenerPermisosOpciones :idUsuario", nativeQuery = true)
-    List<OpcionesMenuUsuario> obtenerPermisosOpciones(@Param("idUsuario") Long idUsuario);
+    @Query(value = "EXEC sp_ObtenerPermisosOpciones :idUsuario , :idRole", nativeQuery = true)
+    List<OpcionesMenuUsuario> obtenerPermisosOpciones(@Param("idUsuario") Long idUsuario, @Param ("idRole") Long idRole);
+
+    @Query(value = "EXEC sp_obtenerPermisosMenus :idUsuario , :idRole", nativeQuery = true)
+    List<OpcionesMenuUsuario> obtenerPermisosMenus(@Param("idUsuario") Long idUsuario, @Param ("idRole") Long idRole);
+    
+    @Query(value = "EXEC sp_ObtenerPermisosModulos :idUsuario , :idRole", nativeQuery = true)
+    List<OpcionesMenuUsuario> obtenerPermisosModulos(@Param("idUsuario") Long idUsuario, @Param ("idRole") Long idRole);
+    
 
 }

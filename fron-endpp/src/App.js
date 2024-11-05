@@ -19,6 +19,11 @@ import UserRoleSelect from "./UsuarioRole/UserRoleSelect";
 import ModuloList from "./Navbar/ModuloList";
 import MenuList from "./Navbar/MenuList";
 import OpcionList from "./Navbar/OpcionList";
+import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
+import Genero from "./Genero/Genero";
+import StatusUsuario from "./StatusUsuario/StatusUsuario"
+import axiosInstance from "./axiosConfig";
+
 
 function NavBar() {
   const { authToken, logout } = useContext(AuthContext);
@@ -30,12 +35,20 @@ function NavBar() {
   const menuRef = useRef(null);
 
   useEffect(() => {
+    const role = localStorage.getItem('userRole');
+    const usuario = localStorage.getItem('username');
+    console.log('este es el rol: ' + role);
+    if (!role || !usuario) {
+      console.error("Role or username not found in localStorage.");
+      return;
+    }
+
     const fetchModules = async () => {
       try {
-        const response = await fetch("http://localhost:8081/api/modulos");
-        if (response.ok) {
-          const data = await response.json();
-          setModules(data);
+        const response = await axiosInstance.get(`/modulos?usuario=${usuario}&role=${role}`);
+        if (response.status >= 200 && response.status < 300) {
+          setModules(response.data);
+          console.log(response.data);
         } else {
           console.error("Failed to fetch modules");
         }
@@ -46,10 +59,9 @@ function NavBar() {
 
     const fetchMenus = async () => {
       try {
-        const response = await fetch("http://localhost:8081/api/menu");
-        if (response.ok) {
-          const data = await response.json();
-          setMenus(data);
+        const response = await axiosInstance.get(`/menu?usuario=${usuario}&role=${role}`);
+        if (response.status >= 200 && response.status < 300) {
+          setMenus(response.data);
         } else {
           console.error("Failed to fetch menus");
         }
@@ -60,10 +72,9 @@ function NavBar() {
 
     const fetchOptions = async () => {
       try {
-        const response = await fetch("http://localhost:8081/api/opciones");
-        if (response.ok) {
-          const data = await response.json();
-          setOptions(data);
+        const response = await axiosInstance.get(`/opciones?usuario=${usuario}&role=${role}`);
+        if (response.status >= 200 && response.status < 300) {
+          setOptions(response.data);
         } else {
           console.error("Failed to fetch options");
         }
@@ -75,7 +86,7 @@ function NavBar() {
     fetchModules();
     fetchMenus();
     fetchOptions();
-  }, []);
+  }, [authToken]);
 
   useEffect(() => {
     const handleClickOutside = (event) => {
@@ -115,9 +126,7 @@ function NavBar() {
                     {module.nombre}
                   </button>
                   <ul
-                    className={`dropdown-menu dropdown-grid ${
-                      selectedMenu === module.idModulo ? "show" : ""
-                    }`}
+                    className={`dropdown-menu dropdown-grid ${selectedMenu === module.idModulo ? "show" : ""}`}
                   >
                     {menus
                       .filter((menu) => menu.idModulo === module.idModulo)
@@ -130,9 +139,7 @@ function NavBar() {
                             {filteredMenu.nombre}
                           </button>
                           <ul
-                            className={`dropdown-menu ${
-                              selectedMenu === filteredMenu.idMenu ? "show" : ""
-                            }`}
+                            className={`dropdown-menu ${selectedMenu === filteredMenu.idMenu ? "show" : ""}`}
                           >
                             {options
                               .filter((option) => option.idMenu === filteredMenu.idMenu)
@@ -173,8 +180,8 @@ function App() {
         <Routes>
           <Route path="/gestion-empresas" element={<ProtectedRoute><ListaEmpresas /></ProtectedRoute>} />
           <Route path="/gestion-sucursales" element={<ProtectedRoute><ListaEmpresas /></ProtectedRoute>} />
-          <Route path="/gestion-generos" element={<ProtectedRoute><ListaEmpresas /></ProtectedRoute>} />
-          <Route path="/gestion-estatus" element={<ProtectedRoute><ListaEmpresas /></ProtectedRoute>} />
+          <Route path="/gestion-generos" element={<ProtectedRoute><Genero /></ProtectedRoute>} />
+          <Route path="/gestion-estatus" element={<ProtectedRoute><StatusUsuario /></ProtectedRoute>} />
           <Route path="/gestion-roles" element={<ProtectedRoute><RoleList /></ProtectedRoute>} />
           <Route path="/gestion-modulos" element={<ProtectedRoute><ModuloList /></ProtectedRoute>} />
           <Route path="/gestion-menus" element={<ProtectedRoute><MenuList /></ProtectedRoute>} />
@@ -182,13 +189,14 @@ function App() {
           <Route path="/gestion-usuarios" element={<ProtectedRoute><Usuarios /></ProtectedRoute>} />
           <Route path="/asignar-roles" element={<ProtectedRoute><UserRoleSelect /></ProtectedRoute>} />
           <Route path="/login" element={<LoginAutenticacion />} />
-          <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
+          <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia />} />
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/FormularioUsuario" element={<ProtectedRoute><FormularioUsuario /></ProtectedRoute>} />
           <Route path="/FormularioEmpresa" element={<ProtectedRoute><FormularioEmpresa /></ProtectedRoute>} />
           <Route path="/Persona" element={<ProtectedRoute><Persona /></ProtectedRoute>} />
           <Route path="/CambiarContrasenia" element={<ProtectedRoute><CambiarContrasenia /></ProtectedRoute>} />
           <Route path="/CuentaCorriente" element={<ProtectedRoute><CuentaCorriente /></ProtectedRoute>} />
+          <Route path="/gestion-documentos" element={<ProtectedRoute><TipoDocumentoPage /></ProtectedRoute>} />
         </Routes>
       </div>
     </AuthProvider>

@@ -32,7 +32,6 @@ public class Usuario {
     private String idGenero;
 
     @Column(name = "Ultima_Fecha_Ingreso")
-    @Temporal(TemporalType.TIMESTAMP)
     private Date ultimaFechaIngreso;
 
     @Column(name = "Intentos_De_Acceso")

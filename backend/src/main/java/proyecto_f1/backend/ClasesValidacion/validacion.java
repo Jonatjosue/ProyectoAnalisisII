@@ -263,6 +263,7 @@ public static class respuesta {
     }
 
     public interface OpcionesMenuUsuario {
+        int getId();
         String getNombre();
         int getTienePermiso();  
     }

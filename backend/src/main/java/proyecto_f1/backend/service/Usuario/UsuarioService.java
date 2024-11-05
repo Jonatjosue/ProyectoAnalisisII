@@ -24,6 +24,7 @@ import org.springframework.security.core.Authentication;
 
 import java.util.List;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Optional;
 
 @Service
@@ -86,7 +87,8 @@ public class UsuarioService {
             if (passwordValida && usuario.getIntentosDeAcceso() < intentosParametros) {
                 respuesta.setrespuesta(true);
                 respuesta.setdescripcion("Usuario logueado correctamente");
-
+                Date fechaHOy = new Date();
+                 usuario.setUltimaFechaIngreso(fechaHOy);
                 // Reinicia los intentos de acceso al loguear correctamente
                 usuario.setIntentosDeAcceso(0);
                 usuarioRepository.save(usuario);
@@ -212,7 +214,8 @@ public class UsuarioService {
                     respuesta.setrespuesta(true);
                     respuesta.setdescripcion("Usuario logueado correctamente");
                     respuesta.setListrespuestas(invalidas);
-
+                    Date fechaHOy = new Date();
+                    usuario.setUltimaFechaIngreso(fechaHOy);
                     // Reinicia los intentos de acceso al loguear correctamente
                     idUsuario.setSiguientePreguntaAcceso(1);
                     usuarioRepository.save(idUsuario);
@@ -257,8 +260,8 @@ public class UsuarioService {
 
         return usuarioRepository.findPreguntasRecuperacion(usuarioPresent.getIdUsuario());
     }
-    public List<OpcionesMenuUsuario> obtenerPermisosOpciones(Long idUsuario) {
-        return usuarioRepository.obtenerPermisosOpciones(idUsuario);
+    public List<OpcionesMenuUsuario> obtenerPermisosOpciones(Long idUsuario , Long idRole) {
+        return usuarioRepository.obtenerPermisosOpciones(idUsuario,idRole);
     }
 
 

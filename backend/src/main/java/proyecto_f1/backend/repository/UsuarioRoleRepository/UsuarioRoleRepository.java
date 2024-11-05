@@ -1,12 +1,9 @@
 package proyecto_f1.backend.repository.UsuarioRoleRepository;
 
 import org.springframework.data.jpa.repository.JpaRepository;
-<<<<<<< HEAD
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
-=======
 import org.springframework.stereotype.Repository;
->>>>>>> e91d1d8eedd097ce266d44ad44868a9329204222
 
 import proyecto_f1.backend.model.Usuario.UsuarioRole;
 import proyecto_f1.backend.model.Usuario.UsuarioRoleId;

@@ -19,10 +19,13 @@ const ModuloList = () => {
   useEffect(() => {
     fetchModulos();
   }, []);
+  const role = localStorage.getItem('userRole');
+  const usuario = localStorage.getItem('username');
+
 
   const fetchModulos = async () => {
     try {
-      const response = await axios.get('http://localhost:8081/api/modulos');
+      const response = await axios.get(`http://localhost:8081/api/modulos?usuario=${usuario}&role=${role}`);
       setModulos(response.data);
       setLoading(false);
       setNewModulo((prev) => ({ ...prev, ordenMenu: response.data.length + 1 }));

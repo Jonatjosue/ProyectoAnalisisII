@@ -18,15 +18,20 @@ const ModuloList = () => {
   const [editOpcion, setEditOpcion] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  
 
   useEffect(() => {
     fetchOpciones();
     fetchMenus();
   }, []);
 
+  const role = localStorage.getItem('userRole');
+  const usuario = localStorage.getItem('username');
+ 
+
   const fetchOpciones = async () => {
     try {
-      const response = await axios.get('http://localhost:8081/api/opciones');
+      const response = await axios.get(`http://localhost:8081/api/opciones?usuario=${usuario}&role=${role}`);
       setOpciones(response.data);
       setLoading(false);
       setNewOpcion((prev) => ({ ...prev, ordenMenu: response.data.length + 1 }));
@@ -38,7 +43,7 @@ const ModuloList = () => {
 
   const fetchMenus = async () => {
     try {
-      const response = await axios.get('http://localhost:8081/api/menu');
+      const response = await axios.get(`http://localhost:8081/api/menu?usuario=${usuario}&role=${role}`);
       setMenus(response.data);
       setLoading(false);
     } catch (error) {
