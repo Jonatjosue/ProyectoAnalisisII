@@ -147,7 +147,7 @@ const LoginAutenticacion = () => {
       });
 
       setRoleIds(roles);
-      setConfirmationMessage(`Se recuperaron ${roles.length} roles.`);
+      setConfirmationMessage(`El usuario cuenta con ${roles.length} role(s).`);
     } catch (error) {
       setErrorRespuesta("Error al obtener roles");
       setMostrarError(true);
