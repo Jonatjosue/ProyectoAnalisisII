@@ -114,4 +114,22 @@ public class SQLServerConsultaDirecta {
         }
     }
 
+    // Método para obtener SALDO_CUENTA junto con el nombre del usuario basado en el
+    // ID de la persona
+    public List<Map<String, Object>> obtenerSaldoCuentaConUsuario(int idPersona) {
+        String sql = "SELECT sc.Id_Saldo_Cuenta, sc.Saldo_Anterior, sc.Debitos, sc.Creditos, " +
+                "sc.Fecha_Creacion, sc.Usuario_Creacion, sc.Fecha_Modificacion, sc.Usuario_Modificacion, " +
+                "p.Nombre AS NombreUsuario " +
+                "FROM ProyectoAnalisis.dbo.SALDO_CUENTA sc " +
+                "JOIN ProyectoAnalisis.dbo.PERSONA p ON sc.Id_Persona = p.Id_Persona " +
+                "WHERE sc.Id_Persona = ?";
+        return jdbcTemplate.queryForList(sql, idPersona);
+    }
+
+    // Método para ejecutar el procedimiento almacenado "ActualizarSaldoCuenta"
+    public int ejecutarProcedimientoActualizarSaldoCuenta(int idSaldoCuenta, int idPersona) {
+        String sql = "EXEC ActualizarSaldoCuenta @Id_Saldo_Cuenta = ?, @Id_Persona = ?";
+        return jdbcTemplate.update(sql, idSaldoCuenta, idPersona);
+    }
+
 }

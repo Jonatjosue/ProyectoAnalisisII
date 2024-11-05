@@ -29,7 +29,7 @@ public class ModuloController {
         return moduloService.findAll(usuario, role);
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public List<ModuloEntity> getAllModulos() {
         return moduloService.buscaModulo();
     }

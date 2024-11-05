@@ -27,7 +27,7 @@ public class MenuController {
         return menuService.findAll(usuario,role);
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public List<MenuEntity> getAllMenus() {
         return menuService.buscaMenu();
     }

@@ -27,6 +27,9 @@ import StatusCuentaComponent from "./StatusCuentaComponent/StatusCuentaComponent
 import EstadoCivil from "./EstadoCivil/EstadoCivil";
 import TipoDocumento from "./TipoDocumento/TipoDocumento";
 import SucursalList from "./SucursalList/SucursalList";
+import SaldoCuentaPage from "./SaldoCuentaPage/SaldoCuentaPage";
+import MovimientoCuentaPage from "./MovimientoCuentaPage/MovimientoCuentaPage";
+
 
 
 
@@ -185,7 +188,6 @@ function App() {
       <div>
         <Routes>
           <Route path="/gestion-empresas" element={<ProtectedRoute><ListaEmpresas /></ProtectedRoute>} />
-          <Route path="/gestion-sucursales" element={<ProtectedRoute><ListaEmpresas /></ProtectedRoute>} />
           <Route path="/gestion-generos" element={<ProtectedRoute><Genero /></ProtectedRoute>} />
           <Route path="/gestion-estatus" element={<ProtectedRoute><StatusUsuario /></ProtectedRoute>} />
           <Route path="/gestion-roles" element={<ProtectedRoute><RoleList /></ProtectedRoute>} />
@@ -212,6 +214,8 @@ function App() {
           <Route path="/TipoDocumento" element={<ProtectedRoute><TipoDocumento /></ProtectedRoute>} />
           <Route path="/SucursalList" element={<ProtectedRoute><SucursalList /></ProtectedRoute>} />
           <Route path="/role" element={<ProtectedRoute><RoleList /></ProtectedRoute>} />
+          <Route path="/SaldoCuentaPage" element={<ProtectedRoute> <SaldoCuentaPage /> </ProtectedRoute> } />
+          <Route path="/MovimientoCuentaPage" element={<ProtectedRoute> <MovimientoCuentaPage /> </ProtectedRoute> } />
           <Route path="/CuentaCorriente" element={<ProtectedRoute><CuentaCorriente /></ProtectedRoute>} />
           <Route path="/gestion-documentos" element={<ProtectedRoute><TipoDocumentoPage /></ProtectedRoute>} />
         </Routes>

@@ -24,6 +24,8 @@ import StatusCuentaComponent from '../StatusCuentaComponent/StatusCuentaComponen
 import EstadoCivilList from '../EstadoCivil/EstadoCivil';
 import TipoDocumentoList from '../TipoDocumento/TipoDocumento';
 import SucursalList from '../SucursalList/SucursalList';
+import SaldoCuentaPage from "./SaldoCuentaPage/SaldoCuentaPage";
+import MovimientoCuentaPage from "./MovimientoCuentaPage/MovimientoCuentaPage";
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -50,7 +52,10 @@ function App() {
         <Route path="/StatusCuentaComponent" element={<StatusCuentaComponent />} />
         <Route path="/EstadoCivil" element={<EstadoCivilList />} />
         <Route path="/TipoDocumento" element={<TipoDocumentoList />} />
-        <Route path="/SucursalList" element={<SucursalList />} />
+        <Route path="/SucursalList" element={<SucursalList />} />        
+        <Route path='/SaldoCuentaPage' element={<SaldoCuentaPage/>}/>
+        <Route path='/MovimientoCuentaPage' element={<MovimientoCuentaPage/>}/>
+
       </Route>
     </Routes>
   );

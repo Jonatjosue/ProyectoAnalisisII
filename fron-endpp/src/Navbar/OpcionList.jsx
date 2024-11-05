@@ -31,7 +31,7 @@ const ModuloList = () => {
 
   const fetchOpciones = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/api/opciones`);
+      const response = await axios.get(`http://localhost:8081/api/opciones/get`);
       setOpciones(response.data);
       setLoading(false);
       setNewOpcion((prev) => ({ ...prev, ordenMenu: response.data.length + 1 }));
@@ -43,7 +43,7 @@ const ModuloList = () => {
 
   const fetchMenus = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/api/menu`);
+      const response = await axios.get(`http://localhost:8081/api/menu/get`);
       setMenus(response.data);
       setLoading(false);
     } catch (error) {

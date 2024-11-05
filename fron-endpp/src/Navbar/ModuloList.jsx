@@ -25,7 +25,7 @@ const ModuloList = () => {
 
   const fetchModulos = async () => {
     try {
-      const response = await axios.get(`http://localhost:8081/api/modulos`);
+      const response = await axios.get(`http://localhost:8081/api/modulos/get`);
       setModulos(response.data);
       setLoading(false);
       setNewModulo((prev) => ({ ...prev, ordenMenu: response.data.length + 1 }));

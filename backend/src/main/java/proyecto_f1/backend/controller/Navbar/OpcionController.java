@@ -27,7 +27,7 @@ public class OpcionController {
         return opcionService.findAll(usuario, role);
     }
 
-    @GetMapping
+    @GetMapping("/get")
     public List<OpcionEntity> getAllOpciiones() {
         return opcionService.buscaOpcion();
     }
