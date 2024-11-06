@@ -29,7 +29,7 @@ import TipoDocumento from "./TipoDocumento/TipoDocumento";
 import SucursalList from "./SucursalList/SucursalList";
 import SaldoCuentaPage from "./SaldoCuentaPage/SaldoCuentaPage";
 import MovimientoCuentaPage from "./MovimientoCuentaPage/MovimientoCuentaPage";
-
+import RoleOpcionList from "./RoleOpcion/RoleOpcionList";
 
 
 
@@ -218,6 +218,7 @@ function App() {
           <Route path="/MovimientoCuentaPage" element={<ProtectedRoute> <MovimientoCuentaPage /> </ProtectedRoute> } />
           <Route path="/CuentaCorriente" element={<ProtectedRoute><CuentaCorriente /></ProtectedRoute>} />
           <Route path="/gestion-documentos" element={<ProtectedRoute><TipoDocumentoPage /></ProtectedRoute>} />
+          <Route path="/gestion-role-opcion" element={<ProtectedRoute><RoleOpcionList /></ProtectedRoute>} />
         </Routes>
       </div>
     </AuthProvider>

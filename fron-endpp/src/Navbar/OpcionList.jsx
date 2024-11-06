@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Table, Container, Row, Col, Button, Spinner, Modal, Form, Pagination } from 'react-bootstrap';
 import axios from 'axios';
 
-const ModuloList = () => {
+const OpcionList = () => {
   const [opciones, setOpciones] = useState([]);
   const [menus, setMenus] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -334,4 +334,4 @@ const ModuloList = () => {
   );
 };
 
-export default ModuloList;
+export default OpcionList;

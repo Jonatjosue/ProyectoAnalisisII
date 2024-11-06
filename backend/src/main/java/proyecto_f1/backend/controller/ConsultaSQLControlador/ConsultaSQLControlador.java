@@ -154,43 +154,6 @@ public class ConsultaSQLControlador {
         }
     }
 
-    // SELECT ROLE_OPCION
-    @GetMapping("/api/role-opcion")
-    public List<Map<String, Object>> obtenerRoleOpcion() {
-        String sql = "SELECT Id_Opcion, Alta, Baja, Cambio, Imprimir, Exportar, Fecha_Creacion, Usuario_Creacion, Fecha_Modificacion, Usuario_Modificacion "
-                +
-                "FROM ProyectoAnalisis.dbo.ROLE_OPCION";
-        return consultaDirecta.ejecutarConsulta(sql);
-    }
-
-    @GetMapping("/api/role-opcion/{idRole}/{idOpcion}")
-    public Map<String, Object> obtenerRoleOpcionPorIds(@PathVariable int idRole, @PathVariable int idOpcion) {
-        String sql = "SELECT Id_Opcion, Alta, Baja, Cambio, Imprimir, Exportar, Fecha_Creacion, Usuario_Creacion, Fecha_Modificacion, Usuario_Modificacion "
-                +
-                "FROM ProyectoAnalisis.dbo.ROLE_OPCION WHERE Id_Role = ? AND Id_Opcion = ?";
-        return consultaDirecta.ejecutarConsultaPorIds(sql, idRole, idOpcion);
-    }
-
-    // INSERT ROLE_OPCION (Sin Id_Opcion)
-    @PostMapping("/api/role-opcion")
-    public String insertarRoleOpcion(@RequestBody Map<String, Object> nuevoRegistro) {
-        String sql = "INSERT INTO ProyectoAnalisis.dbo.ROLE_OPCION " +
-                "(Alta, Baja, Cambio, Imprimir, Exportar, Fecha_Creacion, Usuario_Creacion, Fecha_Modificacion, Usuario_Modificacion) "
-                +
-                "VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)";
-        consultaDirecta.ejecutarInsert(sql,
-                nuevoRegistro.get("Alta"),
-                nuevoRegistro.get("Baja"),
-                nuevoRegistro.get("Cambio"),
-                nuevoRegistro.get("Imprimir"),
-                nuevoRegistro.get("Exportar"),
-                convertirFecha(nuevoRegistro.get("Fecha_Creacion")),
-                nuevoRegistro.get("Usuario_Creacion"),
-                convertirFecha(nuevoRegistro.get("Fecha_Modificacion")),
-                nuevoRegistro.get("Usuario_Modificacion"));
-        return "Registro insertado con éxito en ROLE_OPCION";
-    }
-
     // Actualizar ROLE_OPCION
     @PutMapping("/api/role-opcion/{id}")
     public String actualizarRoleOpcion(@PathVariable int id, @RequestBody Map<String, Object> registroActualizado) {
