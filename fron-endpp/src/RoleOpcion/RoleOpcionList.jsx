@@ -8,6 +8,7 @@ const RoleOpcionList = () => {
     const [opciones, setOpciones] = useState([]);
     const [loading, setLoading] = useState(true);
     const [showModal, setShowModal] = useState(false);
+    const [showCreateModal, setShowCreateModal] = useState(false);
     const [editingItem, setEditingItem] = useState(null);
     const [formData, setFormData] = useState({
         idRole: '',
@@ -45,6 +46,20 @@ const RoleOpcionList = () => {
         }
     };
 
+    const handleCreateClick = () => {
+        setFormData({
+            idRole: '',
+            idOpcion: '',
+            alta: false,
+            baja: false,
+            imprimir: false,
+            exportar: false,
+            fechaModificacion: new Date().toISOString(),
+            usuarioModificacion: localStorage.getItem('username')
+        });
+        setShowCreateModal(true);
+    };
+
     const handleEditClick = (item) => {
         setEditingItem(item);
         alert(item.idRole+'/'+item.idOpcion);
@@ -65,6 +80,8 @@ const RoleOpcionList = () => {
         setShowModal(false);
         setEditingItem(null);
     };
+
+    const handleCloseCreateModal = () => setShowCreateModal(false);
 
     const handleInputChange = (e) => {
         const { name, value, type, checked } = e.target;
@@ -106,6 +123,29 @@ const RoleOpcionList = () => {
         }
     };
 
+    const handleCreateSubmit = async () => {
+        try {
+            const newItem = {
+                idRole: formData.idRole,
+                idOpcion: formData.idOpcion,
+                alta: formData.alta,
+                baja: formData.baja,
+                imprimir: formData.imprimir,
+                exportar: formData.exportar,
+                fechaCreacion: formData.fechaModificacion,
+                usuarioCreacion: formData.usuarioModificacion,
+            };
+            await axios.post('http://localhost:8081/api/role-opcion', newItem);
+
+            // Fetch the updated role-opciones list to ensure role and option names are up-to-date
+            await fetchRolesAndRoleOpciones();
+            
+            handleCloseCreateModal();
+        } catch (error) {
+            console.error('Error creating item:', error);
+        }
+    };
+
     const handleDeleteClick = async (idRole, idOpcion) => {
         try {
             // Make an API call to delete the RoleOpcion entry
@@ -135,6 +175,7 @@ const RoleOpcionList = () => {
     return (
         <Container className="mt-5">
             <h1 className="text-center align-middle">Role Opción List</h1>
+            <Button variant="primary" onClick={handleCreateClick} className="mb-3">Crear relación</Button>
             {loading ? (
                 <div className="text-center mt-5">
                     <Spinner animation="border" role="status">
@@ -278,6 +319,94 @@ const RoleOpcionList = () => {
                 <Modal.Footer>
                     <Button variant="secondary" onClick={handleCloseModal}>Cerrar</Button>
                     <Button variant="primary" onClick={handleSaveChanges}>Guardar cambios</Button>
+                </Modal.Footer>
+            </Modal>
+
+            {/* Modal for creating a new RoleOpcion */}
+            <Modal show={showCreateModal} onHide={handleCloseCreateModal}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Crear relación</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form>
+                        <Form.Group controlId="formRole">
+                            <Form.Label>Role</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="idRole"
+                                value={formData.idRole}
+                                onChange={handleInputChange}
+                            >
+                                <option value="">Seleccione un role</option>
+                                {roles.map((role) => (
+                                    <option key={role.idRole} value={role.idRole}>
+                                        {role.nombre}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+
+                        <Form.Group controlId="formOpcion">
+                            <Form.Label>Opción</Form.Label>
+                            <Form.Control
+                                as="select"
+                                name="idOpcion"
+                                value={formData.idOpcion}
+                                onChange={handleInputChange}
+                            >
+                                <option value="">Seleccione una opción</option>
+                                {opciones.map((opcion) => (
+                                    <option key={opcion.idOpcion} value={opcion.idOpcion}>
+                                        {opcion.nombre}
+                                    </option>
+                                ))}
+                            </Form.Control>
+                        </Form.Group>
+
+                        <Form.Group controlId="formAlta">
+                            <Form.Check
+                                type="checkbox"
+                                label="Alta"
+                                name="alta"
+                                checked={formData.alta}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="formBaja">
+                            <Form.Check
+                                type="checkbox"
+                                label="Baja"
+                                name="baja"
+                                checked={formData.baja}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="formImprimir">
+                            <Form.Check
+                                type="checkbox"
+                                label="Imprimir"
+                                name="imprimir"
+                                checked={formData.imprimir}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="formExportar">
+                            <Form.Check
+                                type="checkbox"
+                                label="Exportar"
+                                name="exportar"
+                                checked={formData.exportar}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+                    </Form>
+                </Modal.Body>
+                <Modal.Footer>
+                    <Button variant="secondary" onClick={handleCloseCreateModal}>Cerrar</Button>
+                    <Button variant="primary" onClick={handleCreateSubmit}>Guardar relación</Button>
                 </Modal.Footer>
             </Modal>
         </Container>
