@@ -17,7 +17,7 @@ import CambiarContrasenia from '../CambiarContrasenia/CambiarContrasenia';
 import Persona from '../Persona/Persona'
 import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
 import SaldoCuentaPage from "./SaldoCuentaPage/SaldoCuentaPage";
-import MovimientoCuentaPage from "./MovimientoCuentaPage/MovimientoCuentaPage";
+import MovimientoCuentaPage from "./Gestion_Cliente/Gestion_Cliente";
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -38,6 +38,7 @@ function App() {
         <Route path='/TipoDocumentoPage' element={<TipoDocumentoPage/>}/>
         <Route path='/SaldoCuentaPage' element={<SaldoCuentaPage/>}/>
         <Route path='/MovimientoCuentaPage' element={<MovimientoCuentaPage/>}/>
+        <Route path='/Gestion_Cliente' element={<Gestion_Cliente/>}/>
 
       </Route>
     </Routes>
