@@ -18,6 +18,7 @@ import Persona from '../Persona/Persona'
 import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
 import SaldoCuentaPage from "./SaldoCuentaPage/SaldoCuentaPage";
 import MovimientoCuentaPage from "./Gestion_Cliente/Gestion_Cliente";
+import GestionTipoMovimientoCXCPage from "./GestionTipoMovimientoCXCPage/GestionTipoMovimientoCXCPage";
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -39,6 +40,7 @@ function App() {
         <Route path='/SaldoCuentaPage' element={<SaldoCuentaPage/>}/>
         <Route path='/MovimientoCuentaPage' element={<MovimientoCuentaPage/>}/>
         <Route path='/Gestion_Cliente' element={<Gestion_Cliente/>}/>
+        <Route path='/GestionTipoMovimientoCXCPage' element={<GestionTipoMovimientoCXCPage/>}/>
 
       </Route>
     </Routes>
