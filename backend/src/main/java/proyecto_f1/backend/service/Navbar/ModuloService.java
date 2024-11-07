@@ -48,5 +48,9 @@ public class ModuloService {
         return moduloRepository.save(modulo);
     }
 
+    public void deleteModulo(Long id) {
+        moduloRepository.deleteById(id);
+    }
+
     
 }

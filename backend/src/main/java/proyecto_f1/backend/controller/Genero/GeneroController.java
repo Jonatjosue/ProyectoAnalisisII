@@ -45,4 +45,9 @@ public class GeneroController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @DeleteMapping("/{id}")
+    public void deleteGenero(@PathVariable Long id) {
+        generoService.deleteGenero(id);
+    }
 }

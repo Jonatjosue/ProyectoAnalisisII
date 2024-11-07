@@ -10,6 +10,7 @@ import org.springframework.web.bind.annotation.RestController;
 import proyecto_f1.backend.model.Navbar.ModuloEntity;
 import proyecto_f1.backend.service.Navbar.ModuloService;
 
+import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -59,6 +60,9 @@ public class ModuloController {
                 .orElse(ResponseEntity.notFound().build());
     }
 
-
+    @DeleteMapping("/{id}")
+    public void deleteModulo(@PathVariable Long id) {
+        moduloService.deleteModulo(id);
+    }
     
 }

@@ -35,5 +35,9 @@ public class GeneroService {
             return generoRepository.save(genero);
         }).orElseThrow(() -> new RuntimeException("Género no encontrado con el ID: " + id));
     }
+
+    public void deleteGenero(Long id) {
+        generoRepository.deleteById(id);
+    }
 }
 

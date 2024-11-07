@@ -37,4 +37,8 @@ public class RoleService {
         return roleRepository.findById(idRole)
                 .orElseThrow(() -> new RuntimeException("Role no encontrado con id: " + idRole));
     }
+
+    public void deleteRole(Long id) {
+        roleRepository.deleteById(id);
+    }
 }

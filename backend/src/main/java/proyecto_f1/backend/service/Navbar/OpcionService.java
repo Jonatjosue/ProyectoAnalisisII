@@ -42,8 +42,6 @@ public class OpcionService {
     public List<OpcionEntity> buscaOpcion() {
         return opcionRepository.findAll(Sort.by(Sort.Direction.ASC, "ordenMenu"));
     }
-    
-    
 
     public Optional<OpcionEntity> findById(Long id) {
         return opcionRepository.findById(id);
@@ -52,4 +50,9 @@ public class OpcionService {
     public OpcionEntity save(OpcionEntity opcion) {
         return opcionRepository.save(opcion);
     }
+
+    public void deleteOpcion(Long id) {
+        opcionRepository.deleteById(id);
+    }
+    
 }
