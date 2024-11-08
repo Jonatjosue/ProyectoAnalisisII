@@ -1,9 +1,11 @@
 import React, { useEffect, useState } from 'react';
+import { Table, Container, Row, Col, Button, Spinner, Modal, Form } from 'react-bootstrap';
 import axios from 'axios';
-import './StatusCuenta.css'; // Importa el archivo CSS
 
+// Base URL for API
 const BASE_URL = 'http://localhost:8081/api/status-cuenta';
 
+// Service class for API requests
 class StatusCuentaService {
     obtenerTodos() {
         return axios.get(BASE_URL);
@@ -30,152 +32,218 @@ const statusCuentaService = new StatusCuentaService();
 
 const StatusCuentaComponent = () => {
     const [statusCuentas, setStatusCuentas] = useState([]);
-    const [error, setError] = useState(null);
-    const [nuevoStatusCuenta, setNuevoStatusCuenta] = useState({ nombre: '', usuarioCreacion: '' });
-    const [modoEdicion, setModoEdicion] = useState(false);
-    const [statusCuentaEditando, setStatusCuentaEditando] = useState(null);
-    const [detallesVisibles, setDetallesVisibles] = useState({});
+    const [loading, setLoading] = useState(true);
+    const [showAddModal, setShowAddModal] = useState(false);
+    const [showEditModal, setShowEditModal] = useState(false);
+    const [newStatusCuenta, setNewStatusCuenta] = useState({
+        nombre: '',
+        usuarioCreacion: localStorage.getItem('username') || '',
+        fechaCreacion: '',
+    });
+    const [editStatusCuenta, setEditStatusCuenta] = useState(null);
+    const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+  // Obten idRole y idOpcion para determinar permisos
+  const userRole = localStorage.getItem('userRole');
+  const idOpcion = localStorage.getItem('idOpcion');
+
+  useEffect(() => {
+
+    // Fetch permissions for the selected role and option
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+        const { alta, baja, cambio, imprimir, exportar } = response.data;
+        setPermissions({ alta, baja, cambio, imprimir, exportar });
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [userRole, idOpcion]);
 
     useEffect(() => {
-        statusCuentaService.obtenerTodos()
-            .then(response => setStatusCuentas(response.data))
-            .catch(error => {
-                setError("Error al obtener los estados de cuenta");
-                console.error(error);
-            });
-
-        const usuarioCreacion = localStorage.getItem('username') || '';
-        setNuevoStatusCuenta(prev => ({ ...prev, usuarioCreacion }));
+        fetchStatusCuentas();
     }, []);
 
-    const handleCrearStatusCuenta = () => {
-        const statusCuenta = {
-            nombre: nuevoStatusCuenta.nombre,
-            fechaCreacion: new Date().toISOString(),
-            usuarioCreacion: nuevoStatusCuenta.usuarioCreacion,
-        };
-
-        statusCuentaService.crearStatusCuenta(statusCuenta)
-            .then(response => {
-                setStatusCuentas([...statusCuentas, response.data]);
-                setNuevoStatusCuenta({ nombre: '', usuarioCreacion: nuevoStatusCuenta.usuarioCreacion });
-            })
-            .catch(error => {
-                setError("Error al crear el estado de cuenta");
-                console.error(error);
-            });
+    const fetchStatusCuentas = async () => {
+        try {
+            const response = await statusCuentaService.obtenerTodos();
+            setStatusCuentas(response.data);
+            setLoading(false);
+        } catch (error) {
+            console.error('Error fetching Status Cuentas:', error);
+            setLoading(false);
+        }
     };
 
-    const handleActualizarStatusCuenta = () => {
-        if (!window.confirm("¿Está seguro de que desea actualizar este estado de cuenta?")) return;
+    const handleShowAdd = () => setShowAddModal(true);
+    const handleCloseAdd = () => setShowAddModal(false);
 
-        const statusCuentaActualizado = {
-            nombre: nuevoStatusCuenta.nombre,
-            fechaModificacion: new Date().toISOString(),
-            usuarioModificacion: nuevoStatusCuenta.usuarioCreacion,
-        };
-
-        statusCuentaService.actualizarStatusCuenta(statusCuentaEditando.idStatusCuenta, statusCuentaActualizado)
-            .then(response => {
-                const nuevosStatusCuentas = statusCuentas.map(sc => 
-                    sc.idStatusCuenta === response.data.idStatusCuenta ? response.data : sc
-                );
-                setStatusCuentas(nuevosStatusCuentas);
-                setModoEdicion(false);
-                setStatusCuentaEditando(null);
-                setNuevoStatusCuenta({ nombre: '', usuarioCreacion: nuevoStatusCuenta.usuarioCreacion });
-            })
-            .catch(error => {
-                setError("Error al actualizar el estado de cuenta");
-                console.error(error);
-            });
+    const handleShowEdit = (statusCuenta) => {
+        setEditStatusCuenta(statusCuenta);
+        setShowEditModal(true);
     };
 
-    const handleEliminarStatusCuenta = (id) => {
-        if (!window.confirm("¿Está seguro de que desea eliminar este estado de cuenta?")) return;
-
-        statusCuentaService.eliminarStatusCuenta(id)
-            .then(() => {
-                setStatusCuentas(statusCuentas.filter(sc => sc.idStatusCuenta !== id));
-                setModoEdicion(false);
-                setStatusCuentaEditando(null);
-                setNuevoStatusCuenta({ nombre: '', usuarioCreacion: nuevoStatusCuenta.usuarioCreacion });
-            })
-            .catch(error => {
-                setError("Error al eliminar el estado de cuenta");
-                console.error(error);
-            });
+    const handleCloseEdit = () => {
+        setEditStatusCuenta(null);
+        setShowEditModal(false);
     };
 
-    const handleEditarStatusCuenta = (statusCuenta) => {
-        setModoEdicion(true);
-        setStatusCuentaEditando(statusCuenta);
-        setNuevoStatusCuenta({ nombre: statusCuenta.nombre, usuarioCreacion: statusCuenta.usuarioCreacion || '' });
+    const handleInputChange = (e) => {
+        const { name, value } = e.target;
+        setNewStatusCuenta({ ...newStatusCuenta, [name]: value });
     };
 
-    const handleCancelarEdicion = () => {
-        setModoEdicion(false);
-        setStatusCuentaEditando(null);
-        setNuevoStatusCuenta({ nombre: '', usuarioCreacion: nuevoStatusCuenta.usuarioCreacion });
+    const handleEditInputChange = (e) => {
+        const { name, value } = e.target;
+        setEditStatusCuenta({ ...editStatusCuenta, [name]: value });
     };
 
-    const toggleDetalles = (id) => {
-        setDetallesVisibles(prevDetalles => ({
-            ...prevDetalles,
-            [id]: !prevDetalles[id]
-        }));
+    const handleFormSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const currentDateTime = new Date().toISOString();
+            const statusCuentaToSubmit = {
+                ...newStatusCuenta,
+                fechaCreacion: currentDateTime,
+            };
+            await statusCuentaService.crearStatusCuenta(statusCuentaToSubmit);
+            setShowAddModal(false);
+            fetchStatusCuentas();
+        } catch (error) {
+            console.error('Error creating Status Cuenta:', error);
+        }
+    };
+
+    const handleEditFormSubmit = async (e) => {
+        e.preventDefault();
+        try {
+            const updatedStatusCuenta = {
+                ...editStatusCuenta,
+                usuarioModificacion: localStorage.getItem('username'),
+                fechaModificacion: new Date().toISOString(),
+            };
+            await statusCuentaService.actualizarStatusCuenta(editStatusCuenta.idStatusCuenta, updatedStatusCuenta);
+            handleCloseEdit();
+            fetchStatusCuentas();
+        } catch (error) {
+            console.error('Error updating Status Cuenta:', error);
+        }
+    };
+
+    const handleDelete = async (id) => {
+        if (window.confirm('¿Está seguro de que desea eliminar este estado de cuenta?')) {
+            try {
+                await statusCuentaService.eliminarStatusCuenta(id);
+                setStatusCuentas(statusCuentas.filter((status) => status.idStatusCuenta !== id));
+            } catch (error) {
+                console.error('Error deleting Status Cuenta:', error);
+            }
+        }
     };
 
     return (
-        <div className="status-cuenta-container">
-            <h2>Lista de Estados de Cuenta</h2>
-            {error && <p className="error-message">{error}</p>}
-            <ul className="status-cuenta-list">
-                {statusCuentas.map(statusCuenta => (
-                    <li key={statusCuenta.idStatusCuenta} className="status-cuenta-item">
-                        <span>{statusCuenta.nombre}</span>
-                        <div className="button-group-inline">
-                            <button onClick={() => toggleDetalles(statusCuenta.idStatusCuenta)} className="details-button">
-                                {detallesVisibles[statusCuenta.idStatusCuenta] ? 'Ocultar Detalles' : 'Mostrar Detalles'}
-                            </button>
-                            <button onClick={() => handleEditarStatusCuenta(statusCuenta)} className="edit-button">Editar</button>
-                        </div>
-                        {detallesVisibles[statusCuenta.idStatusCuenta] && (
-                            <div className="status-cuenta-details">
-                                <p>Fecha de Creación: {new Date(statusCuenta.fechaCreacion).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' })}</p>
-                                <p>Usuario de Creación: {statusCuenta.usuarioCreacion}</p>
-                                <p>Fecha de Modificación: {statusCuenta.fechaModificacion ? new Date(statusCuenta.fechaModificacion).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }) : ''}</p>
-                                <p>Usuario de Modificación: {statusCuenta.usuarioModificacion || ''}</p>
-                            </div>
+        <Container className="mt-5">
+            <Row className="justify-content-between align-items-center">
+                <Col>
+                    <h1 className="text-center">Gestión de Estados de Cuenta</h1>
+                </Col>
+                <Col className="text-right">
+                    {permissions.alta && (<Button variant="primary" onClick={handleShowAdd}>Nuevo Estado de Cuenta</Button>)}
+                </Col>
+            </Row>
+            {loading ? (
+                <div className="text-center mt-5">
+                    <Spinner animation="border" role="status">
+                        <span className="sr-only">Loading...</span>
+                    </Spinner>
+                </div>
+            ) : (
+                <Table striped bordered hover className="mt-3">
+                    <thead className="thead-dark">
+                        <tr>
+                            <th className="text-center">Id</th>
+                            <th className="text-center">Nombre</th>
+                            <th className="text-center">Fecha Creación</th>
+                            <th className="text-center">Usuario Creación</th>
+                            <th className="text-center">Fecha Modificación</th>
+                            <th className="text-center">Usuario Modificación</th>
+                            <th className="text-center">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {statusCuentas.length === 0 ? (
+                            <tr>
+                                <td colSpan="7" className="text-center">No hay estados de cuenta disponibles</td>
+                            </tr>
+                        ) : (
+                            statusCuentas.map((status) => (
+                                <tr key={status.idStatusCuenta}>
+                                    <td className="text-center">{status.idStatusCuenta}</td>
+                                    <td>{status.nombre}</td>
+                                    <td className="text-center">{new Date(status.fechaCreacion).toLocaleDateString()}</td>
+                                    <td className="text-center">{status.usuarioCreacion}</td>
+                                    <td className="text-center">{status.fechaModificacion ? new Date(status.fechaModificacion).toLocaleDateString() : ''}</td>
+                                    <td className="text-center">{status.usuarioModificacion}</td>
+                                    <td className="text-center">
+                                        {permissions.cambio && (<Button variant="warning" size="sm" onClick={() => handleShowEdit(status)}>Editar</Button>)}
+                                        {permissions.baja && (<Button variant="danger" size="sm" className="ml-2" onClick={() => handleDelete(status.idStatusCuenta)}>Eliminar</Button>)}
+                                    </td>
+                                </tr>
+                            ))
                         )}
-                    </li>
-                ))}
-            </ul>
-
-            {modoEdicion && (
-                <button onClick={handleCancelarEdicion} className="cancel-button">
-                    Regresar
-                </button>
+                    </tbody>
+                </Table>
             )}
-            <h3>{modoEdicion ? 'Actualizar Estado de Cuenta' : 'Agregar Nuevo Estado de Cuenta'}</h3>
-            <input
-                type="text"
-                placeholder="Nombre del Estado"
-                value={nuevoStatusCuenta.nombre}
-                onChange={(e) => setNuevoStatusCuenta({ ...nuevoStatusCuenta, nombre: e.target.value })}
-                className="input-field"
-            />
-            <div className="button-group">
-                <button onClick={modoEdicion ? handleActualizarStatusCuenta : handleCrearStatusCuenta} className="submit-button">
-                    {modoEdicion ? 'Actualizar' : 'Crear Estado'}
-                </button>
-                {modoEdicion && (
-                    <button onClick={() => handleEliminarStatusCuenta(statusCuentaEditando.idStatusCuenta)} className="delete-button">
-                        Eliminar
-                    </button>
-                )}
-            </div>
-        </div>
+
+            {/* Modal for adding new status cuenta */}
+            <Modal show={showAddModal} onHide={handleCloseAdd}>
+                <Modal.Header closeButton>
+                    <Modal.Title>Nuevo Estado de Cuenta</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <Form onSubmit={handleFormSubmit}>
+                        <Form.Group controlId="nombre">
+                            <Form.Label>Nombre</Form.Label>
+                            <Form.Control
+                                type="text"
+                                name="nombre"
+                                value={newStatusCuenta.nombre}
+                                onChange={handleInputChange}
+                                required
+                            />
+                        </Form.Group>
+                        <Button variant="primary" type="submit" className="mt-3">Crear</Button>
+                    </Form>
+                </Modal.Body>
+            </Modal>
+
+            {/* Modal for editing status cuenta */}
+            {editStatusCuenta && (
+                <Modal show={showEditModal} onHide={handleCloseEdit}>
+                    <Modal.Header closeButton>
+                        <Modal.Title>Editar Estado de Cuenta</Modal.Title>
+                    </Modal.Header>
+                    <Modal.Body>
+                        <Form onSubmit={handleEditFormSubmit}>
+                            <Form.Group controlId="nombre">
+                                <Form.Label>Nombre</Form.Label>
+                                <Form.Control
+                                    type="text"
+                                    name="nombre"
+                                    value={editStatusCuenta.nombre}
+                                    onChange={handleEditInputChange}
+                                    required
+                                />
+                            </Form.Group>
+                            <Button variant="primary" type="submit" className="mt-3">Actualizar</Button>
+                        </Form>
+                    </Modal.Body>
+                </Modal>
+            )}
+        </Container>
     );
 };
 

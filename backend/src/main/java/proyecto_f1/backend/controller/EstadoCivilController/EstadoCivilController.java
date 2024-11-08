@@ -42,8 +42,7 @@ public class EstadoCivilController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         estadoCivilService.delete(id);
-        return ResponseEntity.noContent().build();
     }
 }

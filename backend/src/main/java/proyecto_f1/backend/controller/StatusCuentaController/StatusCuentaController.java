@@ -40,8 +40,7 @@ public class StatusCuentaController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteStatusCuenta(@PathVariable Long id) {
+    public void deleteStatusCuenta(@PathVariable Long id) {
         statusCuentaService.delete(id);
-        return ResponseEntity.noContent().build();
     }
 }

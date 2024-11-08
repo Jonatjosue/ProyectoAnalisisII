@@ -36,21 +36,17 @@ import GestionStatusCuentaPage from "./GestionStatusCuentaPage/GestionStatusCuen
 
 
 
-
-
 function NavBar() {
   const { authToken, logout } = useContext(AuthContext);
   const [modules, setModules] = useState([]);
   const [menus, setMenus] = useState([]);
   const [options, setOptions] = useState([]);
-  const [selectedMenu, setSelectedMenu] = useState(null);
   const navigate = useNavigate();
   const menuRef = useRef(null);
 
   useEffect(() => {
     const role = localStorage.getItem('userRole');
     const usuario = localStorage.getItem('username');
-    console.log('este es el rol: ' + role);
     if (!role || !usuario) {
       console.error("Role or username not found in localStorage.");
       return;
@@ -61,7 +57,6 @@ function NavBar() {
         const response = await axiosInstance.get(`/modulos?usuario=${usuario}&role=${role}`);
         if (response.status >= 200 && response.status < 300) {
           setModules(response.data);
-          console.log(response.data);
         } else {
           console.error("Failed to fetch modules");
         }
@@ -101,27 +96,9 @@ function NavBar() {
     fetchOptions();
   }, [authToken]);
 
-  useEffect(() => {
-    const handleClickOutside = (event) => {
-      if (menuRef.current && !menuRef.current.contains(event.target)) {
-        setSelectedMenu(null);
-      }
-    };
-
-    document.addEventListener("mousedown", handleClickOutside);
-    return () => {
-      document.removeEventListener("mousedown", handleClickOutside);
-    };
-  }, []);
-
-  const handleMenuClick = (menuId) => {
-    setSelectedMenu(selectedMenu === menuId ? null : menuId);
-  };
-
-  const handleOptionClick = (page,idOpcion) => {
-    localStorage.setItem('idOpcion',idOpcion);
+  const handleOptionClick = (page, idOpcion) => {
+    localStorage.setItem('idOpcion', idOpcion);
     navigate(page);
-    setSelectedMenu(null);
   };
 
   return (
@@ -133,44 +110,29 @@ function NavBar() {
             <ul className="navbar-nav" ref={menuRef}>
               {modules.map((module) => (
                 <li key={module.idModulo} className="nav-item dropdown">
-                  <button
-                    className="nav-link btn btn-link dropdown-toggle"
-                    onClick={() => handleMenuClick(module.idModulo)}
-                  >
+                  <div className="nav-link btn btn-link">
                     {module.nombre}
-                  </button>
-                  <ul
-                    className={`dropdown-menu dropdown-grid ${selectedMenu === module.idModulo ? "show" : ""}`}
-                  >
+                  </div>
+                  <div className="dropdown-menu">
                     {menus
                       .filter((menu) => menu.idModulo === module.idModulo)
                       .map((filteredMenu) => (
-                        <li className="dropdown-item" key={filteredMenu.idMenu}>
-                          <button
-                            className="dropdown-toggle btn"
-                            onClick={() => handleMenuClick(filteredMenu.idMenu)}
-                          >
-                            {filteredMenu.nombre}
-                          </button>
-                          <ul
-                            className={`dropdown-menu ${selectedMenu === filteredMenu.idMenu ? "show" : ""}`}
-                          >
-                            {options
-                              .filter((option) => option.idMenu === filteredMenu.idMenu)
-                              .map((option) => (
-                                <li key={option.idOpcion}>
-                                  <button
-                                    className="dropdown-item"
-                                    onClick={() => handleOptionClick(option.pagina,option.idOpcion)}
-                                  >
-                                    {option.nombre}
-                                  </button>
-                                </li>
-                              ))}
-                          </ul>
-                        </li>
+                        <div key={filteredMenu.idMenu}>
+                          <strong className="dropdown-header">{filteredMenu.nombre}</strong>
+                          {options
+                            .filter((option) => option.idMenu === filteredMenu.idMenu)
+                            .map((option) => (
+                              <button
+                                key={option.idOpcion}
+                                className="dropdown-item"
+                                onClick={() => handleOptionClick(option.pagina, option.idOpcion)}
+                              >
+                                {option.nombre}
+                              </button>
+                            ))}
+                        </div>
                       ))}
-                  </ul>
+                  </div>
                 </li>
               ))}
               <li className="nav-item">
@@ -185,6 +147,8 @@ function NavBar() {
     </nav>
   );
 }
+
+
 
 function App() {
   return (

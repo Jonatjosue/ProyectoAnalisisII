@@ -107,6 +107,17 @@ const EstadoCivilList = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8081/api/estado-civil/${id}`);
+      alert('Estado civil eliminado con éxito');
+      setEstadosCiviles(estadosCiviles.filter((estado) => estado.idEstadoCivil !== id));
+    } catch (error) {
+      console.error('Error al eliminar el estado civil:', error);
+      alert('Error al eliminar el estado civil');
+    }
+  };
+
   return (
     <Container className="mt-5">
       <Row className="justify-content-between align-items-center">
@@ -114,7 +125,7 @@ const EstadoCivilList = () => {
           <h1 className="text-center">Gestión de Estado Civil</h1>
         </Col>
         <Col className="text-right">
-          <Button variant="primary" onClick={handleShowAdd}>Nuevo Estado Civil</Button>
+          {permissions.alta && (<Button variant="primary" onClick={handleShowAdd}>Nuevo Estado Civil</Button>)}
         </Col>
       </Row>
       {loading ? (
@@ -151,7 +162,8 @@ const EstadoCivilList = () => {
                   <td className="text-center">{estadoCivil.fechaModificacion ? new Date(estadoCivil.fechaModificacion).toLocaleDateString() : ''}</td>
                   <td className="text-center">{estadoCivil.usuarioModificacion}</td>
                   <td className="text-center">
-                    <Button variant="warning" size="sm" className="mr-2" onClick={() => handleShowEdit(estadoCivil)}>Editar</Button>
+                    {permissions.cambio && (<Button variant="warning" size="sm" className="mr-2" onClick={() => handleShowEdit(estadoCivil)}>Editar</Button>)}
+                    {permissions.baja && (<Button variant="danger" size="sm" className="ms-2" onClick={() => handleDelete(estadoCivil.idEstadoCivil)}>Eliminar</Button>)}
                   </td>
                 </tr>
               ))
