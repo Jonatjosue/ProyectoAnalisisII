@@ -15,11 +15,33 @@ const RoleOpcionList = () => {
         idOpcion: '',
         alta: false,
         baja: false,
+        cambio: false,
         imprimir: false,
         exportar: false,
         fechaModificacion: null,
         usuarioModificacion: null
     });
+    const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+    // Obten idRole y idOpcion para determinar permisos
+    const userRole = localStorage.getItem('userRole');
+    const idOpcion = localStorage.getItem('idOpcion');
+
+    useEffect(() => {
+
+        // Fetch permissions for the selected role and option
+        const fetchPermissions = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+                const { alta, baja, cambio, imprimir, exportar } = response.data;
+                setPermissions({ alta, baja, cambio, imprimir, exportar });
+            } catch (error) {
+                console.error('Error fetching permissions:', error);
+            }
+        };
+
+        fetchPermissions();
+    }, [userRole, idOpcion]);
 
     useEffect(() => {
         fetchRolesAndRoleOpciones();
@@ -52,6 +74,7 @@ const RoleOpcionList = () => {
             idOpcion: '',
             alta: false,
             baja: false,
+            cambio: false,
             imprimir: false,
             exportar: false,
             fechaModificacion: new Date().toISOString(),
@@ -62,12 +85,12 @@ const RoleOpcionList = () => {
 
     const handleEditClick = (item) => {
         setEditingItem(item);
-        alert(item.idRole+'/'+item.idOpcion);
         setFormData({
             idRole: item.idRole,
             idOpcion: item.idOpcion,
             alta: item.alta,
             baja: item.baja,
+            cambio: item.cambio,
             imprimir: item.imprimir,
             exportar: item.exportar,
             fechaModificacion: new Date().toISOString(),
@@ -100,6 +123,7 @@ const RoleOpcionList = () => {
                 idOpcion: formData.idOpcion, // Using the ID of the option
                 alta: formData.alta,
                 baja: formData.baja,
+                cambio: formData.cambio,
                 imprimir: formData.imprimir,
                 exportar: formData.exportar,
                 fechaModificacion: formData.fechaModificacion,
@@ -130,6 +154,7 @@ const RoleOpcionList = () => {
                 idOpcion: formData.idOpcion,
                 alta: formData.alta,
                 baja: formData.baja,
+                cambio: formData.cambio,
                 imprimir: formData.imprimir,
                 exportar: formData.exportar,
                 fechaCreacion: formData.fechaModificacion,
@@ -139,7 +164,7 @@ const RoleOpcionList = () => {
 
             // Fetch the updated role-opciones list to ensure role and option names are up-to-date
             await fetchRolesAndRoleOpciones();
-            
+
             handleCloseCreateModal();
         } catch (error) {
             console.error('Error creating item:', error);
@@ -174,8 +199,8 @@ const RoleOpcionList = () => {
 
     return (
         <Container className="mt-5">
-            <h1 className="text-center align-middle">Role Opción List</h1>
-            <Button variant="primary" onClick={handleCreateClick} className="mb-3">Crear relación</Button>
+            <h1 className="text-center align-middle">Asignar Opciones a un Role</h1>
+            {permissions.alta && (<Button variant="primary" onClick={handleCreateClick} className="mb-3">Crear relación</Button>)}
             {loading ? (
                 <div className="text-center mt-5">
                     <Spinner animation="border" role="status">
@@ -191,6 +216,7 @@ const RoleOpcionList = () => {
                             <th className="text-center align-middle">Opción</th>
                             <th className="text-center align-middle">Alta</th>
                             <th className="text-center align-middle">Baja</th>
+                            <th className="text-center align-middle">Cambio</th>
                             <th className="text-center align-middle">Imprimir</th>
                             <th className="text-center align-middle">Exportar</th>
                             <th className="text-center align-middle">Fecha Creación</th>
@@ -213,6 +239,7 @@ const RoleOpcionList = () => {
                                     <td className="text-center align-middle">{getOpcionName(item.idOpcion)}</td>
                                     <td className="text-center align-middle">{item.alta ? 'Sí' : 'No'}</td>
                                     <td className="text-center align-middle">{item.baja ? 'Sí' : 'No'}</td>
+                                    <td className="text-center align-middle">{item.cambio ? 'Sí' : 'No'}</td>
                                     <td className="text-center align-middle">{item.imprimir ? 'Sí' : 'No'}</td>
                                     <td className="text-center align-middle">{item.exportar ? 'Sí' : 'No'}</td>
                                     <td className="text-center align-middle">{new Date(item.fechaCreacion).toLocaleDateString()}</td>
@@ -220,12 +247,12 @@ const RoleOpcionList = () => {
                                     <td className="text-center align-middle">{new Date(item.fechaModificacion).toLocaleDateString()}</td>
                                     <td className="text-center align-middle">{item.usuarioModificacion}</td>
                                     <td className="text-center align-middle d-flex justify-content-start">
-                                        <Button variant="warning" size="sm" onClick={() => handleEditClick(item)} className="mr-2">
+                                        {permissions.cambio && (<Button variant="warning" size="sm" onClick={() => handleEditClick(item)} className="mr-2">
                                             Editar
-                                        </Button>
-                                        <Button variant="danger" size="sm" onClick={() => handleDeleteClick(item.idRole, item.idOpcion)} className="ml-2">
+                                        </Button>)}
+                                        {permissions.baja && (<Button variant="danger" size="sm" onClick={() => handleDeleteClick(item.idRole, item.idOpcion)} className="ml-2">
                                             Eliminar
-                                        </Button>
+                                        </Button>)}
                                     </td>
                                 </tr>
                             ))
@@ -291,6 +318,16 @@ const RoleOpcionList = () => {
                                 label="Baja"
                                 name="baja"
                                 checked={formData.baja}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="formCambio">
+                            <Form.Check
+                                type="checkbox"
+                                label="Cambio"
+                                name="cambio"
+                                checked={formData.cambio}
                                 onChange={handleInputChange}
                             />
                         </Form.Group>
@@ -379,6 +416,16 @@ const RoleOpcionList = () => {
                                 label="Baja"
                                 name="baja"
                                 checked={formData.baja}
+                                onChange={handleInputChange}
+                            />
+                        </Form.Group>
+
+                        <Form.Group controlId="formCambio">
+                            <Form.Check
+                                type="checkbox"
+                                label="Cambio"
+                                name="cambio"
+                                checked={formData.cambio}
                                 onChange={handleInputChange}
                             />
                         </Form.Group>

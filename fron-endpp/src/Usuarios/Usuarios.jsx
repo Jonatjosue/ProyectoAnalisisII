@@ -4,7 +4,6 @@ import { AuthContext } from '../autenticacion/AuthContext';
 import axios from 'axios';
 
 function Usuarios() {
-  const { userRole, loggedInUser } = useContext(AuthContext);
   const [usuarios, setUsuarios] = useState([]);
   const [formData, setFormData] = useState({
     idUsuario: null,
@@ -39,6 +38,27 @@ function Usuarios() {
   const [availableRoles, setAvailableRoles] = useState([]);
   const [selectedRoleCount, setSelectedRoleCount] = useState(0);
   const [selectedRoles, setSelectedRoles] = useState([]);
+  const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+  // Obten idRole y idOpcion para determinar permisos
+  const userRole = localStorage.getItem('userRole');
+  const idOpcion = localStorage.getItem('idOpcion');
+
+  useEffect(() => {
+
+    // Fetch permissions for the selected role and option
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+        const { alta, baja, cambio, imprimir, exportar } = response.data;
+        setPermissions({ alta, baja, cambio, imprimir, exportar });
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [userRole, idOpcion]);
 
   useEffect(() => {
     // Fetch users
@@ -266,10 +286,21 @@ function Usuarios() {
     );
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8081/api/usuario/${id}`);
+      alert('Usuario eliminado con éxito');
+      setUsuarios(usuarios.filter((usuario) => usuario.idUsuario !== id));
+    } catch (error) {
+      console.error('Error al eliminar el usuario:', error);
+      alert('Error al eliminar el usuario');
+    }
+  };
+
   return (
     <div className="container mt-5">
       <h1 className="text-center mb-4">Lista de Usuarios</h1>
-      {userRole === 1 && (
+      {permissions.alta && (
         <button className="btn btn-primary mb-3" onClick={() => openDialog()}>
           Crear Nuevo Usuario
         </button>
@@ -277,39 +308,47 @@ function Usuarios() {
       <table className="table table-bordered">
         <thead className="thead-dark">
           <tr>
-            <th>ID Usuario</th>
-            <th>Nombre</th>
-            <th>Apellido</th>
-            <th>Fecha de Nacimiento</th>
-            <th>Correo Electrónico</th>
-            <th>Teléfono Móvil</th>
-            <th>Última Fecha de Ingreso</th>
-            <th>Última Fecha de Cambio de Password</th>
-            <th>Intentos de Acceso</th>
-            <th>Acciones</th>
+            <th className="text-center align-middle">ID Usuario</th>
+            <th className="text-center align-middle">Nombre</th>
+            <th className="text-center align-middle">Apellido</th>
+            <th className="text-center align-middle">Fecha de Nacimiento</th>
+            <th className="text-center align-middle">Correo Electrónico</th>
+            <th className="text-center align-middle">Teléfono Móvil</th>
+            <th className="text-center align-middle">Última Fecha de Ingreso</th>
+            <th className="text-center align-middle">Última Fecha de Cambio de Password</th>
+            <th className="text-center align-middle">Intentos de Acceso</th>
+            <th className="text-center align-middle">Acciones</th>
           </tr>
         </thead>
         <tbody>
           {usuarios.map((usuario) => (
             <tr key={usuario.idUsuario}>
-              <td>{usuario.idUsuario}</td>
-              <td>{usuario.nombre}</td>
-              <td>{usuario.apellido}</td>
-              <td>{new Date(usuario.fechaNacimiento).toLocaleDateString()}</td>
-              <td>{usuario.correoElectronico}</td>
-              <td>{usuario.telefonoMovil}</td>
-              <td>{new Date(usuario.ultimaFechaIngreso).toLocaleDateString()}</td>
-              <td>{new Date(usuario.ultimaFechaCambioPassword).toLocaleDateString()}</td>
-              <td>{usuario.intentosDeAcceso}</td>
-              <td>
-                {userRole === 1 && (
+              <td className="text-center align-middle">{usuario.idUsuario}</td>
+              <td className="text-center align-middle">{usuario.nombre}</td>
+              <td className="text-center align-middle">{usuario.apellido}</td>
+              <td className="text-center align-middle">{new Date(usuario.fechaNacimiento).toLocaleDateString()}</td>
+              <td className="text-center align-middle">{usuario.correoElectronico}</td>
+              <td className="text-center align-middle">{usuario.telefonoMovil}</td>
+              <td className="text-center align-middle">{new Date(usuario.ultimaFechaIngreso).toLocaleDateString()}</td>
+              <td className="text-center align-middle">{new Date(usuario.ultimaFechaCambioPassword).toLocaleDateString()}</td>
+              <td className="text-center align-middle">{usuario.intentosDeAcceso}</td>
+              <td className='text-center align-middle d-flex justify-content-start'>
+                {permissions.cambio && (
                   <button
-                    className="btn btn-warning"
+                    className="btn btn-warning btn-sm"
                     onClick={() => openDialog(usuario)}
                   >
                     Editar
                   </button>
                 )}
+                {permissions.baja && (
+                    <button
+                      className="btn btn-danger btn-sm ms-2"
+                      onClick={() => handleDelete(usuario.idUsuario)}
+                    >
+                      Eliminar
+                    </button>
+                  )}
               </td>
             </tr>
           ))}

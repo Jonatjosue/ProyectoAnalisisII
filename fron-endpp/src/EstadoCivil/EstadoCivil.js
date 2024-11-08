@@ -14,6 +14,27 @@ const EstadoCivilList = () => {
   });
 
   const [editEstadoCivil, setEditEstadoCivil] = useState(null);
+  const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+  // Obten idRole y idOpcion para determinar permisos
+  const userRole = localStorage.getItem('userRole');
+  const idOpcion = localStorage.getItem('idOpcion');
+
+  useEffect(() => {
+
+    // Fetch permissions for the selected role and option
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+        const { alta, baja, cambio, imprimir, exportar } = response.data;
+        setPermissions({ alta, baja, cambio, imprimir, exportar });
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [userRole, idOpcion]);
 
   useEffect(() => {
     fetchEstadosCiviles();

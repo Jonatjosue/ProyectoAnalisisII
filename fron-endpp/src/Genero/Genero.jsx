@@ -34,6 +34,27 @@ const GeneroComponent = () => {
     const [modoEdicion, setModoEdicion] = useState(false);
     const [generoEditando, setGeneroEditando] = useState(null);
     const [detallesVisibles, setDetallesVisibles] = useState({});
+    const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+    // Obten idRole y idOpcion para determinar permisos
+    const userRole = localStorage.getItem('userRole');
+    const idOpcion = localStorage.getItem('idOpcion');
+
+    useEffect(() => {
+
+        // Fetch permissions for the selected role and option
+        const fetchPermissions = async () => {
+            try {
+                const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+                const { alta, baja, cambio, imprimir, exportar } = response.data;
+                setPermissions({ alta, baja, cambio, imprimir, exportar });
+            } catch (error) {
+                console.error('Error fetching permissions:', error);
+            }
+        };
+
+        fetchPermissions();
+    }, [userRole, idOpcion]);
 
     // Obtener todos los géneros al montar el componente
     useEffect(() => {
@@ -76,7 +97,7 @@ const GeneroComponent = () => {
 
         generoService.actualizarGenero(generoEditando.idGenero, generoActualizado)
             .then(response => {
-                const nuevosGeneros = generos.map(g => 
+                const nuevosGeneros = generos.map(g =>
                     g.idGenero === response.data.idGenero ? response.data : g
                 );
                 setGeneros(nuevosGeneros);
@@ -102,6 +123,18 @@ const GeneroComponent = () => {
         setDetallesVisibles(prev => ({ ...prev, [id]: !prev[id] }));
     };
 
+    const handleDelete = async (id) => {
+      try {
+        await axios.delete(`http://localhost:8081/api/generos/${id}`);
+        alert('Genero eliminado con éxito');
+        setGeneros(generos.filter((genero) => genero.idGenero !== id));
+      } catch (error) {
+        console.error('Error al eliminar el Género:', error);
+        alert('Error al eliminar el Género');
+      }
+    };
+  
+
     return (
         <div className="genero-container">
             <h2>Lista de Géneros</h2>
@@ -118,13 +151,13 @@ const GeneroComponent = () => {
                                 <div className="genero-details">
                                     <p>Fecha de Creación: {genero.fechaCreacion}</p>
                                     <p>Usuario de Creación: {genero.usuarioCreacion}</p>
-                                    <p>Fecha de Modificación: {genero.fechaModificacion ? new Date(genero.fechaModificacion).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }) : '' }</p>
+                                    <p>Fecha de Modificación: {genero.fechaModificacion ? new Date(genero.fechaModificacion).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }) : ''}</p>
                                     <p>Usuario de Modificación: {genero.usuarioModificacion || ''}</p>
 
                                 </div>
                             )}
                         </div>
-                        <button onClick={() => handleEditarGenero(genero)} className="edit-button">Editar</button>
+                        {permissions.cambio && (<button onClick={() => handleEditarGenero(genero)} className="edit-button">Editar</button>)}
                     </li>
                 ))}
             </ul>

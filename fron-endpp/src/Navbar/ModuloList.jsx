@@ -15,12 +15,31 @@ const ModuloList = () => {
   });
 
   const [editModulo, setEditModulo] = useState(null);
+  const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+  // Obten idRole y idOpcion para determinar permisos
+  const userRole = localStorage.getItem('userRole');
+  const idOpcion = localStorage.getItem('idOpcion');
+
+  useEffect(() => {
+
+    // Fetch permissions for the selected role and option
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+        const { alta, baja, cambio, imprimir, exportar } = response.data;
+        setPermissions({ alta, baja, cambio, imprimir, exportar });
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [userRole, idOpcion]);
 
   useEffect(() => {
     fetchModulos();
   }, []);
-  const role = localStorage.getItem('userRole');
-  const usuario = localStorage.getItem('username');
 
 
   const fetchModulos = async () => {
@@ -111,6 +130,17 @@ const ModuloList = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8081/api/modulos/${id}`);
+      alert('Módulo eliminado con éxito');
+      setModulos(modulos.filter((modulo) => modulo.idModulo !== id));
+    } catch (error) {
+      console.error('Error al eliminar el módulo:', error);
+      alert('Error al eliminar el módulo');
+    }
+  };
+
   return (
     <Container className="mt-5">
       <Row className="justify-content-between align-items-center">
@@ -118,7 +148,7 @@ const ModuloList = () => {
           <h1 className="text-center">Gestión de Módulos</h1>
         </Col>
         <Col className="text-right">
-          <Button variant="primary" onClick={handleShowAdd}>Nuevo Modulo</Button>
+          {permissions.alta && (<Button variant="primary" onClick={handleShowAdd}>Nuevo Modulo</Button>)}
         </Col>
       </Row>
       {loading ? (
@@ -156,8 +186,9 @@ const ModuloList = () => {
                   <td className="text-center">{modulo.usuarioCreacion}</td>
                   <td className="text-center">{new Date(modulo.fechaModificacion).toLocaleDateString()}</td>
                   <td className="text-center">{modulo.usuarioModificacion}</td>
-                  <td className="text-center">
-                    <Button variant="warning" size="sm" className="mr-2" onClick={() => handleShowEdit(modulo)}>Editar</Button>
+                  <td className="text-center d-flex justify-content-start">
+                    {permissions.cambio && (<Button variant="warning" size="sm" className="mr-2" onClick={() => handleShowEdit(modulo)}>Editar</Button>)}
+                    {permissions.baja && (<Button variant="danger" size="sm" className="ms-2" onClick={() => handleDelete(modulo.idModulo)}>Eliminar</Button>)}
                   </td>
                 </tr>
               ))

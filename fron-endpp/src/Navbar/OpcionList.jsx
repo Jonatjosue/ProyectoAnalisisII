@@ -18,6 +18,27 @@ const OpcionList = () => {
   const [editOpcion, setEditOpcion] = useState(null);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+  // Obten idRole y idOpcion para determinar permisos
+  const userRole = localStorage.getItem('userRole');
+  const idOpcion = localStorage.getItem('idOpcion');
+
+  useEffect(() => {
+
+    // Fetch permissions for the selected role and option
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+        const { alta, baja, cambio, imprimir, exportar } = response.data;
+        setPermissions({ alta, baja, cambio, imprimir, exportar });
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [userRole, idOpcion]);
   
 
   useEffect(() => {
@@ -141,6 +162,18 @@ const OpcionList = () => {
   const currentOpciones = opciones.slice(indexOfFirstItem, indexOfLastItem);
 
   const paginate = (pageNumber) => setCurrentPage(pageNumber);
+
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8081/api/opciones/${id}`);
+      alert('Opción eliminada con éxito');
+      setOpciones(opciones.filter((opcion) => opcion.idOpcion !== id));
+    } catch (error) {
+      console.error('Error al eliminar la opcion:', error);
+      alert('Error al eliminar la opcion');
+    }
+  };
+
   
   return (
     <Container className="mt-5">
@@ -149,7 +182,9 @@ const OpcionList = () => {
           <h1 className="text-center">Gestión de Opciones</h1>
         </Col>
         <Col className="text-right">
+          {permissions.alta && (
           <Button variant="primary" onClick={handleShowAdd}>Nueva Opción</Button>
+          )}
         </Col>
       </Row>
       {loading ? (
@@ -192,9 +227,28 @@ const OpcionList = () => {
                     <td className="text-center">{new Date(item.fechaModificacion).toLocaleDateString()}</td>
                     <td className="text-center">{item.usuarioModificacion}</td>
                     <td className="text-center">{item.pagina}</td>
-                    <td className="text-center">
-                      <Button variant="warning" size="sm" className="mr-2" onClick={() => handleShowEdit(item)}>Editar</Button>
-                    </td>
+                    <td className="text-center align-middle d-flex justify-content-start">
+                  {/* Conditionally render the "Eliminar" button based on baja permission */}
+                  {permissions.cambio && (
+                    <button
+                      className="btn btn-warning btn-sm"
+                      onClick={() => handleShowEdit(item)}
+                    >
+                      Editar
+                    </button>
+                  )}
+                  
+                  {/* Conditionally render the "Eliminar" button based on baja permission */}
+                  {permissions.baja && (
+                    <button
+                      className="btn btn-danger btn-sm ms-2"
+                      onClick={() => handleDelete(item.idOpcion)}
+                    >
+                      Eliminar
+                    </button>
+                  )}
+                </td>
+                    
                   </tr>
                 ))
               )}

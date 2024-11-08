@@ -114,7 +114,8 @@ function NavBar() {
     setSelectedMenu(selectedMenu === menuId ? null : menuId);
   };
 
-  const handleOptionClick = (page) => {
+  const handleOptionClick = (page,idOpcion) => {
+    localStorage.setItem('idOpcion',idOpcion);
     navigate(page);
     setSelectedMenu(null);
   };
@@ -156,7 +157,7 @@ function NavBar() {
                                 <li key={option.idOpcion}>
                                   <button
                                     className="dropdown-item"
-                                    onClick={() => handleOptionClick(option.pagina)}
+                                    onClick={() => handleOptionClick(option.pagina,option.idOpcion)}
                                   >
                                     {option.nombre}
                                   </button>

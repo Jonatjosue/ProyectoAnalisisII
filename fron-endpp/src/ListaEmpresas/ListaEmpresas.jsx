@@ -9,6 +9,29 @@ const ListaEmpresas = () => {
   const [selectedEmpresa, setSelectedEmpresa] = useState(null);
   const [showEditModal, setShowEditModal] = useState(false);
   const [isEditing, setIsEditing] = useState(false);
+  ////////////////////////////////////////////////////////////////////////////
+  const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+  // Obten idRole y idOpcion para determinar permisos
+  const userRole = localStorage.getItem('userRole');
+  const idOpcion = localStorage.getItem('idOpcion');
+
+  useEffect(() => {
+
+    // Fetch permissions for the selected role and option
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+        const { alta, baja, cambio, imprimir, exportar } = response.data;
+        setPermissions({ alta, baja, cambio, imprimir, exportar });
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [userRole, idOpcion]);
+  //////////////////////////////////////////////////////////////
 
   useEffect(() => {
     const fetchEmpresas = async () => {
@@ -97,12 +120,25 @@ const ListaEmpresas = () => {
     }
   };
 
+  /////////////////////////////////////////////////////////////////////////////////////
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8081/api/empresas/${id}`);
+      alert('Empresa eliminada con éxito');
+      setEmpresas(empresas.filter((empresa) => empresa.idEmpresa !== id));
+    } catch (error) {
+      console.error('Error al eliminar la empresa:', error);
+      alert('Error al eliminar la empresa');
+    }
+  };
+  /////////////////////////////////////////////////////////////////////////////////////
+
   return (
     <div className="container mt-5" style={{ maxWidth: '95%' }}>
       <h2 className="mb-4 text-center">Lista de Empresas</h2>
-      <button className="btn btn-primary mb-3" onClick={() => openDialog()}>
+      {permissions.alta && (<button className="btn btn-primary mb-3" onClick={() => openDialog()}>
         Crear Nueva Empresa
-      </button>
+      </button>)}
       <div className="table-responsive mx-auto">
         <table className="table table-striped">
           <thead className="thead-dark">
@@ -145,8 +181,26 @@ const ListaEmpresas = () => {
                 <td className="text-center align-middle">{empresa.usuarioCreacion}</td>
                 <td className="text-center align-middle">{formatDateForDisplay(empresa.fechaModificacion)}</td>
                 <td className="text-center align-middle">{empresa.usuarioModificacion}</td>
-                <td className="text-center align-middle">
-                  <button className="btn btn-warning btn-sm" onClick={() => openDialog(empresa)}>Editar</button>
+                <td className="text-center align-middle d-flex justify-content-start">
+                  {/* Conditionally render the "Eliminar" button based on baja permission */}
+                  {permissions.cambio && (
+                    <button
+                      className="btn btn-warning btn-sm"
+                      onClick={() => openDialog(empresa)}
+                    >
+                      Editar
+                    </button>
+                  )}
+                  
+                  {/* Conditionally render the "Eliminar" button based on baja permission */}
+                  {permissions.baja && (
+                    <button
+                      className="btn btn-danger btn-sm ms-2"
+                      onClick={() => handleDelete(empresa.idEmpresa)}
+                    >
+                      Eliminar
+                    </button>
+                  )}
                 </td>
               </tr>
             ))}

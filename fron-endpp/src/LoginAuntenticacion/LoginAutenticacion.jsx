@@ -164,7 +164,6 @@ const LoginAutenticacion = () => {
     console.log(idrole)
     localStorage.setItem('username', username);
     localStorage.setItem('role', 'Administrador');
-  // localStorage.setItem('userRole', this.selectedRoleId);
     const startSession = new Date().toISOString();
     localStorage.setItem('startSession', startSession);
     navigate('/');

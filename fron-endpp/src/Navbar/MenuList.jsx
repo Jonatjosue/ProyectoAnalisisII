@@ -18,6 +18,28 @@ const ModuloList = () => {
 
   const [editModulo, setEditModulo] = useState(null);
 
+  const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+  // Obten idRole y idOpcion para determinar permisos
+  const userRole = localStorage.getItem('userRole');
+  const idOpcion = localStorage.getItem('idOpcion');
+
+  useEffect(() => {
+
+    // Fetch permissions for the selected role and option
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+        const { alta, baja, cambio, imprimir, exportar } = response.data;
+        setPermissions({ alta, baja, cambio, imprimir, exportar });
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [userRole, idOpcion]);
+
   useEffect(() => {
     
     fetchMenus();
@@ -132,6 +154,17 @@ const usuario = localStorage.getItem('username');
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8081/api/menu/${id}`);
+      alert('Menu eliminado con éxito');
+      setMenus(menus.filter((menu) => menu.idMenu !== id));
+    } catch (error) {
+      console.error('Error al eliminar el menú:', error);
+      alert('Error al eliminar el menú');
+    }
+  };
+
   return (
     <Container className="mt-5">
       <Row className="justify-content-between align-items-center">
@@ -139,7 +172,9 @@ const usuario = localStorage.getItem('username');
           <h1 className="text-center">Gestión de Menú</h1>
         </Col>
         <Col className="text-right">
+          {permissions.alta && (
           <Button variant="primary" onClick={handleShowAdd}>Nuevo Menú</Button>
+          )}
         </Col>
       </Row>
       {loading ? (
@@ -179,8 +214,13 @@ const usuario = localStorage.getItem('username');
                   <td className="text-center">{item.usuarioCreacion}</td>
                   <td className="text-center">{new Date(item.fechaModificacion).toLocaleDateString()}</td>
                   <td className="text-center">{item.usuarioModificacion}</td>
-                  <td className="text-center">
-                    <Button variant="warning" size="sm" className="mr-2" onClick={() => handleShowEdit(item)}>Editar</Button>
+                  <td className="text-center d-flex justify-content-start">
+                    {permissions.cambio && (
+                      <Button variant="warning" size="sm" className="mr-2" onClick={() => handleShowEdit(item)}>Editar</Button>
+                      )}
+                    {permissions.baja && (
+                      <Button variant="danger" size="sm" className="mr-2" onClick={() => handleDelete(item.idMenu)}>Eliminar</Button>
+                      )}
                   </td>
                 </tr>
               ))

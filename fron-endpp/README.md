@@ -1,3 +1,8 @@
+## Valores almacenados en localStorage
+userRole -> Contiene el role id con el que fue autenticado
+username -> Contiene el nombre de usuario con el que fue autenticado
+idOpcion -> Contiene el ID de la opcion seleccionada en el menú de navegación
+
 # Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).

@@ -14,6 +14,27 @@ const RoleList = () => {
   });
 
   const [editRole, setEditRole] = useState(null);
+  const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+  // Obten idRole y idOpcion para determinar permisos
+  const userRole = localStorage.getItem('userRole');
+  const idOpcion = localStorage.getItem('idOpcion');
+
+  useEffect(() => {
+
+    // Fetch permissions for the selected role and option
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+        const { alta, baja, cambio, imprimir, exportar } = response.data;
+        setPermissions({ alta, baja, cambio, imprimir, exportar });
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [userRole, idOpcion]);
 
   useEffect(() => {
     fetchRoles();
@@ -86,6 +107,17 @@ const RoleList = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8081/api/Role/${id}`);
+      alert('Role eliminado con éxito');
+      setRoles(roles.filter((role) => role.idRole !== id));
+    } catch (error) {
+      console.error('Error al eliminar el Role:', error);
+      alert('Error al eliminar el Role');
+    }
+  };
+
   return (
     <Container className="mt-5">
       <Row className="justify-content-between align-items-center">
@@ -93,7 +125,7 @@ const RoleList = () => {
           <h1 className="text-center">Gestión de Roles</h1>
         </Col>
         <Col className="text-right">
-          <Button variant="primary" onClick={handleShowAdd}>Nuevo Rol</Button>
+          {permissions.alta && (<Button variant="primary" onClick={handleShowAdd}>Nuevo Rol</Button>)}
         </Col>
       </Row>
       {loading ? (
@@ -130,7 +162,8 @@ const RoleList = () => {
                   <td className="text-center">{role.fechaModificacion ? new Date(role.fechaModificacion).toLocaleDateString() : ''}</td>
                   <td className="text-center">{role.usuarioModificacion}</td>
                   <td className="text-center">
-                    <Button variant="warning" size="sm" className="mr-2" onClick={() => handleShowEdit(role)}>Editar</Button>
+                    {permissions.cambio && (<Button variant="warning" size="md" className="mr-2" onClick={() => handleShowEdit(role)}>Editar</Button>)}
+                    {permissions.baja && (<Button variant="danger" size="md" className="ms-2" onClick={() => handleDelete(role.idRole)}>Eliminar</Button>)}
                   </td>
                 </tr>
               ))

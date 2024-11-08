@@ -17,6 +17,27 @@ const SucursalList = () => {
   });
 
   const [editSucursal, setEditSucursal] = useState(null);
+  const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+  // Obten idRole y idOpcion para determinar permisos
+  const userRole = localStorage.getItem('userRole');
+  const idOpcion = localStorage.getItem('idOpcion');
+
+  useEffect(() => {
+
+    // Fetch permissions for the selected role and option
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+        const { alta, baja, cambio, imprimir, exportar } = response.data;
+        setPermissions({ alta, baja, cambio, imprimir, exportar });
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [userRole, idOpcion]);
 
   useEffect(() => {
     fetchSucursales();
@@ -103,6 +124,17 @@ const SucursalList = () => {
     }
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8081/api/sucursales/${id}`);
+      alert('Sucursal eliminada con éxito');
+      setSucursales(sucursales.filter((sucursal) => sucursal.idSucursal !== id));
+    } catch (error) {
+      console.error('Error al eliminar la sucursal:', error);
+      alert('Error al eliminar la sucursal');
+    }
+  };
+
   return (
     <Container className="mt-5">
       <Row className="justify-content-between align-items-center">
@@ -110,7 +142,7 @@ const SucursalList = () => {
           <h1 className="text-center">Gestión de Sucursales</h1>
         </Col>
         <Col className="text-right">
-          <Button variant="primary" onClick={handleShowAdd}>Nueva Sucursal</Button>
+          {permissions.alta && (<Button variant="primary" onClick={handleShowAdd}>Nueva Sucursal</Button>)}
         </Col>
       </Row>
       {loading ? (
@@ -150,8 +182,9 @@ const SucursalList = () => {
                   <td className="text-center">{sucursal.usuarioCreacion}</td>
                   <td className="text-center">{sucursal.fechaModificacion ? new Date(sucursal.fechaModificacion).toLocaleDateString() : ''}</td>
                   <td className="text-center">{sucursal.usuarioModificacion}</td>
-                  <td className="text-center">
-                    <Button variant="warning" size="sm" onClick={() => handleShowEdit(sucursal)}>Editar</Button>
+                  <td className="text-center align-middle d-flex justify-content-start">
+                    {permissions.cambio && (<Button variant="warning" size="sm" onClick={() => handleShowEdit(sucursal)}>Editar</Button>)}
+                    {permissions.baja && (<Button variant="danger" size="sm" onClick={() => handleDelete(sucursal.idSucursal)}>Eliminar</Button>)}
                   </td>
                 </tr>
               ))
