@@ -20,6 +20,27 @@ const StatusUsuarioComponent = () => {
   const [error, setError] = useState(null);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
+  const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+  // Obten idRole y idOpcion para determinar permisos
+  const userRole = localStorage.getItem('userRole');
+  const idOpcion = localStorage.getItem('idOpcion');
+
+  useEffect(() => {
+
+    // Fetch permissions for the selected role and option
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+        const { alta, baja, cambio, imprimir, exportar } = response.data;
+        setPermissions({ alta, baja, cambio, imprimir, exportar });
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [userRole, idOpcion]);
 
   useEffect(() => {
     StatusUsuarioService.obtenerTodos()
@@ -111,9 +132,9 @@ const StatusUsuarioComponent = () => {
         <Col>
           <h1 className="text-center">Gestión de Status de Usuario</h1>
         </Col>
-        <Col className="text-right">
+        {permissions.alta && (<Col className="text-right">
           <Button variant="primary" onClick={handleShowAdd}>Nuevo Status</Button>
-        </Col>
+        </Col>)}
       </Row>
 
       {loading ? (
@@ -150,8 +171,8 @@ const StatusUsuarioComponent = () => {
                   <td className="text-center">{statusUsuario.fechaModificacion ? new Date(statusUsuario.fechaModificacion).toLocaleDateString() : ''}</td>
                   <td className="text-center">{statusUsuario.usuarioModificacion || ''}</td>
                   <td className="text-center">
-                    <Button variant="warning" size="sm" onClick={() => handleShowEdit(statusUsuario)}>Editar</Button>{' '}
-                    <Button variant="danger" size="sm" onClick={() => handleEliminarStatusUsuario(statusUsuario.idStatusUsuario)}>Eliminar</Button>
+                    {permissions.cambio && (<Button variant="warning" size="sm" onClick={() => handleShowEdit(statusUsuario)}>Editar</Button>)}
+                    {permissions.baja && (<Button variant="danger" size="sm" onClick={() => handleEliminarStatusUsuario(statusUsuario.idStatusUsuario)}>Eliminar</Button>)}
                   </td>
                 </tr>
               ))

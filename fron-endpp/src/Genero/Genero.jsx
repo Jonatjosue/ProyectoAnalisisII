@@ -3,7 +3,6 @@ import { Table, Container, Row, Col, Button, Spinner, Modal, Form } from 'react-
 import axios from 'axios';
 
 const BASE_URL = 'http://localhost:8081/api/generos';
-const PERMISOS_URL = 'http://localhost:8081/api/role-opcion';
 
 const GeneroService = {
   obtenerTodos: () => axios.get(BASE_URL),
@@ -21,8 +20,27 @@ const GeneroComponent = () => {
   const [loading, setLoading] = useState(true);
   const [showAddModal, setShowAddModal] = useState(false);
   const [showEditModal, setShowEditModal] = useState(false);
-  const [tienePermisoAlta, setTienePermisoAlta] = useState(false);
-  const [tienePermisoBaja, setTienePermisoBaja] = useState(false);
+  const [permissions, setPermissions] = useState({ alta: false, baja: false, cambio: false, imprimir: false, exportar: false });
+
+  // Obten idRole y idOpcion para determinar permisos
+  const userRole = localStorage.getItem('userRole');
+  const idOpcion = localStorage.getItem('idOpcion');
+
+  useEffect(() => {
+
+    // Fetch permissions for the selected role and option
+    const fetchPermissions = async () => {
+      try {
+        const response = await axios.get(`http://localhost:8081/api/role-opcion/${userRole}/${idOpcion}`);
+        const { alta, baja, cambio, imprimir, exportar } = response.data;
+        setPermissions({ alta, baja, cambio, imprimir, exportar });
+      } catch (error) {
+        console.error('Error fetching permissions:', error);
+      }
+    };
+
+    fetchPermissions();
+  }, [userRole, idOpcion]);
 
   useEffect(() => {
     // Obtener todos los géneros al montar el componente
@@ -36,19 +54,7 @@ const GeneroComponent = () => {
         console.error(error);
         setLoading(false);
       });
-
-    // Obtener permisos desde la tabla ROLE_OPCION
-    const idRole = localStorage.getItem('roleId'); 
-    axios.get(`${PERMISOS_URL}?idRole=${idRole}`)
-      .then(response => {
-        const permisos = response.data;
-        setTienePermisoAlta(permisos.some(permiso => permiso.alta === true));
-        setTienePermisoBaja(permisos.some(permiso => permiso.baja === true));
-      })
-      .catch(error => {
-        console.error("Error al obtener los permisos", error);
-      });
-  }, []);
+    }, []);
 
   const handleShowAdd = () => setShowAddModal(true);
   const handleCloseAdd = () => setShowAddModal(false);
@@ -111,6 +117,17 @@ const GeneroComponent = () => {
       });
   };
 
+  const handleDelete = async (id) => {
+    try {
+      await axios.delete(`http://localhost:8081/api/generos/${id}`);
+      alert('Género eliminado con éxito');
+      setGeneros(generos.filter((genero) => genero.idGenero !== id));
+    } catch (error) {
+      console.error('Error al eliminar el Género:', error);
+      alert('Error al eliminar el Género');
+    }
+  };
+
   return (
     <Container className="mt-5">
       <Row className="justify-content-between align-items-center">
@@ -118,7 +135,7 @@ const GeneroComponent = () => {
           <h1 className="text-center">Gestión de Géneros</h1>
         </Col>
         <Col className="text-right">
-          {tienePermisoAlta && (
+          {permissions.alta && (
             <Button variant="primary" onClick={handleShowAdd}>Nuevo Género</Button>
           )}
         </Col>
@@ -157,8 +174,11 @@ const GeneroComponent = () => {
                   <td className="text-center">{genero.fechaModificacion ? new Date(genero.fechaModificacion).toLocaleDateString() : ''}</td>
                   <td className="text-center">{genero.usuarioModificacion}</td>
                   <td className="text-center">
-                    {tienePermisoAlta && (
+                    {permissions.cambio && (
                       <Button variant="warning" size="sm" onClick={() => handleShowEdit(genero)}>Editar</Button>
+                    )}
+                    {permissions.baja && (
+                      <Button variant="danger" size="sm" onClick={() => handleDelete(genero.idGenero)}>Eliminar</Button>
                     )}
                   </td>
                 </tr>
