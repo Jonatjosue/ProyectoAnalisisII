@@ -25,7 +25,8 @@ import EstadoCivilList from '../EstadoCivil/EstadoCivil';
 import TipoDocumentoList from '../TipoDocumento/TipoDocumento';
 import SucursalList from '../SucursalList/SucursalList';
 import SaldoCuentaPage from "./SaldoCuentaPage/SaldoCuentaPage";
-import MovimientoCuentaPage from "./MovimientoCuentaPage/MovimientoCuentaPage";
+import MovimientoCuentaPage from "./Gestion_Cliente/Gestion_Cliente";
+import GestionTipoMovimientoCXCPage from "./GestionTipoMovimientoCXCPage/GestionTipoMovimientoCXCPage";
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -55,6 +56,9 @@ function App() {
         <Route path="/SucursalList" element={<SucursalList />} />        
         <Route path='/SaldoCuentaPage' element={<SaldoCuentaPage/>}/>
         <Route path='/MovimientoCuentaPage' element={<MovimientoCuentaPage/>}/>
+        <Route path='/Gestion_Cliente' element={<Gestion_Cliente/>}/>
+        <Route path='/GestionTipoMovimientoCXCPage' element={<GestionTipoMovimientoCXCPage/>}/>
+        <Route path='/GestionStatusCuentaPage' element={<GestionStatusCuentaPage/>}/>
 
       </Route>
     </Routes>

@@ -36,37 +36,46 @@
 }
 
 /* Botones */
+.button-group-inline {
+    display: flex;
+    gap: 10px;
+}
+
 .edit-button,
 .submit-button,
 .cancel-button,
 .delete-button {
-    padding: 6px 12px;
+    padding: 10px 20px;
     color: #fff;
     border: none;
     border-radius: 4px;
     cursor: pointer;
     font-size: 14px;
+    width: 48%; /* Ajustado para que los botones se alineen y tengan el mismo tamaño */
 }
 
+/* Botones de acción */
 .edit-button {
     background-color: #28a745;
 }
 
 .submit-button {
     background-color: #007bff;
-    display: block;
-    width: 100%;
-    margin-top: 10px;
 }
 
 .cancel-button {
     background-color: #6c757d; /* Color gris para el botón de regresar */
-    margin-top: 10px;
 }
 
+.delete-button {
+    background-color: #dc3545;
+}
+
+/* Hover para botones */
 .submit-button:hover,
 .edit-button:hover,
-.cancel-button:hover {
+.cancel-button:hover,
+.delete-button:hover {
     background-color: #0056b3;
 }
 
@@ -87,24 +96,23 @@
     margin-top: 10px;
 }
 
-/* Botón de eliminar */
-.delete-button {
-    background-color: #dc3545;
-    margin-top: 10px;
-    display: inline-block;
-}
-
-.delete-button:hover {
-    background-color: #c82333;
-}
-
-/* Espaciado para la lista */
-.status-usuario-list {
-    margin-bottom: 20px;
-}
+/* Detalles de status de usuario */
 .status-usuario-details {
     margin-top: 10px;
     padding: 10px;
     border-top: 1px solid #ddd;
     background-color: #f9f9f9;
+}
+
+/* Botón de detalles */
+.details-button {
+    background-color: #17a2b8;
+    color: #fff;
+    padding: 6px 12px;
+    font-size: 14px;
+    border-radius: 4px;
+}
+
+.details-button:hover {
+    background-color: #138496;
 }

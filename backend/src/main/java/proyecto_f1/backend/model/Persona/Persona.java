@@ -1,68 +1,69 @@
 package proyecto_f1.backend.model.Persona;
 
-
 import jakarta.persistence.*;
-import java.util.Date;
-import proyecto_f1.backend.model.Genero.Genero;
-import proyecto_f1.backend.model.EstadoCivil.EstadoCivil;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "PERSONA")
+@Table(name = "Persona")
 public class Persona {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "Id_Persona")
-    private Long idPersona;
+    private Integer idPersona;
 
-    @Column(name = "Nombre", nullable = false, length = 50)
+    @Column(name = "Nombre")
     private String nombre;
 
-    @Column(name = "Apellido", nullable = false, length = 50)
+    @Column(name = "Apellido")
     private String apellido;
 
-    @Column(name = "Fecha_Nacimiento", nullable = false)
-    @Temporal(TemporalType.DATE)
-    private Date fechaNacimiento;
+    // Cambiamos el tipo de Date a LocalDate para manejar solo la fecha
+    @Column(name = "Fecha_Nacimiento")
+    private LocalDate fechaNacimiento;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Genero", nullable = false)
-    private Genero genero;
+    public LocalDate getFechaNacimiento() {
+        return fechaNacimiento;
+    }
 
-    @Column(name = "Direccion", nullable = false, length = 100)
+    public void setFechaNacimiento(LocalDate fechaNacimiento) {
+        this.fechaNacimiento = fechaNacimiento;
+    }
+
+    @Column(name = "Id_Genero")
+    private Integer idGenero;
+
+    @Column(name = "Direccion")
     private String direccion;
 
-    @Column(name = "Telefono", nullable = false, length = 50)
+    @Column(name = "Telefono")
     private String telefono;
 
-    @Column(name = "Correo_Electronico", length = 50)
+    @Column(name = "Correo_Electronico")
     private String correoElectronico;
 
-    @ManyToOne
-    @JoinColumn(name = "Id_Estado_Civil", nullable = false)
-    private EstadoCivil estadoCivil;
+    @Column(name = "Id_Estado_Civil")
+    private Integer idEstadoCivil;
 
-    @Column(name = "Fecha_Creacion", nullable = false)
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaCreacion;
+    @Column(name = "Fecha_Creacion")
+    private LocalDate fechaCreacion;
 
-    @Column(name = "Usuario_Creacion", nullable = false, length = 100)
+    @Column(name = "Usuario_Creacion")
     private String usuarioCreacion;
 
     @Column(name = "Fecha_Modificacion")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date fechaModificacion;
+    private LocalDate fechaModificacion;
 
-    @Column(name = "Usuario_Modificacion", length = 100)
+    @Column(name = "Usuario_Modificacion")
     private String usuarioModificacion;
 
     // Getters y Setters
-
-    public Long getIdPersona() {
+    public Integer getIdPersona() {
         return idPersona;
     }
 
-    public void setIdPersona(Long idPersona) {
+    public void setIdPersona(Integer idPersona) {
         this.idPersona = idPersona;
     }
 
@@ -82,20 +83,12 @@ public class Persona {
         this.apellido = apellido;
     }
 
-    public Date getFechaNacimiento() {
-        return fechaNacimiento;
+    public Integer getIdGenero() {
+        return idGenero;
     }
 
-    public void setFechaNacimiento(Date fechaNacimiento) {
-        this.fechaNacimiento = fechaNacimiento;
-    }
-
-    public Genero getGenero() {
-        return genero;
-    }
-
-    public void setGenero(Genero genero) {
-        this.genero = genero;
+    public void setIdGenero(Integer idGenero) {
+        this.idGenero = idGenero;
     }
 
     public String getDireccion() {
@@ -122,19 +115,19 @@ public class Persona {
         this.correoElectronico = correoElectronico;
     }
 
-    public EstadoCivil getEstadoCivil() {
-        return estadoCivil;
+    public Integer getIdEstadoCivil() {
+        return idEstadoCivil;
     }
 
-    public void setEstadoCivil(EstadoCivil estadoCivil) {
-        this.estadoCivil = estadoCivil;
+    public void setIdEstadoCivil(Integer idEstadoCivil) {
+        this.idEstadoCivil = idEstadoCivil;
     }
 
-    public Date getFechaCreacion() {
+    public LocalDate getFechaCreacion() {
         return fechaCreacion;
     }
 
-    public void setFechaCreacion(Date fechaCreacion) {
+    public void setFechaCreacion(LocalDate fechaCreacion) {
         this.fechaCreacion = fechaCreacion;
     }
 
@@ -146,11 +139,11 @@ public class Persona {
         this.usuarioCreacion = usuarioCreacion;
     }
 
-    public Date getFechaModificacion() {
+    public LocalDate getFechaModificacion() {
         return fechaModificacion;
     }
 
-    public void setFechaModificacion(Date fechaModificacion) {
+    public void setFechaModificacion(LocalDate fechaModificacion) {
         this.fechaModificacion = fechaModificacion;
     }
 

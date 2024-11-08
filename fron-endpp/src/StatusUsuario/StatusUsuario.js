@@ -1,182 +1,210 @@
 import React, { useEffect, useState } from 'react';
+import { Container, Row, Col, Button, Table, Modal, Form, Spinner } from 'react-bootstrap';
 import axios from 'axios';
-import './StatusUsuario.css'; // Importa el archivo CSS
 
 const BASE_URL = 'http://localhost:8081/api/statusUsuarios';
 
-class StatusUsuarioService {
-    obtenerTodos() {
-        return axios.get(BASE_URL);
-    }
-
-    obtenerPorId(id) {
-        return axios.get(`${BASE_URL}/${id}`);
-    }
-
-    crearStatusUsuario(statusUsuario) {
-        return axios.post(BASE_URL, statusUsuario);
-    }
-
-    actualizarStatusUsuario(id, statusUsuario) {
-        return axios.put(`${BASE_URL}/${id}`, statusUsuario);
-    }
-
-    eliminarStatusUsuario(id) {
-        return axios.delete(`${BASE_URL}/${id}`);
-    }
-}
-
-const statusUsuarioService = new StatusUsuarioService();
+const StatusUsuarioService = {
+  obtenerTodos: () => axios.get(BASE_URL),
+  obtenerPorId: (id) => axios.get(`${BASE_URL}/${id}`),
+  crearStatusUsuario: (statusUsuario) => axios.post(BASE_URL, statusUsuario),
+  actualizarStatusUsuario: (id, statusUsuario) => axios.put(`${BASE_URL}/${id}`, statusUsuario),
+  eliminarStatusUsuario: (id) => axios.delete(`${BASE_URL}/${id}`)
+};
 
 const StatusUsuarioComponent = () => {
-    const [statusUsuarios, setStatusUsuarios] = useState([]);
-    const [error, setError] = useState(null);
-    const [nuevoStatusUsuario, setNuevoStatusUsuario] = useState({ nombre: '', usuarioCreacion: '' });
-    const [modoEdicion, setModoEdicion] = useState(false);
-    const [statusUsuarioEditando, setStatusUsuarioEditando] = useState(null);
-    const [detallesVisibles, setDetallesVisibles] = useState({});
+  const [statusUsuarios, setStatusUsuarios] = useState([]);
+  const [nuevoStatusUsuario, setNuevoStatusUsuario] = useState({ nombre: '' });
+  const [statusUsuarioEditando, setStatusUsuarioEditando] = useState(null);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [showAddModal, setShowAddModal] = useState(false);
+  const [showEditModal, setShowEditModal] = useState(false);
 
-    useEffect(() => {
-        statusUsuarioService.obtenerTodos()
-            .then(response => setStatusUsuarios(response.data))
-            .catch(error => {
-                setError("Error al obtener los status de usuario");
-                console.error(error);
-            });
+  useEffect(() => {
+    StatusUsuarioService.obtenerTodos()
+      .then(response => {
+        setStatusUsuarios(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        setError("Error al obtener los status de usuario");
+        console.error(error);
+        setLoading(false);
+      });
+  }, []);
 
-        const usuarioCreacion = localStorage.getItem('username') || '';
-        setNuevoStatusUsuario(prev => ({ ...prev, usuarioCreacion }));
-    }, []);
+  const handleShowAdd = () => setShowAddModal(true);
+  const handleCloseAdd = () => setShowAddModal(false);
 
-    const handleCrearStatusUsuario = () => {
-        const statusUsuario = {
-            nombre: nuevoStatusUsuario.nombre,
-            fechaCreacion: new Date().toISOString(),
-            usuarioCreacion: nuevoStatusUsuario.usuarioCreacion,
-        };
+  const handleShowEdit = (statusUsuario) => {
+    setStatusUsuarioEditando(statusUsuario);
+    setNuevoStatusUsuario({ nombre: statusUsuario.nombre });
+    setShowEditModal(true);
+  };
+  const handleCloseEdit = () => {
+    setStatusUsuarioEditando(null);
+    setShowEditModal(false);
+  };
 
-        statusUsuarioService.crearStatusUsuario(statusUsuario)
-            .then(response => {
-                setStatusUsuarios([...statusUsuarios, response.data]);
-                setNuevoStatusUsuario({ nombre: '', usuarioCreacion: nuevoStatusUsuario.usuarioCreacion });
-            })
-            .catch(error => {
-                setError("Error al crear el status de usuario");
-                console.error(error);
-            });
+  const handleCrearStatusUsuario = (event) => {
+    event.preventDefault();
+    const usuarioCreacion = localStorage.getItem('username');
+    const statusUsuario = {
+      ...nuevoStatusUsuario,
+      fechaCreacion: new Date().toISOString(),
+      usuarioCreacion
     };
 
-    const handleActualizarStatusUsuario = () => {
-        if (!window.confirm("¿Está seguro de que desea actualizar este status de usuario?")) return;
+    StatusUsuarioService.crearStatusUsuario(statusUsuario)
+      .then(response => {
+        setStatusUsuarios([...statusUsuarios, response.data]);
+        setNuevoStatusUsuario({ nombre: '' });
+        setShowAddModal(false);
+      })
+      .catch(error => {
+        setError("Error al crear el status de usuario");
+        console.error(error);
+      });
+  };
 
-        const statusUsuarioActualizado = {
-            nombre: nuevoStatusUsuario.nombre,
-            fechaModificacion: new Date().toISOString(),
-            usuarioModificacion: nuevoStatusUsuario.usuarioCreacion,
-        };
-
-        statusUsuarioService.actualizarStatusUsuario(statusUsuarioEditando.idStatusUsuario, statusUsuarioActualizado)
-            .then(response => {
-                const nuevosStatusUsuarios = statusUsuarios.map(su => 
-                    su.idStatusUsuario === response.data.idStatusUsuario ? response.data : su
-                );
-                setStatusUsuarios(nuevosStatusUsuarios);
-                setModoEdicion(false);
-                setStatusUsuarioEditando(null);
-                setNuevoStatusUsuario({ nombre: '', usuarioCreacion: nuevoStatusUsuario.usuarioCreacion });
-            })
-            .catch(error => {
-                setError("Error al actualizar el status de usuario");
-                console.error(error);
-            });
+  const handleActualizarStatusUsuario = (event) => {
+    event.preventDefault();
+    const usuarioModificacion = localStorage.getItem('username');
+    const statusUsuarioActualizado = {
+      ...nuevoStatusUsuario,
+      fechaModificacion: new Date().toISOString(),
+      usuarioModificacion
     };
 
-    const handleEliminarStatusUsuario = (id) => {
-        if (!window.confirm("¿Está seguro de que desea eliminar este status de usuario?")) return;
-
-        statusUsuarioService.eliminarStatusUsuario(id)
-            .then(() => {
-                setStatusUsuarios(statusUsuarios.filter(su => su.idStatusUsuario !== id));
-                setModoEdicion(false);
-                setStatusUsuarioEditando(null);
-                setNuevoStatusUsuario({ nombre: '', usuarioCreacion: nuevoStatusUsuario.usuarioCreacion });
-            })
-            .catch(error => {
-                setError("Error al eliminar el status de usuario");
-                console.error(error);
-            });
-    };
-
-    const handleEditarStatusUsuario = (statusUsuario) => {
-        setModoEdicion(true);
-        setStatusUsuarioEditando(statusUsuario);
-        setNuevoStatusUsuario({ nombre: statusUsuario.nombre, usuarioCreacion: statusUsuario.usuarioCreacion || '' });
-    };
-
-    const handleCancelarEdicion = () => {
-        setModoEdicion(false);
+    StatusUsuarioService.actualizarStatusUsuario(statusUsuarioEditando.idStatusUsuario, statusUsuarioActualizado)
+      .then(response => {
+        setStatusUsuarios(statusUsuarios.map(su => 
+          su.idStatusUsuario === response.data.idStatusUsuario ? response.data : su
+        ));
+        setShowEditModal(false);
         setStatusUsuarioEditando(null);
-        setNuevoStatusUsuario({ nombre: '', usuarioCreacion: nuevoStatusUsuario.usuarioCreacion });
-    };
+        setNuevoStatusUsuario({ nombre: '' });
+      })
+      .catch(error => {
+        setError("Error al actualizar el status de usuario");
+        console.error(error);
+      });
+  };
 
-    const toggleDetalles = (id) => {
-        setDetallesVisibles(prevDetalles => ({
-            ...prevDetalles,
-            [id]: !prevDetalles[id]
-        }));
-    };
+  const handleEliminarStatusUsuario = (id) => {
+    if (!window.confirm("¿Está seguro de que desea eliminar este status de usuario?")) return;
 
-    return (
-        <div className="status-usuario-container">
-            <h2>Lista de Status de Usuario</h2>
-            {error && <p className="error-message">{error}</p>}
-            <ul className="status-usuario-list">
-                {statusUsuarios.map(statusUsuario => (
-                    <li key={statusUsuario.idStatusUsuario} className="status-usuario-item">
-                        <span>{statusUsuario.nombre}</span>
-                        <div className="button-group-inline">
-                            <button onClick={() => toggleDetalles(statusUsuario.idStatusUsuario)} className="details-button">
-                                {detallesVisibles[statusUsuario.idStatusUsuario] ? 'Ocultar Detalles' : 'Mostrar Detalles'}
-                            </button>
-                            <button onClick={() => handleEditarStatusUsuario(statusUsuario)} className="edit-button">Editar</button>
-                        </div>
-                        {detallesVisibles[statusUsuario.idStatusUsuario] && (
-                            <div className="status-usuario-details">
-                                <p>Fecha de Creación: {new Date(statusUsuario.fechaCreacion).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' })}</p>
-                                <p>Usuario de Creación: {statusUsuario.usuarioCreacion}</p>
-                                <p>Fecha de Modificación: {statusUsuario.fechaModificacion ? new Date(statusUsuario.fechaModificacion).toLocaleString('es-ES', { dateStyle: 'short', timeStyle: 'short' }) : ''}</p>
-                                <p>Usuario de Modificación: {statusUsuario.usuarioModificacion || ''}</p>
-                            </div>
-                        )}
-                    </li>
-                ))}
-            </ul>
+    StatusUsuarioService.eliminarStatusUsuario(id)
+      .then(() => {
+        setStatusUsuarios(statusUsuarios.filter(su => su.idStatusUsuario !== id));
+      })
+      .catch(error => {
+        setError("Error al eliminar el status de usuario");
+        console.error(error);
+      });
+  };
 
-            {modoEdicion && (
-                <button onClick={handleCancelarEdicion} className="cancel-button">
-                    Regresar
-                </button>
+  return (
+    <Container className="mt-5">
+      <Row className="justify-content-between align-items-center">
+        <Col>
+          <h1 className="text-center">Gestión de Status de Usuario</h1>
+        </Col>
+        <Col className="text-right">
+          <Button variant="primary" onClick={handleShowAdd}>Nuevo Status</Button>
+        </Col>
+      </Row>
+
+      {loading ? (
+        <div className="text-center mt-5">
+          <Spinner animation="border" role="status">
+            <span className="sr-only">Cargando...</span>
+          </Spinner>
+        </div>
+      ) : (
+        <Table striped bordered hover className="mt-3">
+          <thead className="thead-dark">
+            <tr>
+              <th className="text-center">Id</th>
+              <th className="text-center">Nombre</th>
+              <th className="text-center">Fecha Creación</th>
+              <th className="text-center">Usuario Creación</th>
+              <th className="text-center">Fecha Modificación</th>
+              <th className="text-center">Usuario Modificación</th>
+              <th className="text-center">Acciones</th>
+            </tr>
+          </thead>
+          <tbody>
+            {statusUsuarios.length === 0 ? (
+              <tr>
+                <td colSpan="7" className="text-center">No se encontraron status de usuario</td>
+              </tr>
+            ) : (
+              statusUsuarios.map((statusUsuario) => (
+                <tr key={statusUsuario.idStatusUsuario}>
+                  <td className="text-center">{statusUsuario.idStatusUsuario}</td>
+                  <td>{statusUsuario.nombre}</td>
+                  <td className="text-center">{new Date(statusUsuario.fechaCreacion).toLocaleDateString()}</td>
+                  <td className="text-center">{statusUsuario.usuarioCreacion}</td>
+                  <td className="text-center">{statusUsuario.fechaModificacion ? new Date(statusUsuario.fechaModificacion).toLocaleDateString() : ''}</td>
+                  <td className="text-center">{statusUsuario.usuarioModificacion || ''}</td>
+                  <td className="text-center">
+                    <Button variant="warning" size="sm" onClick={() => handleShowEdit(statusUsuario)}>Editar</Button>{' '}
+                    <Button variant="danger" size="sm" onClick={() => handleEliminarStatusUsuario(statusUsuario.idStatusUsuario)}>Eliminar</Button>
+                  </td>
+                </tr>
+              ))
             )}
-            <h3>{modoEdicion ? 'Actualizar Status de Usuario' : 'Agregar Nuevo Status de Usuario'}</h3>
-            <input
+          </tbody>
+        </Table>
+      )}
+
+      {/* Modal for adding new status usuario */}
+      <Modal show={showAddModal} onHide={handleCloseAdd}>
+        <Modal.Header closeButton>
+          <Modal.Title>Nuevo Status de Usuario</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          <Form onSubmit={handleCrearStatusUsuario}>
+            <Form.Group controlId="nombre">
+              <Form.Label>Nombre</Form.Label>
+              <Form.Control
                 type="text"
-                placeholder="Nombre del Status"
                 value={nuevoStatusUsuario.nombre}
                 onChange={(e) => setNuevoStatusUsuario({ ...nuevoStatusUsuario, nombre: e.target.value })}
-                className="input-field"
-            />
-            <div className="button-group">
-                <button onClick={modoEdicion ? handleActualizarStatusUsuario : handleCrearStatusUsuario} className="submit-button">
-                    {modoEdicion ? 'Actualizar' : 'Crear Status'}
-                </button>
-                {modoEdicion && (
-                    <button onClick={() => handleEliminarStatusUsuario(statusUsuarioEditando.idStatusUsuario)} className="delete-button">
-                        Eliminar
-                    </button>
-                )}
-            </div>
-        </div>
-    );
+                required
+              />
+            </Form.Group>
+            <Button variant="primary" type="submit" className="mt-3">Crear Status</Button>
+          </Form>
+        </Modal.Body>
+      </Modal>
+
+      {/* Modal for editing existing status usuario */}
+      <Modal show={showEditModal} onHide={handleCloseEdit}>
+        <Modal.Header closeButton>
+          <Modal.Title>Editar Status de Usuario</Modal.Title>
+        </Modal.Header>
+        <Modal.Body>
+          {statusUsuarioEditando && (
+            <Form onSubmit={handleActualizarStatusUsuario}>
+              <Form.Group controlId="nombre">
+                <Form.Label>Nombre</Form.Label>
+                <Form.Control
+                  type="text"
+                  value={nuevoStatusUsuario.nombre}
+                  onChange={(e) => setNuevoStatusUsuario({ ...nuevoStatusUsuario, nombre: e.target.value })}
+                  required
+                />
+              </Form.Group>
+              <Button variant="primary" type="submit" className="mt-3">Actualizar Status</Button>
+            </Form>
+          )}
+        </Modal.Body>
+      </Modal>
+    </Container>
+  );
 };
 
 export default StatusUsuarioComponent;

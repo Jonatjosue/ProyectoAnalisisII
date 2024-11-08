@@ -30,6 +30,10 @@ import SucursalList from "./SucursalList/SucursalList";
 import SaldoCuentaPage from "./SaldoCuentaPage/SaldoCuentaPage";
 import MovimientoCuentaPage from "./MovimientoCuentaPage/MovimientoCuentaPage";
 import RoleOpcionList from "./RoleOpcion/RoleOpcionList";
+import Gestion_Cliente from "./Gestion_Cliente/Gestion_Cliente";
+import GestionTipoMovimientoCXCPage from "./GestionTipoMovimientoCXC/GestionTipoMovimientoCXC";
+import GestionStatusCuentaPage from "./GestionStatusCuentaPage/GestionStatusCuentaPage";
+
 
 
 
@@ -217,6 +221,9 @@ function App() {
           <Route path="/role" element={<ProtectedRoute><RoleList /></ProtectedRoute>} />
           <Route path="/SaldoCuentaPage" element={<ProtectedRoute> <SaldoCuentaPage /> </ProtectedRoute> } />
           <Route path="/MovimientoCuentaPage" element={<ProtectedRoute> <MovimientoCuentaPage /> </ProtectedRoute> } />
+          <Route path="/Gestion_Cliente" element={<ProtectedRoute> <Gestion_Cliente /> </ProtectedRoute> } />
+          <Route path="/GestionTipoMovimientoCXCPage" element={<ProtectedRoute> <GestionTipoMovimientoCXCPage /> </ProtectedRoute> } />
+          <Route path="/GestionStatusCuentaPage" element={<ProtectedRoute> <GestionStatusCuentaPage /> </ProtectedRoute> } />
           <Route path="/CuentaCorriente" element={<ProtectedRoute><CuentaCorriente /></ProtectedRoute>} />
           <Route path="/gestion-documentos" element={<ProtectedRoute><TipoDocumentoPage /></ProtectedRoute>} />
           <Route path="/gestion-role-opcion" element={<ProtectedRoute><RoleOpcionList /></ProtectedRoute>} />
