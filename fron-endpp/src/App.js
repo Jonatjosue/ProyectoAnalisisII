@@ -33,7 +33,7 @@ import RoleOpcionList from "./RoleOpcion/RoleOpcionList";
 import Gestion_Cliente from "./Gestion_Cliente/Gestion_Cliente";
 import GestionTipoMovimientoCXCPage from "./GestionTipoMovimientoCXC/GestionTipoMovimientoCXC";
 import GestionStatusCuentaPage from "./GestionStatusCuentaPage/GestionStatusCuentaPage";
-
+import TipoSaldoCuentaList from "./TipoSaldoCuenta/TipoSaldoCuentaList";
 
 
 function NavBar() {
@@ -170,7 +170,6 @@ function App() {
           <Route path="/" element={<ProtectedRoute><Home /></ProtectedRoute>} />
           <Route path="/FormularioUsuario" element={<ProtectedRoute><FormularioUsuario /></ProtectedRoute>} />
           <Route path="/FormularioEmpresa" element={<ProtectedRoute><FormularioEmpresa /></ProtectedRoute>} />
-          <Route path="/Persona" element={<ProtectedRoute><Persona /></ProtectedRoute>} />
           <Route path="/CambiarContrasenia" element={<ProtectedRoute><CambiarContrasenia /></ProtectedRoute>} />
           <Route path="/CuentaCorriente" element={<ProtectedRoute> <CuentaCorriente /> </ProtectedRoute> } />
           <Route path="/modulos" element={<ProtectedRoute><ModuloList /></ProtectedRoute>} />
@@ -191,6 +190,7 @@ function App() {
           <Route path="/CuentaCorriente" element={<ProtectedRoute><CuentaCorriente /></ProtectedRoute>} />
           <Route path="/gestion-documentos" element={<ProtectedRoute><TipoDocumentoPage /></ProtectedRoute>} />
           <Route path="/gestion-role-opcion" element={<ProtectedRoute><RoleOpcionList /></ProtectedRoute>} />
+          <Route path="/tipo-saldo-cuenta" element={<ProtectedRoute><TipoSaldoCuentaList /></ProtectedRoute>} />
         </Routes>
       </div>
     </AuthProvider>

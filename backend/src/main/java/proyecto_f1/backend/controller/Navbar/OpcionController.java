@@ -51,6 +51,7 @@ public class OpcionController {
                     opcion.setIdMenu(opcionDetails.getIdMenu());
                     opcion.setNombre(opcionDetails.getNombre());
                     opcion.setOrdenMenu(opcionDetails.getOrdenMenu());
+                    opcion.setPagina(opcionDetails.getPagina());
                     opcion.setFechaModificacion(opcionDetails.getFechaModificacion());
                     opcion.setUsuarioModificacion(opcionDetails.getUsuarioModificacion());
                     return ResponseEntity.ok(opcionService.save(opcion));

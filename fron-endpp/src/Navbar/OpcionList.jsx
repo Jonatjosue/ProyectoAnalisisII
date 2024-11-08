@@ -45,9 +45,6 @@ const OpcionList = () => {
     fetchOpciones();
     fetchMenus();
   }, []);
-
-  const role = localStorage.getItem('userRole');
-  const usuario = localStorage.getItem('username');
  
 
   const fetchOpciones = async () => {
@@ -81,8 +78,8 @@ const OpcionList = () => {
   const handleShowAdd = () => setShowAddModal(true);
   const handleCloseAdd = () => setShowAddModal(false);
 
-  const handleShowEdit = (menu) => {
-    setEditOpcion(menu);
+  const handleShowEdit = (opcion) => {
+    setEditOpcion(opcion);
     setShowEditModal(true);
   };
 
@@ -217,7 +214,7 @@ const OpcionList = () => {
                 </tr>
               ) : (
                 currentOpciones.map((item) => (
-                  <tr key={item.idModulo}>
+                  <tr key={item.idOpcion}>
                     <td className="text-center">{item.idOpcion}</td>
                     <td>{item.nombre}</td>
                     <td className="text-center">{getMenuNameById(item.idMenu)}</td>
@@ -347,14 +344,14 @@ const OpcionList = () => {
                 <Form.Label>Seleccionar Menú</Form.Label>
                 <Form.Control
                   as="select"
-                  name="idMenú"
+                  name="idMenu"
                   value={editOpcion.idMenu}
                   onChange={handleEditInputChange}
                   required
                 >
-                  {menus.map(modulo => (
-                    <option key={modulo.idMenu} value={modulo.idMenu}>
-                      {modulo.nombre}
+                  {menus.map(menu => (
+                    <option key={menu.idMenu} value={menu.idMenu}>
+                      {menu.nombre}
                     </option>
                   ))}
                 </Form.Control>
@@ -373,7 +370,7 @@ const OpcionList = () => {
                 <Form.Label>Página</Form.Label>
                 <Form.Control
                   type="text"
-                  name="ordenMenu"
+                  name="pagina"
                   value={editOpcion.pagina}
                   onChange={handleEditInputChange}
                   required
