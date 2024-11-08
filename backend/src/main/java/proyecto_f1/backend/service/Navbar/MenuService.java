@@ -10,7 +10,6 @@ import org.springframework.stereotype.Service;
 
 import proyecto_f1.backend.ClasesValidacion.validacion.OpcionesMenuUsuario;
 import proyecto_f1.backend.model.Navbar.MenuEntity;
-import proyecto_f1.backend.model.Navbar.OpcionEntity;
 import proyecto_f1.backend.model.Usuario.Usuario;
 import proyecto_f1.backend.repository.Navbar.MenuRepository;
 import proyecto_f1.backend.repository.Usuario.UsuarioRepository;

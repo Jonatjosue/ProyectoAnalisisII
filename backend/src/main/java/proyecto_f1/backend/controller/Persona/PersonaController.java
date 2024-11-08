@@ -1,7 +1,6 @@
 package proyecto_f1.backend.controller.Persona;
 
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;

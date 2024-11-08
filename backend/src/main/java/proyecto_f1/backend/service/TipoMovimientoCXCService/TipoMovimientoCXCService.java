@@ -8,7 +8,6 @@ import proyecto_f1.backend.repository.TipoMovimientoCXCRepository.TipoMovimiento
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 @Service
 public class TipoMovimientoCXCService {

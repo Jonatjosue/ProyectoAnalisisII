@@ -2,7 +2,6 @@ package proyecto_f1.backend.model.Persona;
 
 import jakarta.persistence.*;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
 
 @Entity
 @Table(name = "Persona")

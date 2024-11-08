@@ -1,7 +1,5 @@
 package proyecto_f1.backend.service.CuentaCorrienteService;
 
-import java.math.BigDecimal;
-import java.time.LocalDateTime;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;

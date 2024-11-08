@@ -2,16 +2,13 @@ package proyecto_f1.backend.service.Usuario;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
-import proyecto_f1.backend.ClasesValidacion.validacion;
 import proyecto_f1.backend.ClasesValidacion.validacion.OpcionesMenuUsuario;
 import proyecto_f1.backend.ClasesValidacion.validacion.PreguntasUsuarioRecuperacion;
 import proyecto_f1.backend.ClasesValidacion.validacion.RespuestaAutenticacion;
 import proyecto_f1.backend.ClasesValidacion.validacion.RespuestaAutenticacionPregunta;
-import proyecto_f1.backend.ClasesValidacion.validacion.preguntasUsuarioRecuperaciones;
 import proyecto_f1.backend.ClasesValidacion.validacion.recuperar;
 import proyecto_f1.backend.ClasesValidacion.validacion.repuestasInvalidas;
 import proyecto_f1.backend.ClasesValidacion.validacion.respuesta;
@@ -117,27 +114,6 @@ public class UsuarioService {
         }
     }
 
-    // Corrección del método para obtener el rol por username
-    /*
-    public long obtenerRolPorUsername(String username) {
-        Optional<Usuario> usuarioOpt = usuarioRepository.findByNombre(username);
-
-        if (usuarioOpt.isPresent()) {
-            Usuario usuario = usuarioOpt.get();
-
-            // Cambiamos Optional por List
-            List<UsuarioRole> usuarioRoles = usuarioRoleRepository.findByIdUsuario(usuario.getIdUsuario());
-
-            // Si la lista no está vacía, devolvemos el primer rol (o aplicamos la lógica
-            // que necesites)
-            if (!usuarioRoles.isEmpty()) {
-                return usuarioRoles.get(0).getIdRole(); // Asume que el usuario tiene al menos un rol
-            }
-        }
-
-        return 0; // Devuelve 0 si no hay roles
-    }
-        */
 
     public List<UsuarioRole> obtenerRolPorUsername(String username) {
         Optional<Usuario> usuarioOpt = usuarioRepository.findByNombre(username);
