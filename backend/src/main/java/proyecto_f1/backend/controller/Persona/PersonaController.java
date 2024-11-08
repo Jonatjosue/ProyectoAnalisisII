@@ -63,4 +63,9 @@ public class PersonaController {
     public void deletePersona(@PathVariable Integer id) {
         personaRepository.deleteById(id);
     }
+
+    @GetMapping("/buscar/{nombre}")
+    public List<Persona> getPersonasByNombre(@PathVariable String nombre) {
+        return personaRepository.findByNombreContainingIgnoreCase(nombre);
+    }
 }
