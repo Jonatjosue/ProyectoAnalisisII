@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import axiosInstance from "../axiosConfig";// Importa la instancia configurada
 import CryptoJs from "crypto-js";
 const CambiarContrasenia = () => {
@@ -11,6 +11,11 @@ const CambiarContrasenia = () => {
   const generateMD5Hash = (str) => {
     return CryptoJs.MD5(str).toString();
   };
+
+  useEffect(() => {
+    setMessage("Al cambiar la contraseña debera de iniciar de nuevo sesion")
+  },[]
+  );
 
   const handleSubmit = async (e) => {
     e.preventDefault();

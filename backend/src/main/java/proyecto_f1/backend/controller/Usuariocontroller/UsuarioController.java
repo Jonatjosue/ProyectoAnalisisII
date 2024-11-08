@@ -11,6 +11,8 @@ import proyecto_f1.backend.ClasesValidacion.validacion.PreguntasUsuarioRecuperac
 import proyecto_f1.backend.ClasesValidacion.validacion.RespuestaAutenticacion;
 import proyecto_f1.backend.ClasesValidacion.validacion.RespuestaAutenticacionPregunta;
 import proyecto_f1.backend.ClasesValidacion.jwtValida;
+
+import java.util.ArrayList;
 import java.util.List;
 
 
@@ -63,10 +65,17 @@ public class UsuarioController {
 
         if (respuesta.getrespuesta()) {
             // Genera un token JWT
-            String token = jwtValida.generateToken(loginRequest.getUsername());
+            String token =  respuesta.getdescripcion().equals("REQUIERE_CAMBIO") ? "REQUIERE_CAMBIO" 
+                            : jwtValida.generateToken(loginRequest.getUsername());
 
+            ArrayList<UsuarioRole> roldeFault = new ArrayList<>();
+            UsuarioRole usuarioRole = new UsuarioRole();
+            usuarioRole.setIdRole(0L);
+            roldeFault.add(usuarioRole);
             // Obtener el rol del usuario
-            List <UsuarioRole> roles = usuarioService.obtenerRolPorUsername(loginRequest.getUsername());
+            List <UsuarioRole> roles =  respuesta.getdescripcion().equals("REQUIERE_CAMBIO")  ?   roldeFault
+             :usuarioService.obtenerRolPorUsername(loginRequest.getUsername());
+
 
             // Devuelve el token y el rol en la respuesta
             return ResponseEntity.ok(new validacion.AuthResponse(token, roles, respuesta));

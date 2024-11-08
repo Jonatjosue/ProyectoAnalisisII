@@ -92,6 +92,7 @@ public class UsuarioService {
                 // Reinicia los intentos de acceso al loguear correctamente
                 usuario.setIntentosDeAcceso(0);
                 usuarioRepository.save(usuario);
+                if(usuario.getRequiereCambiarPassword()) respuesta.setdescripcion("REQUIERE_CAMBIO");
                 return respuesta;
             } else {
                 // Contraseña incorrecta, incrementa intentos de acceso
@@ -99,13 +100,10 @@ public class UsuarioService {
                 usuario.setIntentosDeAcceso(intentos);
 
                 // Bloquea al usuario si ha fallado más de 3 veces
-                if (intentos >= 3) {
-                    respuesta.setrespuesta(false);
-                    respuesta.setdescripcion("Usuario bloqueado después de 3 intentos fallidos");
-                } else {
+             
                     respuesta.setrespuesta(false);
                     respuesta.setdescripcion("Contraseña incorrecta, intente nuevamente. Intentos: " + intentos);
-                }
+                
 
                 usuarioRepository.save(usuario); // Guarda los cambios
                 return respuesta;
@@ -283,7 +281,8 @@ public class UsuarioService {
 
                 // Aquí puedes establecer la nueva contraseña
                 usuario.setPassword(newPassword);
-                
+                Date ultimaFechaActualiza = new Date();
+                usuario.setUltimaFechaCambioPassword(ultimaFechaActualiza);
                 // Guarda los cambios en el repositorio
                 usuarioRepository.save(usuario);
             } else {

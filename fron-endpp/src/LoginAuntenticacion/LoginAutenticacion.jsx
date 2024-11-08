@@ -41,7 +41,7 @@ function ErrorAutenticacion({ respuesta, mostrar, onHidden }) {
 
 function ConfirmationMessage({ message }) {
   const [visible, setVisible] = useState(false);
-
+  const { cambiarContrasenia } = useContext(AuthContext);
   useEffect(() => {
     if (message) {
       setVisible(true);
@@ -98,8 +98,10 @@ const LoginAutenticacion = () => {
           headers: { "Content-Type": "application/json" },
           withCredentials: true,
         });
-        
-        if (response.data.respuesta.respuesta === true) {
+        if(response.data.respuesta.respuesta === "REQUIERE_CAMBIO" &&  response.data.roles === 0) {
+          redirigirCambioPassword(response.data.token, 0, persona.usuario);
+        }
+        if (response.data.respuesta.respuesta === true && response.data.roles !== 0) {
          // const idRoles = response.data.roles.map(role => role.idRole);
          const selectedRoleId = roleIds.find(role => role.name === selectedRole)?.id;
           redirigir(response.data.token, selectedRoleId, persona.usuario);
@@ -127,6 +129,7 @@ const LoginAutenticacion = () => {
   };
 
   const handleRoleChange = (e) => {
+    
     setSelectedRole(e.target.value);
   };
 
@@ -158,7 +161,11 @@ const LoginAutenticacion = () => {
   const generateMD5Hash = (str) => {
     return CryptoJs.MD5(str).toString();
   };
-
+  const { cambiarContrasenia } = useContext(AuthContext);
+  const redirigirCambioPassword = (token, idrole, username) => {
+    cambiarContrasenia(token, idrole)
+   
+  } 
   const redirigir = (token, idrole, username) => {
     login(token, idrole);
     console.log(idrole)
