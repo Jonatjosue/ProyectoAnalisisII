@@ -150,7 +150,7 @@ const RoleList = () => {
           <tbody>
             {roles.length === 0 ? (
               <tr>
-                <td colSpan="7" className="text-center">No Roles found</td>
+                <td colSpan="7" className="text-center">No se encontraron Roles</td>
               </tr>
             ) : (
               roles.map((role) => (

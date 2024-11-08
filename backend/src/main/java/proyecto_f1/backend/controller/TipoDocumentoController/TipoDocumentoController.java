@@ -46,8 +46,7 @@ public class TipoDocumentoController {
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public void delete(@PathVariable Long id) {
         tipoDocumentoService.delete(id);
-        return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 }
