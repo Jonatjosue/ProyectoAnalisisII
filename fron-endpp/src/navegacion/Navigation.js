@@ -41,6 +41,7 @@ function App() {
         <Route path='/MovimientoCuentaPage' element={<MovimientoCuentaPage/>}/>
         <Route path='/Gestion_Cliente' element={<Gestion_Cliente/>}/>
         <Route path='/GestionTipoMovimientoCXCPage' element={<GestionTipoMovimientoCXCPage/>}/>
+        <Route path='/GestionStatusCuentaPage' element={<GestionStatusCuentaPage/>}/>
 
       </Route>
     </Routes>
