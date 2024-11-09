@@ -263,4 +263,16 @@ public class ConsultaSQLControlador {
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Error al actualizar el saldo");
         }
     }
+
+    @PostMapping("/api/actualizar-saldo-todas-cuentas")
+    public ResponseEntity<String> actualizarSaldoTodasCuentas() {
+        try {
+            consultaDirecta.ejecutarProcedimientoActualizarSaldoTodasCuentas();
+            return ResponseEntity.ok("Saldo de todas las cuentas actualizado exitosamente");
+        } catch (Exception e) {
+            e.printStackTrace();
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error al actualizar el saldo de todas las cuentas");
+        }
+    }
 }

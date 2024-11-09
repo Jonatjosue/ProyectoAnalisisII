@@ -135,4 +135,9 @@ public class SQLServerConsultaDirecta {
         return jdbcTemplate.update(sql, idSaldoCuenta, idPersona);
     }
 
+    public int ejecutarProcedimientoActualizarSaldoTodasCuentas() {
+        String sql = "EXEC ActualizarSaldoTodasCuentas";
+        return jdbcTemplate.update(sql);
+    }
+
 }

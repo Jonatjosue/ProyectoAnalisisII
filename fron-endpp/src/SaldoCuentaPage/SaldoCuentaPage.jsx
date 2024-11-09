@@ -41,7 +41,7 @@ function SaldoCuentaPage() {
     setIdSaldoCuenta('');
   };
 
-  // Función para ejecutar el procedimiento de actualización
+  // Función para ejecutar el procedimiento de actualización de una sola cuenta
   const actualizarSaldoCuenta = async () => {
     try {
       const response = await fetch(`http://localhost:8081/api/actualizar-saldo-cuenta/${idSaldoCuenta}/${idPersona}`, {
@@ -57,6 +57,24 @@ function SaldoCuentaPage() {
     } catch (error) {
       console.error('Error al actualizar el saldo:', error);
       alert('Error al actualizar el saldo');
+    }
+  };
+
+  // Función para ejecutar el procedimiento de actualización para todas las cuentas
+  const actualizarSaldoTodasCuentas = async () => {
+    try {
+      const response = await fetch(`http://localhost:8081/api/actualizar-saldo-todas-cuentas`, {
+        method: 'POST'
+      });
+      if (response.ok) {
+        alert('Saldo de todas las cuentas actualizado exitosamente');
+        fetchSaldoCuentas(); // Refresca los datos después de la actualización
+      } else {
+        alert('Error al actualizar el saldo de todas las cuentas');
+      }
+    } catch (error) {
+      console.error('Error al actualizar el saldo de todas las cuentas:', error);
+      alert('Error al actualizar el saldo de todas las cuentas');
     }
   };
 
@@ -78,29 +96,32 @@ function SaldoCuentaPage() {
         Consultar Saldos
       </button>
 
+      <button className="btn btn-danger mb-4 ml-2" onClick={actualizarSaldoTodasCuentas}>
+        Ejecución en Todas las Cuentas
+      </button>
+
       {/* Tabla para mostrar los saldos de cuenta */}
       {saldoCuentas.length > 0 ? (
         <div className="table-responsive">
           <table className="table table-bordered">
             <thead className="thead-dark">
               <tr>
-              <th>Nombre del Cliente</th>
+                <th>Nombre del Cliente</th>
                 <th>ID Saldo Cuenta</th>
                 <th>Saldo Anterior</th>
                 <th>Débitos</th>
                 <th>Créditos</th>
-                 <th>Acciones</th>
+                <th>Acciones</th>
               </tr>
             </thead>
             <tbody>
               {saldoCuentas.map((cuenta) => (
                 <tr key={cuenta.Id_Saldo_Cuenta}>
-                <td>{cuenta.NombreUsuario}</td>
+                  <td>{cuenta.NombreUsuario}</td>
                   <td>{cuenta.Id_Saldo_Cuenta}</td>
                   <td>{cuenta.Saldo_Anterior}</td>
                   <td>{cuenta.Debitos}</td>
                   <td>{cuenta.Creditos}</td>
-                  
                   <td>
                     <button className="btn btn-warning" onClick={() => openDialog(cuenta)}>
                       Actualizar Saldo
