@@ -21,7 +21,7 @@ import MovimientoCuentaPage from "./MovimientoCuentaPage/MovimientoCuentaPage";
 import Gestion_Cliente from "./Gestion_Cliente/Gestion_Cliente";
 import GestionTipoMovimientoCXCPage from "./GestionTipoMovimientoCXC/GestionTipoMovimientoCXC";
 import GestionStatusCuentaPage from "./GestionStatusCuentaPage/GestionStatusCuentaPage";
-
+import TipoSaldoCuenta from "./TipoSaldoCuenta/TipoSaldoCuenta";
 
 
 
@@ -64,6 +64,7 @@ function NavBar() {
                <li class="nav-link active" aria-current="page" ><Link to="/Gestion_Cliente">Gestion_Cliente</Link></li>
                <li class="nav-link active" aria-current="page" ><Link to="/GestionTipoMovimientoCXCPage">GestionTipoMovimientoCXCPage</Link></li>
                <li class="nav-link active" aria-current="page" ><Link to="/GestionStatusCuentaPage">GestionStatusCuentaPage</Link></li>
+               <li class="nav-link active" aria-current="page" ><Link to="/TipoSaldoCuenta">TipoSaldoCuenta</Link></li>
                
              </>
            ) : (
@@ -103,6 +104,9 @@ function App() {
           <Route path="/Gestion_Cliente" element={<ProtectedRoute> <Gestion_Cliente /> </ProtectedRoute> } />
           <Route path="/GestionTipoMovimientoCXCPage" element={<ProtectedRoute> <GestionTipoMovimientoCXCPage /> </ProtectedRoute> } />
           <Route path="/GestionStatusCuentaPage" element={<ProtectedRoute> <GestionStatusCuentaPage /> </ProtectedRoute> } />
+          <Route path="/TipoSaldoCuenta" element={<ProtectedRoute> <TipoSaldoCuenta /> </ProtectedRoute> } />
+          
+
           
         </Routes>
       </div>

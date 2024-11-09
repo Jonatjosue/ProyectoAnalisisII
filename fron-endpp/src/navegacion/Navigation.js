@@ -19,6 +19,7 @@ import TipoDocumentoPage from "./TipoDocumentoPage/TipoDocumentoPage";
 import SaldoCuentaPage from "./SaldoCuentaPage/SaldoCuentaPage";
 import MovimientoCuentaPage from "./Gestion_Cliente/Gestion_Cliente";
 import GestionTipoMovimientoCXCPage from "./GestionTipoMovimientoCXCPage/GestionTipoMovimientoCXCPage";
+import TipoSaldoCuenta from "./TipoSaldoCuenta/TipoSaldoCuenta";
 
 // <Route path='/RestrablecerContrasenia' element={<RestrablecerContrasenia/>} />
 function App() {
@@ -42,6 +43,7 @@ function App() {
         <Route path='/Gestion_Cliente' element={<Gestion_Cliente/>}/>
         <Route path='/GestionTipoMovimientoCXCPage' element={<GestionTipoMovimientoCXCPage/>}/>
         <Route path='/GestionStatusCuentaPage' element={<GestionStatusCuentaPage/>}/>
+        <Route path='/TipoSaldoCuenta' element={<TipoSaldoCuenta/>}/>
 
       </Route>
     </Routes>
